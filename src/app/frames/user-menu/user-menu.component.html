@@ -1,0 +1,11 @@
+<button mat-icon-button [matMenuTriggerFor]="menu">
+    <mat-icon style="font-size: 36px;">
+        perm_identity
+    </mat-icon>
+</button>
+
+<mat-menu #menu="matMenu">
+    <button mat-menu-item disabled>{{username}}</button>
+    <button mat-menu-item>Settings</button>
+    <button mat-menu-item>Register/Logout</button>
+</mat-menu>

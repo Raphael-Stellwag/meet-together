@@ -1,0 +1,33 @@
+<app-top-bar title="Meet Together"></app-top-bar>
+
+<!--Just Show if at least one event exists-->
+<mat-slide-toggle style="margin-top: 20px; margin-left: 20px;" color="primary" [(checked)]="checked"
+    *ngIf="events.length>0">
+    Show Last messages
+</mat-slide-toggle>
+
+
+<mat-card matBadge="8" MatBadgeSize="medium" matBadgePosition="after" matBadgeColor="accent" style="margin: 20px 20px;"
+    *ngFor="let event of events" [routerLink]="['/event/1']">
+    <!--[routerLink]="['/event/',event.link]"-->
+    <h2>{{event.name}}</h2>
+    <span *ngIf=" event.start_date!=null">
+        Time:
+        <span [innerHTML]="printDate(event.start_date)"></span>
+    </span>
+    <span *ngIf="event.end_date!=null">
+        <span> - </span>
+        <span [innerHTML]="printDate(event.end_date)"></span>
+    </span>
+    <br>
+    {{event.description}}
+</mat-card>
+
+
+
+<div style="position:fixed; top:50%; left: 50%; transform: translate(-50%);" *ngIf="events.length==0">
+    <app-add-join-button showTooltip="true"></app-add-join-button>
+</div>
+<div style="position:fixed; bottom: 1em; left: 50%; transform: translateX(-50%);" *ngIf="events.length>0">
+    <app-add-join-button></app-add-join-button>
+</div>

@@ -1,0 +1,11 @@
+<h1 mat-dialog-title>Welcome to meet together!</h1>
+<div mat-dialog-content>
+    <p>Under what name should your friends see you:</p>
+    <mat-form-field>
+        <mat-label>Username</mat-label>
+        <input required matInput [(ngModel)]="username" autofocus>
+    </mat-form-field>
+</div>
+<div mat-dialog-actions>
+    <button mat-button (click)="close()">Save</button>
+</div>

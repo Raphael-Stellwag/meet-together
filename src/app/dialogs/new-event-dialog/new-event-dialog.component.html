@@ -1,0 +1,55 @@
+<h1 mat-dialog-title>Create a new event!</h1>
+<div mat-dialog-content>
+    <p>Details from the upcoming event:</p>
+    <form [formGroup]="myForm" (ngSubmit)="createEvent()" novalidate>
+        <mat-form-field style="width: 100%;">
+            <mat-label>Name</mat-label>
+            <input required matInput required minlength="4" autofocus formControlName="name"
+                (change)="nameChanged($event)">
+            <mat-error *ngIf="errorHandling('name', 'required')">
+                You must provide a <strong>name</strong>
+            </mat-error>
+            <mat-error *ngIf="errorHandling('name', 'minlength')">
+                You must provide at least <strong>4 character</strong>
+            </mat-error>
+        </mat-form-field>
+        <br>
+        <mat-form-field style="width: 100%;">
+            <mat-label>Description</mat-label>
+            <textarea matInput required formControlName="description"></textarea>
+            <mat-error *ngIf="errorHandling('description', 'required')">
+                You must provide a <strong>description</strong>
+            </mat-error>
+        </mat-form-field>
+        <br>
+        <mat-slide-toggle formControlName="fixDate" (change)="fixDateChanged()">
+            Fix Date
+        </mat-slide-toggle>
+        <br>
+        <mat-form-field style="width: 100%;">
+            <mat-label>Date</mat-label>
+            <!--<input type="datetime" matInput formControlName="date">-->
+            <input [owlDateTime]="dt1" [min]="minDate" [selectMode]="'range'" [owlDateTimeTrigger]="dt1"
+                placeholder="Date" matInput formControlName="date">
+            <owl-date-time #dt1></owl-date-time>
+            <mat-error *ngIf="errorHandling('date', 'required')">
+                You must provide a <strong>date</strong>
+            </mat-error>
+        </mat-form-field>
+        <br>
+        <mat-form-field style="width: 100%;">
+            <mat-label>Invitation Link</mat-label>
+            <input matInput formControlName="link">
+        </mat-form-field>
+        <br>
+        <button hidden #hiddenButton></button>
+    </form>
+    <!-- TODO IMPLEMENT LATER
+        <mat-slide-toggle [checked]="checked">
+            Set Password
+        </mat-slide-toggle>
+        <br>-->
+</div>
+<div mat-dialog-actions>
+    <button mat-button (click)="hiddenButton.click();">Create Event</button>
+</div>

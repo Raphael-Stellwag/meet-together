@@ -13,6 +13,16 @@ import { NewUserDialog } from './dialogs/new-user-dialog/new-user-dialog.compone
 import { TopBarComponent } from './frames/top-bar/top-bar.component';
 import { EventComponent } from './pages/event/event.component';
 import { NewEventDialog } from './dialogs/new-event-dialog/new-event-dialog.component';
+import { HomeComponent } from './pages/home/home.component';
+import { SideNavBarComponent } from './frames/side-nav-bar/side-nav-bar.component';
+import { MessagesComponent } from './pages/subpages/messages/messages.component';
+import { PlanComponent } from './pages/subpages/plan/plan.component';
+import { DetailsComponent } from './pages/subpages/details/details.component';
+import { EditComponent } from './pages/subpages/edit/edit.component';
+import { ParticipantsComponent } from './pages/subpages/participants/participants.component';
+import { JoinEventComponent } from './pages/join-event/join-event.component';
+import { MessageDialogComponent } from './dialogs/message-dialog/message-dialog.component';
+import { InviteComponent } from './pages/subpages/invite/invite.component';
 
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
@@ -28,10 +38,17 @@ import { UserMenuComponent } from './frames/user-menu/user-menu.component';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatTabsModule } from '@angular/material/tabs';
 import { MatSelectModule } from '@angular/material/select';
+import { MatSidenavModule } from '@angular/material/sidenav';
+import { MatGridListModule } from '@angular/material/grid-list';
+import { MatListModule } from '@angular/material/list';
+
 
 import { OwlDateTimeModule, OwlNativeDateTimeModule } from 'ng-pick-datetime';
 import { OWL_DATE_TIME_LOCALE } from 'ng-pick-datetime';
-import { HomeComponent } from './pages/home/home.component';
+
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
+import { AuthInterceptor } from './interceptors/AuthInterceptor';
+
 
 @NgModule({
   declarations: [
@@ -42,7 +59,16 @@ import { HomeComponent } from './pages/home/home.component';
     UserMenuComponent,
     EventComponent,
     NewEventDialog,
-    HomeComponent
+    HomeComponent,
+    SideNavBarComponent,
+    MessagesComponent,
+    PlanComponent,
+    DetailsComponent,
+    EditComponent,
+    ParticipantsComponent,
+    JoinEventComponent,
+    MessageDialogComponent,
+    InviteComponent
   ],
   imports: [
     BrowserModule,
@@ -57,6 +83,9 @@ import { HomeComponent } from './pages/home/home.component';
     MatCardModule,
     MatSlideToggleModule,
     MatTooltipModule,
+    MatListModule,
+    MatSidenavModule,
+    MatGridListModule,
     MatFormFieldModule,
     MatDialogModule,
     MatInputModule,
@@ -64,10 +93,13 @@ import { HomeComponent } from './pages/home/home.component';
     MatMenuModule,
     MatSelectModule,
     OwlDateTimeModule,
+    HttpClientModule,
     OwlNativeDateTimeModule,
     ServiceWorkerModule.register('ngsw-worker.js', { enabled: environment.production })
   ],
-  providers: [{ provide: OWL_DATE_TIME_LOCALE, useValue: 'de' }],
+  providers: [
+    { provide: OWL_DATE_TIME_LOCALE, useValue: 'de' }, 
+    { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true }],
   bootstrap: [AppComponent],
   schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })

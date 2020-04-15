@@ -3,9 +3,11 @@ import { MatDialog } from '@angular/material/dialog';
 
 import { NewUserDialog } from 'src/app/dialogs/new-user-dialog/new-user-dialog.component';
 import { TopBarComponent } from 'src/app/frames/top-bar/top-bar.component';
-import { IEvent } from 'src/app/interfacese/ievent';
+import { IEvent } from 'src/app/interfaces/ievent';
 import { UserService } from 'src/app/services/user.service';
 import { EventService } from 'src/app/services/event.service';
+import { AddJoinButtonComponent } from 'src/app/frames/add-join-button/add-join-button.component';
+import { OutputWriterService } from 'src/app/services/output-writer.service';
 
 @Component({
   selector: 'app-home',
@@ -19,31 +21,44 @@ export class HomeComponent implements AfterViewInit {
   disabled: boolean = false;
   color: String = "primary";
   @ViewChild(TopBarComponent) topBarComponent: TopBarComponent;
-  events: IEvent[];
+  @ViewChild(AddJoinButtonComponent) addJoinButton: AddJoinButtonComponent;
 
-  constructor(public dialog: MatDialog, private userService: UserService, private eventSerivce: EventService) { }
+  events: IEvent[] = [];
+
+  constructor(public dialog: MatDialog, private userService: UserService, private eventSerivce: EventService, public outputWriter: OutputWriterService) { }
 
   ngOnInit() {
-    this.events = this.eventSerivce.getEvents();
-    this.listenForChanges();
-  }
-
-  ngAfterViewInit() {
-    console.log(this.topBarComponent);
-    let _this = this
-    if (this.userService.getUserName() == null) {
+    if (this.userService.getUserName() != null) {
+      this.eventSerivce.getEvents()
+        .then((events: IEvent[]) => this.events = events)
+    } else {
+      let _this = this
       setTimeout(() => {
         const dialogRef = this.dialog.open(NewUserDialog);
 
         dialogRef.afterClosed().subscribe(userName => {
-          console.log('The dialog was closed');
-          this.userService.createUserName(userName).then(() => _this.topBarComponent.userMenu.updateUserName());
           console.log(userName);
+          _this.addJoinButton.showToolTip();
+          this.userService.createUserName(userName).then(() => {
+            _this.topBarComponent.userMenu.updateUserName();
+            this.eventSerivce.getEvents()
+              .then((events: IEvent[]) => this.events = events)
+
+          });
         });
       })
     }
+    //this.listenForChanges();
   }
 
+  ngAfterViewInit() {
+    console.log(this.topBarComponent);
+    if (this.userService.getUserName() == null) {
+
+    }
+  }
+
+  /*
   listenForChanges() {
     this.eventSerivce.notifyWhenChanged()
       .then((events: IEvent[]) => {
@@ -51,11 +66,11 @@ export class HomeComponent implements AfterViewInit {
         this.listenForChanges();
       })
   }
+  */
 
-  printDate(date: Date) {
-    console.log(date.toLocaleString());
-    console.log(date.toLocaleTimeString("de", { hour: '2-digit', minute: '2-digit' }));
-    console.log(date);
-    return date.toLocaleDateString("de") + " " + date.toLocaleTimeString("de", { hour: '2-digit', minute: '2-digit' });
+  eventAdded(event) {
+    //this.eventSerivce.getEvents()
+    //  .then((events: IEvent[]) => this.events = events);
+    //this.events.push(event);
   }
 }

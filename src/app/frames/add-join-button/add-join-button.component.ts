@@ -1,7 +1,8 @@
-import { Component, OnInit, ViewChild, AfterViewInit, Input } from '@angular/core';
+import { Component, OnInit, ViewChild, AfterViewInit, Input, EventEmitter, Output } from '@angular/core';
 import { TooltipComponent } from '@angular/material/tooltip';
 import { MatDialog } from '@angular/material/dialog';
 import { NewEventDialog } from 'src/app/dialogs/new-event-dialog/new-event-dialog.component';
+import { IEvent } from 'src/app/interfaces/ievent';
 
 @Component({
   selector: 'app-add-join-button',
@@ -9,9 +10,9 @@ import { NewEventDialog } from 'src/app/dialogs/new-event-dialog/new-event-dialo
   styleUrls: ['./add-join-button.component.scss']
 })
 export class AddJoinButtonComponent implements OnInit, AfterViewInit {
-
   @ViewChild('tooltip') tooltip: TooltipComponent;
   @Input('showTooltip') showTooltip: boolean;
+  @Output() added = new EventEmitter<IEvent>();
 
   constructor(public dialog: MatDialog) { }
 
@@ -28,13 +29,18 @@ export class AddJoinButtonComponent implements OnInit, AfterViewInit {
     });
   }
 
+  showToolTip() {
+    setTimeout(() => {
+      this.tooltip.show(0);
+    });
+  }
+
   openNewEventDialog() {
     const dialogRef = this.dialog.open(NewEventDialog, {
-      //height: "500px"
     });
 
     dialogRef.afterClosed().subscribe(event => {
-
+      this.added.emit(event);
     });
   }
 }

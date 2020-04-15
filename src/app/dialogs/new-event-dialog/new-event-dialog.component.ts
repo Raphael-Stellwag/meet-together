@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { MatDialogRef } from '@angular/material/dialog';
-import { IEvent } from 'src/app/interfacese/ievent';
+import { IEvent } from 'src/app/interfaces/ievent';
 import { EventService } from 'src/app/services/event.service';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 
@@ -53,9 +53,10 @@ export class NewEventDialog implements OnInit {
     console.log(this.myForm);
     if (!this.myForm.invalid) {
       let event: IEvent = {
+        id: null,
         name: this.myForm.get('name').value,
         description: this.myForm.get('description').value,
-        link: this.myForm.get('link').value,
+        accesstoken: this.myForm.get('link').value,
         start_date: null,
         end_date: null,
         flexible_time: this.dateDisabled,
@@ -65,8 +66,9 @@ export class NewEventDialog implements OnInit {
         event.end_date = this.myForm.get('date').value[1]
       }
 
-      this.eventService.addEvent(event);
-      this.dialogRef.close();
+      this.eventService.addEvent(event)
+        .then(data => this.dialogRef.close(event))
+        .catch(error => console.log(error));
     }
   }
 

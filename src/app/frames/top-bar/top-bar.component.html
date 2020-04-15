@@ -1,8 +1,32 @@
-<mat-toolbar style="font-size: 32px">
-    <span style="margin: 0 auto;">
-        {{title}}
-    </span>
-    <app-user-menu style="right: 0; margin-right: 1em;" #userMenu>
-    </app-user-menu>
+<mat-toolbar color="primary" class="app-toolbar">
+    <mat-toolbar-row class="app-toolbar"
+        style="font-size: 32px; box-shadow:0 3px 5px -1px rgba(0,0,0,.2),0 6px 10px 0 rgba(0,0,0,.14),0 1px 18px 0 rgba(0,0,0,.12)">
+        <button *ngIf="subpage" mat-icon-button [routerLink]="['/']">
+            <mat-icon style="font-size: 36px;">
+                arrow_back
+            </mat-icon>
+        </button>
+        <span style="margin: 0 auto;">
+            {{title}}
+        </span>
+        <app-user-menu style="right: 0;" #userMenu>
+        </app-user-menu>
+    </mat-toolbar-row>
+</mat-toolbar>
 
+<mat-toolbar color="primary" *ngIf="subpage">
+    <mat-toolbar-row>
+        <span>{{subpage_name}}</span>
+        <span style="margin: 0 auto;"> </span>
+        <div style="right: 0;" *ngIf="start_date != null">
+            <div *ngIf="end_date==null" style="right: 0;">
+                <span>{{outputWriter.printDate(start_date)}}</span>
+            </div>
+            <div *ngIf="end_date!=null" style="right: 0;">
+                <span>{{outputWriter.printDate(start_date)}}</span>
+                <span> - </span>
+                <span>{{outputWriter.printDate(end_date)}}</span>
+            </div>
+        </div>
+    </mat-toolbar-row>
 </mat-toolbar>

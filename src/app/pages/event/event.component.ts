@@ -13,9 +13,19 @@ export class EventComponent implements OnInit {
   event: IEvent = {} as IEvent;
   opened = true;
   @ViewChild('sidenav', { static: true }) sidenav: MatSidenav;
+  private static instance: EventComponent;
 
   constructor(private actRoute: ActivatedRoute, private eventService: EventService) {
     console.log("Event View initialised");
+    EventComponent.instance = this;
+  }
+
+  static getInstance() {
+    return EventComponent.instance;
+  }
+
+  refreshEvent() {
+    this.ngOnInit();
   }
 
   ngOnInit() {

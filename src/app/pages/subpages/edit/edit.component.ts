@@ -3,6 +3,7 @@ import { ActivatedRouteSnapshot, ActivatedRoute } from '@angular/router';
 import { EventService } from 'src/app/services/event.service';
 import { IEvent } from 'src/app/interfaces/ievent';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { EventComponent } from '../../event/event.component';
 
 @Component({
   selector: 'app-edit',
@@ -101,7 +102,7 @@ export class EditComponent implements OnInit {
 
       this.eventService.updateEvent(event)
         .then(data => /*this.dialogRef.close(event)*/{
-
+          EventComponent.getInstance().refreshEvent();
         })
         .catch(error => console.log(error));
     }

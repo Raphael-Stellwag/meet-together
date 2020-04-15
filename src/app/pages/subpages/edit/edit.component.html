@@ -1,6 +1,6 @@
-<div class="custom-box">
-    <mat-card>Just you as creator of this event can see this view</mat-card>
-    <br>
+<mat-card>Just you as creator of this event can see this view</mat-card>
+<br>
+<mat-card>
     <form [formGroup]="myForm" (ngSubmit)="updateEvent()" novalidate>
         <mat-form-field style="width: 100%;" appearance="outline">
             <mat-label>Name</mat-label>
@@ -50,4 +50,4 @@
         <br>
         <button mat-raised-button color="primary">Update Event</button>
     </form>
-</div>
+</mat-card>

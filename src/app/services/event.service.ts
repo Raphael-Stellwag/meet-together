@@ -114,10 +114,15 @@ export class EventService {
           console.log("PUT Request is successful ", data);
           _this.events.forEach((event) => {
             if (event.id == data.id) {
-              _this.events.splice(_this.events.indexOf(event), 1);
+              data = _this.dataToEvent(data);
+              event.accesstoken = data.accesstoken;
+              event.description = data.description;
+              event.end_date = data.end_date;
+              event.flexible_time = data.flexible_time;
+              event.name = data.name;
+              event.start_date = data.start_date
             }
           })
-          _this.events.push(_this.dataToEvent(data));
           if (this.notifier != null) {
             this.notifier(this.events);
           }

@@ -1,5 +1,36 @@
-<mat-card>
-    Share the following URL with your friends:
-    <br>
+<mat-card style="margin-bottom: 20px;">
+    <h2>Share the following URL with your friends:</h2>
     <a [href]="accessUrl">{{accessUrl}}</a>
+</mat-card>
+
+<mat-card style="margin-bottom: 20px;">
+    <h2>Or send an email:</h2>
+
+
+    <mat-form-field style="width: 100%;" appearance="outline">
+        <mat-chip-list #chipList aria-label="recipient selection">
+            <mat-chip *ngFor="let email of recipients" selectable="true" (removed)="remove(email)">
+                {{email}}
+                <mat-icon matChipRemove>cancel</mat-icon>
+            </mat-chip>
+            <input placeholder="Recipients" #participantInput [formControl]="recipientsCtrl"
+                [matChipInputFor]="chipList" [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+                (matChipInputTokenEnd)="add($event)">
+        </mat-chip-list>
+    </mat-form-field>
+
+    <mat-form-field style="width: 100%;" appearance="outline">
+        <mat-label>Subject</mat-label>
+        <textarea matInput style="min-height: 20px;" cdkTextareaAutosize [(ngModel)]="subject"
+            #autosize="cdkTextareaAutosize" cdkAutosizeMaxRows="3"></textarea>
+    </mat-form-field>
+
+    <mat-form-field style="width: 100%;" appearance="outline">
+        <mat-label>Content</mat-label>
+        <textarea matInput cdkTextareaAutosize [(ngModel)]="content" #autosize="cdkTextareaAutosize"></textarea>
+    </mat-form-field>
+
+    <button *ngIf="recipients.length > 0" mat-raised-button color="primary" (click)="sendEmail()">Send Email</button>
+    <button *ngIf="recipients.length == 0" mat-raised-button disabled color="grey">You need at least one
+        recipient</button>
 </mat-card>

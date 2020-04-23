@@ -3,6 +3,7 @@ import { rejects } from 'assert';
 import { HttpClient } from '@angular/common/http';
 import { IUser } from '../interfaces/iuser';
 import { StorageService } from './storage.service';
+import { environment } from 'src/environments/environment';
 
 @Injectable({
   providedIn: 'root'
@@ -30,7 +31,7 @@ export class UserService {
         password: this.storageService.generateRandomString(20),
         password_generated: true
       }
-      this.httpClient.post("http://localhost:9000/v1/user/", body).subscribe(
+      this.httpClient.post(environment.api_base_uri + "v1/user/", body).subscribe(
         (data: IUser) => {
           console.log("POST Request is successful ", data);
 

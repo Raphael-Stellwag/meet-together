@@ -16,6 +16,11 @@
 
 <mat-toolbar color="primary" *ngIf="subpage">
     <mat-toolbar-row>
+        <!-- -->
+        <button type="button" aria-label="Toggle sidenav" mat-icon-button *ngIf="isHandset$ | async"
+            (click)="triggerShowMenu.emit($event)">
+            <mat-icon aria-label="Side nav toggle icon">menu</mat-icon>
+        </button>
         <span>{{subpage_name}}</span>
         <span style="margin: 0 auto;"> </span>
         <div style="right: 0;" *ngIf="start_date != null">
@@ -24,8 +29,8 @@
             </div>
             <div *ngIf="end_date!=null" style="right: 0;">
                 <span>{{outputWriter.printDate(start_date)}}</span>
-                <span> - </span>
-                <span>{{outputWriter.printDate(end_date)}}</span>
+                <span>&nbsp;-&nbsp;</span>
+                <span>{{outputWriter.printEndDate(end_date, start_date)}}</span>
             </div>
         </div>
     </mat-toolbar-row>

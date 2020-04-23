@@ -1,20 +1,20 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { AddJoinButtonComponent } from './add-join-button.component';
+import { CreateSuggestionComponent } from './create-suggestion.component';
 
-describe('AddJoinButtonComponent', () => {
-  let component: AddJoinButtonComponent;
-  let fixture: ComponentFixture<AddJoinButtonComponent>;
+describe('CreateSuggestionComponent', () => {
+  let component: CreateSuggestionComponent;
+  let fixture: ComponentFixture<CreateSuggestionComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ AddJoinButtonComponent ]
+      declarations: [ CreateSuggestionComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(AddJoinButtonComponent);
+    fixture = TestBed.createComponent(CreateSuggestionComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

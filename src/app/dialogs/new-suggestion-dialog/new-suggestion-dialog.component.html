@@ -1,0 +1,9 @@
+<h1 mat-dialog-title>Suggest a new Date or Place</h1>
+<div mat-dialog-content>
+    <p>Details:</p>
+    <app-create-suggestion (callback)="createButtonPressed($event)">
+    </app-create-suggestion>
+</div>
+<div mat-dialog-actions>
+    <button mat-button (click)="createsuggestionComponent.submitForm();">Suggest Date & Place</button>
+</div>

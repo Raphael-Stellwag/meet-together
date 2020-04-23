@@ -4,3 +4,11 @@ html, body { height: 100%; }
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 
 @import "~ng-pick-datetime/assets/style/picker.min.css";
+
+.mat-radio-button ~ .mat-radio-button {
+    margin-left: 16px;
+  }
+
+  ::ng-deep .large-tooltip {
+    font-size: 16px;
+}

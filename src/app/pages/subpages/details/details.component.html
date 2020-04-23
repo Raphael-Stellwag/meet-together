@@ -1,18 +1,34 @@
-<div class="example-container">
-    <mat-form-field appearance="fill">
-      <mat-label>Name</mat-label>
-      <input matInput>
-    </mat-form-field>
-    <br>
-    <mat-form-field appearance="fill">
-      <mat-label>Des</mat-label>
-      <mat-select>
-        <mat-option value="option">Option</mat-option>
-      </mat-select>
-    </mat-form-field>
-    <br>
-    <mat-form-field appearance="fill">
-      <mat-label>Description</mat-label>
-      <textarea matInput></textarea>
-    </mat-form-field>
+<mat-card>
+  <h2>Here you can see all details to an event</h2>
+</mat-card>
+<br>
+
+<mat-card>
+  <mat-form-field style="width: 100%;" appearance="outline">
+    <mat-label>Name</mat-label>
+    <input matInput class="details-disabled-input" [(ngModel)]="event.name" disabled>
+  </mat-form-field>
+  <mat-form-field style="width: 100%;" appearance="outline">
+    <mat-label>Description</mat-label>
+    <textarea disabled class="details-disabled-input" matInput cdkTextareaAutosize [(ngModel)]="event.description"
+      #autosize="cdkTextareaAutosize" style="min-height: 20px;"></textarea>
+  </mat-form-field>
+  <mat-form-field style="width: 100%;" appearance="outline">
+    <mat-label>Time</mat-label>
+    <input matInput class="details-disabled-input" [(ngModel)]="time" disabled>
+  </mat-form-field>
+  <mat-form-field style="width: 100%;" appearance="outline">
+    <mat-label>Location</mat-label>
+    <input matInput class="details-disabled-input" [(ngModel)]="event.place" disabled>
+  </mat-form-field>
+  <div style="width: 100%;" *ngIf="event.link != null">
+    <a target="_blank" rel="noopener noreferrer" mat-stroked-button style="width: 100%;" [href]="event.link">
+      Open {{event.link}} in new tab
+    </a>
+    <!--<input matInput [(ngModel)]="event.link" disabled>-->
   </div>
+  <br>
+  <a mat-raised-button color="primary" [routerLink]="['../participants/']">See Participants</a>
+
+</mat-card>
+<br>

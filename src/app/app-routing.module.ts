@@ -10,6 +10,7 @@ import { EditComponent } from './pages/subpages/edit/edit.component';
 import { ParticipantsComponent } from './pages/subpages/participants/participants.component';
 import { JoinEventComponent } from './pages/join-event/join-event.component';
 import { InviteComponent } from './pages/subpages/invite/invite.component';
+import { AuthGuard } from './guards/auth.guard';
 
 
 const routes: Routes = [
@@ -17,7 +18,7 @@ const routes: Routes = [
   { path: 'home', component: HomeComponent },
   { path: 'join-event/:id', component: JoinEventComponent },
   {
-    path: 'event/:id', component: EventComponent,
+    path: 'event/:id', component: EventComponent, canActivate: [AuthGuard],
     children: [
       { path: '', redirectTo: 'messages', pathMatch: 'full' },
       { path: 'messages', component: MessagesComponent },

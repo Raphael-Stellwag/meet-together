@@ -1,8 +1,11 @@
 import { Component, OnInit, ViewChild, HostListener } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { EventService } from 'src/app/services/event.service';
 import { IEvent } from 'src/app/interfaces/ievent';
 import { MatSidenav } from '@angular/material/sidenav';
+import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
+import { Observable } from 'rxjs';
+import { map, shareReplay } from 'rxjs/operators';
 
 @Component({
   selector: 'app-event',
@@ -14,14 +17,24 @@ export class EventComponent implements OnInit {
   opened = true;
   @ViewChild('sidenav', { static: true }) sidenav: MatSidenav;
   private static instance: EventComponent;
+  isHandset$: Observable<boolean> = this.breakpointObserver.observe(Breakpoints.Handset)
+    .pipe(
+      map(result => result.matches),
+      shareReplay()
+    );
 
-  constructor(private actRoute: ActivatedRoute, private eventService: EventService) {
+  constructor(private actRoute: ActivatedRoute, private router: Router, private eventService: EventService, private breakpointObserver: BreakpointObserver) {
     console.log("Event View initialised");
     EventComponent.instance = this;
   }
 
   static getInstance() {
     return EventComponent.instance;
+  }
+
+  toggleMenu($event) {
+    this.sidenav.fixedInViewport = true;
+    this.sidenav.toggle();
   }
 
   refreshEvent() {
@@ -31,7 +44,11 @@ export class EventComponent implements OnInit {
   ngOnInit() {
     let event_id = this.actRoute.snapshot.params.id;
     this.eventService.getEvent(event_id).then((event) => {
-      this.event = event;
+      if (event == null) {
+        this.router.navigate(['home']);
+      } else {
+        this.event = event;
+      }
     })
     console.log(window.innerWidth)
     if (window.innerWidth < 768) {

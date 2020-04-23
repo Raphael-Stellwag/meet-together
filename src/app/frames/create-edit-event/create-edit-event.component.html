@@ -1,0 +1,72 @@
+<form [formGroup]="myForm" (ngSubmit)="triggerCallback()" novalidate>
+    <mat-form-field style="width: 100%;" appearance="outline">
+        <mat-label>Name</mat-label>
+        <input required matInput required minlength="4" autofocus formControlName="name"
+            (change)="nameChanged($event.target.value)" placeholder="Event name">
+        <mat-error *ngIf="errorHandling('name', 'required')">
+            You must provide a <strong>name</strong>
+        </mat-error>
+        <mat-error *ngIf="errorHandling('name', 'minlength')">
+            You must provide at least <strong>4 character</strong>
+        </mat-error>
+    </mat-form-field>
+    <br>
+    <mat-form-field style="width: 100%;" appearance="outline">
+        <mat-label>Description</mat-label>
+        <textarea matInput cdkTextareaAutosize formControlName="description" #autosize="cdkTextareaAutosize"
+            cdkAutosizeMinRows="1" cdkAutosizeMaxRows="5"></textarea>
+    </mat-form-field>
+    <br>
+    <span>Time & Place Settings</span>
+    <br>
+    <br>
+    <mat-radio-group (change)="timePlaceSettingsChanged($event)" aria-label="Select an option"
+        formControlName="timePlaceSettings">
+        <mat-radio-button value="2">set it fix</mat-radio-button>
+        <mat-radio-button *ngIf="!isUpdateView" value="1">suggest one</mat-radio-button>
+        <mat-radio-button value="0">let the others suggest</mat-radio-button>
+    </mat-radio-group>
+    <br>
+    <div [hidden]="myForm.get('timePlaceSettings').value=='0'">
+        <br>
+        <mat-form-field style=" width: 100%;">
+            <mat-label>Date</mat-label>
+            <!--<input type="datetime" matInput formControlName="date">-->
+            <input required [owlDateTime]="dt1" [min]="minDate" [selectMode]="'range'" [owlDateTimeTrigger]="dt1"
+                placeholder="Date" matInput formControlName="date">
+            <owl-date-time #dt1></owl-date-time>
+            <mat-error *ngIf="errorHandling('date', 'required')">
+                You must provide a <strong>date</strong>
+            </mat-error>
+        </mat-form-field>
+        <br>
+        <mat-form-field style="width: 100%;" appearance="outline">
+            <mat-label>Location</mat-label>
+            <input matInput formControlName="location"
+                placeholder="Can be online (e.g. zoom, skype) or real location (e.g. at my house)">
+        </mat-form-field>
+        <br>
+        <mat-form-field style="width: 100%;" appearance="outline">
+            <mat-label>Link to get to the event</mat-label>
+            <input matInput formControlName="location_link"
+                placeholder="e.g. zoom access link, skype conference link or a google maps link">
+        </mat-form-field>
+    </div>
+    <br>
+
+    <mat-slide-toggle *ngIf="isUpdateView" formControlName="updateLink" (change)="updateInvitationLink()">
+        Update invitation link (not recommended: your old link will not work anymore)
+    </mat-slide-toggle>
+
+    <span *ngIf="!isUpdateView">Future Invitation Link for this event</span>
+    <br>
+    <br>
+    <mat-form-field style="width: 100%;" appearance="outline">
+        <mat-label>Invitation Link</mat-label>
+        <input matInput formControlName="link">
+    </mat-form-field>
+    <br>
+    <button *ngIf="isUpdateView" mat-raised-button color="primary">Update Event</button>
+    <button *ngIf="!isUpdateView" hidden #hiddenButton></button>
+
+</form>

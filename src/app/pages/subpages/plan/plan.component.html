@@ -1,1 +1,132 @@
-<p>plan works!</p>
+<div *ngIf="creator == false">
+    <mat-card>
+        <h2>Give the organizer feedback when you could attend</h2>
+    </mat-card>
+</div>
+<div *ngIf="creator == true" class="">
+    <mat-card>
+        <h2>Here you see when your guests could attend</h2>
+    </mat-card>
+    <br>
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-auto">
+                <mat-slide-toggle color="primary" style="float: left;" (change)="showResultsTogglePressed($event)">
+                    Show Results
+                </mat-slide-toggle>
+            </div>
+            <div *ngIf="isResultView" class="col">
+                <mat-form-field style="width: 100%;">
+                    <mat-chip-list #chipList aria-label="Fruit selection">
+                        <mat-chip *ngFor="let participant of importantParticipants" selectable="true"
+                            (removed)="remove(participant)">
+                            {{participant.name}}
+                            <mat-icon matChipRemove>cancel</mat-icon>
+                        </mat-chip>
+                        <input placeholder="Important Participants" #participantInput [formControl]="participantsCtrl"
+                            [matAutocomplete]="auto" [matChipInputFor]="chipList"
+                            [matChipInputSeparatorKeyCodes]="separatorKeysCodes" (matChipInputTokenEnd)="add($event)">
+                    </mat-chip-list>
+                    <mat-autocomplete #auto="matAutocomplete" (optionSelected)="selected($event)">
+                        <mat-option *ngFor="let participant of filteredParticipants | async" [value]="participant">
+                            {{participant.name}}
+                        </mat-option>
+                    </mat-autocomplete>
+                </mat-form-field>
+            </div>
+        </div>
+    </div>
+</div>
+
+<br>
+
+<div *ngIf="!isResultView">
+    <mat-accordion>
+        <!-- [expanded]="step === 0" (opened)="setStep(0)" hideToggle  | sortBy:'asc':'start_date'-->
+        <mat-expansion-panel *ngFor="let suggestion of timePlaceSuggestions | sortBy:'asc':'start_date'; let i = index"
+            [expanded]="step === i" (opened)="setStep(i)">
+            <mat-expansion-panel-header>
+                <mat-panel-title>
+                    {{outputWriter.printDate(suggestion.start_date)}}
+                    <span *ngIf="suggestion.end_date != null">
+                        <span>&nbsp;-&nbsp;</span>{{outputWriter.printEndDate(suggestion.end_date, suggestion.start_date)}}
+                    </span>
+                </mat-panel-title>
+                <mat-panel-description>
+                    <span *ngIf="suggestion.place != null">
+                        Place: {{suggestion.place}}
+                    </span>
+                </mat-panel-description>
+            </mat-expansion-panel-header>
+
+            <span *ngIf="suggestion.link != null">
+                Link: {{suggestion.link}}
+                <br>
+                <br>
+            </span>
+            <mat-slide-toggle color="primary" [checked]="canAttend(suggestion)"
+                (change)="togglePressed($event, suggestion)">
+                I can attend on that date
+            </mat-slide-toggle>
+            <br>
+            <br>
+            <mat-divider></mat-divider>
+            <br>
+            Participants: <br>
+            <span *ngFor="let attendee of suggestion.can_attend, let o = index">
+                {{attendee.name}}<span *ngIf="o != suggestion.can_attend.length - 1">,</span>
+            </span>
+
+            <mat-action-row>
+                <button mat-button color="warn" [hidden]="i === 0" (click)="prevStep()">Previous</button>
+                <button mat-button color="primary" [hidden]="i === timePlaceSuggestions.length-1"
+                    (click)="nextStep()">Next</button>
+            </mat-action-row>
+        </mat-expansion-panel>
+    </mat-accordion>
+
+    <div style="position:fixed; bottom: 2em; left: 50%; transform: translateX(-50%);">
+        <app-add-suggestion-button [event_id]="event_id" (added)="suggestionAdded($event)"></app-add-suggestion-button>
+    </div>
+</div>
+<div *ngIf="isResultView">
+    <!--TODO TEST THIS initial sort works wird aber nicht ausreichend aktualisiert-->
+    <mat-card *ngFor="let suggestion of timePlaceSuggestions | sortBy:'desc':'score'; let i = index"
+        style="margin-bottom: 20px;">
+        <!--   | sortBy:'desc':'score' -->
+        {{outputWriter.printDate(suggestion.start_date)}}
+        <span *ngIf="suggestion.end_date != null">
+            &nbsp;-&nbsp;{{outputWriter.printEndDate(suggestion.end_date, suggestion.start_date)}}
+        </span>
+        <span *ngIf="suggestion.place != null">
+            <br>
+            Location: {{suggestion.place}}
+        </span>
+        <span *ngIf="suggestion.link != null">
+
+            <br>
+            Link to Location: {{suggestion.link}}
+        </span>
+        <!--<br>
+        Hidden in Future: {{suggestion.score}}
+        <br>
+        {{countParticipantsCanAttend(suggestion)}} out of {{allParticipants.length}} Participants can attend
+        <br>
+        {{countImportantParticipantsCanAttend(suggestion)}} out of {{importantParticipants.length}} important
+        Participants can attend-->
+        <br>
+
+        All Participants who can attend: <br>
+        <span *ngFor="let attendee of suggestion.can_attend, let o = index">
+            {{attendee.name}}<span *ngIf="o != suggestion.can_attend.length - 1">,</span>
+        </span>
+        <br>
+        <br>
+
+        <button *ngIf="choosen_id != suggestion.id" mat-raised-button color="primary"
+            (click)="suggestionChoosen(suggestion)">Choose this date</button>
+
+        <button *ngIf="choosen_id == suggestion.id" mat-raised-button disabled color="grey">This is at the moment
+            choosen</button>
+    </mat-card>
+</div>

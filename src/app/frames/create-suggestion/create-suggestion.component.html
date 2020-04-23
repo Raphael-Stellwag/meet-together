@@ -1,0 +1,26 @@
+<form [formGroup]="myForm" (ngSubmit)="triggerCallback()" novalidate>
+    <mat-form-field style=" width: 100%;">
+        <mat-label>Date</mat-label>
+        <!--<input type="datetime" matInput formControlName="date">-->
+        <input required [owlDateTime]="dt1" [min]="minDate" [selectMode]="'range'" [owlDateTimeTrigger]="dt1"
+            placeholder="Date" matInput formControlName="date">
+        <owl-date-time #dt1></owl-date-time>
+        <mat-error *ngIf="errorHandling('date', 'required')">
+            You must provide a <strong>date</strong>
+        </mat-error>
+    </mat-form-field>
+    <br>
+    <mat-form-field style="width: 100%;" appearance="outline">
+        <mat-label>Location</mat-label>
+        <input matInput formControlName="location"
+            placeholder="Can be online (e.g. zoom, skype) or real location (e.g. at my house)">
+    </mat-form-field>
+    <br>
+    <mat-form-field style="width: 100%;" appearance="outline">
+        <mat-label>Link to get to the event</mat-label>
+        <input matInput formControlName="location_link"
+            placeholder="e.g. zoom access link, skype conference link or a google maps link">
+    </mat-form-field>
+
+    <button hidden #hiddenButton></button>
+</form>

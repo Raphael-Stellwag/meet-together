@@ -1,1 +1,8 @@
-<p>participants works!</p>
+<mat-card>
+    <h2>Here you see all the participants of this event</h2>
+    (All the people who have joined the event over the invitationlink)
+</mat-card>
+
+<mat-card style="margin: 20px 0px;" *ngFor="let participant of participants">
+    <h4>{{participant.name}}</h4>
+</mat-card>

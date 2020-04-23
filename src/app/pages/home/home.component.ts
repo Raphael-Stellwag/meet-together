@@ -6,7 +6,7 @@ import { TopBarComponent } from 'src/app/frames/top-bar/top-bar.component';
 import { IEvent } from 'src/app/interfaces/ievent';
 import { UserService } from 'src/app/services/user.service';
 import { EventService } from 'src/app/services/event.service';
-import { AddJoinButtonComponent } from 'src/app/frames/add-join-button/add-join-button.component';
+import { AddEventButtonComponent } from 'src/app/frames/add-event-button/add-event-button.component';
 import { OutputWriterService } from 'src/app/services/output-writer.service';
 
 @Component({
@@ -21,7 +21,7 @@ export class HomeComponent implements AfterViewInit {
   disabled: boolean = false;
   color: String = "primary";
   @ViewChild(TopBarComponent) topBarComponent: TopBarComponent;
-  @ViewChild(AddJoinButtonComponent) addJoinButton: AddJoinButtonComponent;
+  @ViewChild(AddEventButtonComponent) addJoinButton: AddEventButtonComponent;
 
   events: IEvent[] = [];
 

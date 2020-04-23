@@ -2,20 +2,22 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 
 import { StorageService } from './storage.service';
+import { environment } from 'src/environments/environment';
+import { IUser } from '../interfaces/iuser';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
-  createTokenUrl = "localhost:9000/v1/token/create";
-  verifyTokenUrl = "localhost:9000/v1/token/verify";
+  createTokenUrl = environment.api_base_uri + "v1/token/create";
+  verifyTokenUrl = environment.api_base_uri + "v1/token/verify";
 
   constructor(private httpClient: HttpClient, private storage: StorageService) { }
 
   verifyToken(): Promise<any> {
     return new Promise((resolve, reject) => {
-      this.httpClient.get("http://" + this.verifyTokenUrl).subscribe(
-        (data) => {
+      this.httpClient.get(this.verifyTokenUrl).subscribe(
+        () => {
           console.log("Token verified");
           resolve();
         },
@@ -44,7 +46,7 @@ export class AuthService {
 
   createToken(): Promise<any> {
     return new Promise((resolve, reject) => {
-      this.httpClient.get("http://" + this.createTokenUrl).subscribe(
+      this.httpClient.get(this.createTokenUrl).subscribe(
         (data: any) => {
           console.log("GET Request is successful ", data);
           this.storage.setAccessToken(data.token);
@@ -55,5 +57,12 @@ export class AuthService {
           reject(error);
         });
     })
+  }
+
+  isLoggedIn(): boolean {
+    let user: IUser = this.storage.loadUserCredentials();
+    if (user.id != null)
+      return true;
+    return false;
   }
 }

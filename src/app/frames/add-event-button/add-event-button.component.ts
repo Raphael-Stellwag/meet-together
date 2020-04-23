@@ -5,11 +5,11 @@ import { NewEventDialog } from 'src/app/dialogs/new-event-dialog/new-event-dialo
 import { IEvent } from 'src/app/interfaces/ievent';
 
 @Component({
-  selector: 'app-add-join-button',
-  templateUrl: './add-join-button.component.html',
-  styleUrls: ['./add-join-button.component.scss']
+  selector: 'app-add-event-button',
+  templateUrl: './add-event-button.component.html',
+  styleUrls: ['./add-event-button.component.scss']
 })
-export class AddJoinButtonComponent implements OnInit, AfterViewInit {
+export class AddEventButtonComponent implements OnInit, AfterViewInit {
   @ViewChild('tooltip') tooltip: TooltipComponent;
   @Input('showTooltip') showTooltip: boolean;
   @Output() added = new EventEmitter<IEvent>();

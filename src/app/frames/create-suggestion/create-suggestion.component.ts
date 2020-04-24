@@ -25,7 +25,6 @@ export class CreateSuggestionComponent implements OnInit {
   }
 
   triggerCallback() {
-    console.log(this.myForm);
     if (!this.myForm.invalid && this.myForm.get('date').value[0] instanceof Date) {
       let timePlaceSuggestion = this.getFormFieldInputAsReturnableObject();
       if (timePlaceSuggestion.place == "") {
@@ -50,7 +49,6 @@ export class CreateSuggestionComponent implements OnInit {
       place: this.myForm.get('location').value,
       link: this.myForm.get('location_link').value
     }
-    console.log(timePlaceSuggestion)
 
     return timePlaceSuggestion;
   }

@@ -12,10 +12,10 @@
     <h2>{{event.name}}</h2>
     <span *ngIf=" event.start_date!=null">
         Time:
-        <span [innerHTML]="outputWriter.printDate(event.start_date)"></span>
+        <span [innerHTML]="helperFunctions.printDate(event.start_date)"></span>
         <span *ngIf="event.end_date!=null">
             <span>&nbsp;-&nbsp;</span>
-            <span [innerHTML]="outputWriter.printEndDate(event.end_date, event.start_date)"></span>
+            <span [innerHTML]="helperFunctions.printEndDate(event.end_date, event.start_date)"></span>
         </span>
         <br>
     </span>
@@ -23,8 +23,8 @@
 </mat-card>
 
 <div style="position:fixed; top:50%; left: 50%; transform: translate(-50%);" *ngIf="events.length==0">
-    <app-add-event-button (added)="eventAdded($event)"></app-add-event-button>
+    <app-add-event-button></app-add-event-button>
 </div>
 <div style="position:fixed; bottom: 1em; left: 50%; transform: translateX(-50%);" *ngIf="events.length>0">
-    <app-add-event-button (added)="eventAdded($event)"></app-add-event-button>
+    <app-add-event-button></app-add-event-button>
 </div>

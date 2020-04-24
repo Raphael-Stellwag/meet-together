@@ -7,14 +7,14 @@ import { IEvent } from 'src/app/interfaces/ievent';
 import { UserService } from 'src/app/services/user.service';
 import { EventService } from 'src/app/services/event.service';
 import { AddEventButtonComponent } from 'src/app/frames/add-event-button/add-event-button.component';
-import { OutputWriterService } from 'src/app/services/output-writer.service';
+import { HelperFunctionsService } from 'src/app/services/helper-functions.service';
 
 @Component({
   selector: 'app-home',
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.scss']
 })
-export class HomeComponent implements AfterViewInit {
+export class HomeComponent {
   title = 'meet-together-client';
 
   checked: boolean = false;
@@ -25,7 +25,7 @@ export class HomeComponent implements AfterViewInit {
 
   events: IEvent[] = [];
 
-  constructor(public dialog: MatDialog, private userService: UserService, private eventSerivce: EventService, public outputWriter: OutputWriterService) { }
+  constructor(public dialog: MatDialog, private userService: UserService, private eventSerivce: EventService, public helperFunctions: HelperFunctionsService) { }
 
   ngOnInit() {
     if (this.userService.getUserName() != null) {
@@ -48,29 +48,5 @@ export class HomeComponent implements AfterViewInit {
         });
       })
     }
-    //this.listenForChanges();
-  }
-
-  ngAfterViewInit() {
-    console.log(this.topBarComponent);
-    if (this.userService.getUserName() == null) {
-
-    }
-  }
-
-  /*
-  listenForChanges() {
-    this.eventSerivce.notifyWhenChanged()
-      .then((events: IEvent[]) => {
-        this.events = events;
-        this.listenForChanges();
-      })
-  }
-  */
-
-  eventAdded(event) {
-    //this.eventSerivce.getEvents()
-    //  .then((events: IEvent[]) => this.events = events);
-    //this.events.push(event);
   }
 }

@@ -9,8 +9,9 @@ import { Observable } from 'rxjs';
 import { IParticipant } from 'src/app/interfaces/iparticipant';
 import { MatChipInputEvent } from '@angular/material/chips';
 import { UserService } from 'src/app/services/user.service';
-import { OutputWriterService } from 'src/app/services/output-writer.service';
+import { HelperFunctionsService } from 'src/app/services/helper-functions.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { EmailService } from 'src/app/services/email.service';
 
 @Component({
   selector: 'app-invite',
@@ -21,7 +22,7 @@ export class InviteComponent implements OnInit {
   accessUrl = "";
   event_id;
 
-  constructor(private actRoute: ActivatedRoute, private eventService: EventService, private userService: UserService, private outputWriter: OutputWriterService, private snackbar: MatSnackBar) {
+  constructor(private actRoute: ActivatedRoute, private emailService: EmailService, private eventService: EventService, private userService: UserService, private helperFunctions: HelperFunctionsService, private snackbar: MatSnackBar) {
   }
 
   ngOnInit(): void {
@@ -41,9 +42,9 @@ export class InviteComponent implements OnInit {
         "\t- Name: " + event.name + "\n" +
         "\t- Description: " + event.description + "\n";
       if (event.start_date != null) {
-        this.content = this.content + "\t- Start: " + this.outputWriter.printDate(event.start_date);
+        this.content = this.content + "\t- Start: " + this.helperFunctions.printDate(event.start_date);
         if (event.end_date != null) {
-          this.content = this.content + " - " + this.outputWriter.printEndDate(event.end_date, event.start_date);
+          this.content = this.content + " - " + this.helperFunctions.printEndDate(event.end_date, event.start_date);
         }
         this.content = this.content + "\n";
         if (event.place != null) {
@@ -74,7 +75,7 @@ export class InviteComponent implements OnInit {
     //html5_content = html5_content.replace(/ /g, "&nbsp");
     html5_content = html5_content.replace(/\t/g, "&nbsp;&nbsp;&nbsp;&nbsp;");
 
-    this.eventService.sendEmail(this.event_id, this.recipients, this.subject, html5_content)
+    this.emailService.sendEmail(this.event_id, this.recipients, this.subject, html5_content)
       .then((result: any) => {
         if (result.rejected.length == 0) {
           this.snackbar.open("All mails were send", null, {

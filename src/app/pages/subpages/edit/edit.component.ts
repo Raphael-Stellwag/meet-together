@@ -19,13 +19,13 @@ export class EditComponent implements OnInit {
   }
 
   updateButtonPressed(data) {
-    if(data.timePlaceSuggestion != null) {
+    if (data.timePlaceSuggestion != null) {
       console.error("Should be null: ", data.timePlaceSuggestion);
     }
     console.log(data);
     this.eventService.updateEvent(data.event)
       .then(() => {
-          EventComponent.getInstance().refreshEvent();
+        //EventComponent.getInstance().refreshEvent();
       })
       .catch(error => console.log(error));
   }

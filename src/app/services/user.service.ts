@@ -4,6 +4,8 @@ import { HttpClient } from '@angular/common/http';
 import { IUser } from '../interfaces/iuser';
 import { StorageService } from './storage.service';
 import { environment } from 'src/environments/environment';
+import { SocketService } from './socket.service';
+import { AuthService } from './auth.service';
 
 @Injectable({
   providedIn: 'root'
@@ -11,7 +13,7 @@ import { environment } from 'src/environments/environment';
 export class UserService {
   private user: IUser;
 
-  constructor(private httpClient: HttpClient, private storageService: StorageService) {
+  constructor(private httpClient: HttpClient, private storageService: StorageService, private socketService: SocketService, private authService: AuthService) {
     this.user = storageService.loadUserCredentials();
   }
 
@@ -38,7 +40,11 @@ export class UserService {
           _this.user = data;
           body.id = data.id;
           _this.storageService.saveUserCredentials(body);
-          resolve(_this.user);
+          this.authService.createToken()
+            .then(() => {
+              this.socketService.initializeSocket();
+              resolve(_this.user);
+            })
         },
         error => {
           console.log("Error", error);

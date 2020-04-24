@@ -14,6 +14,10 @@ export class MessagesService {
   messages: IMessage[] = [];
 
   constructor(private socketService: SocketService, private httpClient: HttpClient, private authService: AuthService) {
+    this.socketService.newMessageReceived()
+      .subscribe(data => {
+        this.messages.push(this.deserializeMessage(data))
+      });
   }
 
   getMessages(eventId): Promise<IMessage[]> {
@@ -25,10 +29,7 @@ export class MessagesService {
           data.forEach((element) => {
             this.messages.push(this.deserializeMessage(element));
           });
-          this.socketService.newMessageReceived(eventId)
-            .subscribe(data => {
-              this.messages.push(this.deserializeMessage(data))
-            });
+          this.socketService.subscribeNewMessage(eventId);
           resolve(this.messages);
         },
         (error: HttpErrorResponse) => {

@@ -1,6 +1,6 @@
 import { Component, OnInit, ViewChild, Input, Output, EventEmitter } from '@angular/core';
 import { UserMenuComponent } from '../user-menu/user-menu.component';
-import { OutputWriterService } from 'src/app/services/output-writer.service';
+import { HelperFunctionsService } from 'src/app/services/helper-functions.service';
 import { Observable } from 'rxjs';
 import { Breakpoints, BreakpointObserver } from '@angular/cdk/layout';
 import { map, shareReplay } from 'rxjs/operators';
@@ -25,7 +25,7 @@ export class TopBarComponent implements OnInit {
   @Output() triggerShowMenu = new EventEmitter<Object>();
 
 
-  constructor(public outputWriter: OutputWriterService, private breakpointObserver: BreakpointObserver) { }
+  constructor(public helperFunctions: HelperFunctionsService, private breakpointObserver: BreakpointObserver) { }
 
   ngOnInit(): void {
   }

@@ -22,7 +22,6 @@ export class AddEventButtonComponent implements OnInit, AfterViewInit {
 
   ngAfterViewInit() {
     setTimeout(() => {
-      console.log(this.tooltip);
       if (this.showTooltip) {
         this.tooltip.show(0);
       }

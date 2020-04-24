@@ -50,7 +50,7 @@ export class AuthService {
         (data: any) => {
           console.log("GET Request is successful ", data);
           this.storage.setAccessToken(data.token);
-          resolve();
+          resolve(true);
         },
         error => {
           console.log("Error", error);

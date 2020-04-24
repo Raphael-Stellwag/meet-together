@@ -25,12 +25,12 @@
         <span style="margin: 0 auto;"> </span>
         <div style="right: 0;" *ngIf="start_date != null">
             <div *ngIf="end_date==null" style="right: 0;">
-                <span>{{outputWriter.printDate(start_date)}}</span>
+                <span>{{helperFunctions.printDate(start_date)}}</span>
             </div>
             <div *ngIf="end_date!=null" style="right: 0;">
-                <span>{{outputWriter.printDate(start_date)}}</span>
+                <span>{{helperFunctions.printDate(start_date)}}</span>
                 <span>&nbsp;-&nbsp;</span>
-                <span>{{outputWriter.printEndDate(end_date, start_date)}}</span>
+                <span>{{helperFunctions.printEndDate(end_date, start_date)}}</span>
             </div>
         </div>
     </mat-toolbar-row>

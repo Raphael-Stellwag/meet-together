@@ -24,7 +24,6 @@ export class EventComponent implements OnInit {
     );
 
   constructor(private actRoute: ActivatedRoute, private router: Router, private eventService: EventService, private breakpointObserver: BreakpointObserver) {
-    console.log("Event View initialised");
     EventComponent.instance = this;
   }
 
@@ -35,6 +34,13 @@ export class EventComponent implements OnInit {
   toggleMenu($event) {
     this.sidenav.fixedInViewport = true;
     this.sidenav.toggle();
+  }
+
+  closeMenu($event) {
+    //Close the menu on mobile devices
+    if (this.sidenav.mode == "over") {
+      this.sidenav.close()
+    }
   }
 
   refreshEvent() {

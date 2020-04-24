@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, ActivatedRouteSnapshot } from '@angular/router';
 import { EventService } from 'src/app/services/event.service';
+import { ParticipantsService } from 'src/app/services/participants.service';
 
 @Component({
   selector: 'app-participants',
@@ -10,7 +11,7 @@ import { EventService } from 'src/app/services/event.service';
 export class ParticipantsComponent implements OnInit {
   participants: any[];
 
-  constructor(private actRoute: ActivatedRoute, private eventService: EventService) { }
+  constructor(private actRoute: ActivatedRoute, private eventService: EventService, private participantsService: ParticipantsService) { }
 
   ngOnInit(): void {
     let event_id;
@@ -22,7 +23,7 @@ export class ParticipantsComponent implements OnInit {
       }
     })
     console.log(event_id)
-    this.eventService.getParticipants(event_id).then((participants: any[]) => {
+    this.participantsService.getParticipants(event_id).then((participants: any[]) => {
       this.participants = participants
     })
   }

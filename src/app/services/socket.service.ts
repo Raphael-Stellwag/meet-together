@@ -5,6 +5,9 @@ import { IMessage } from '../interfaces/imessage';
 import { AuthService } from './auth.service';
 import { AuthGuard } from '../guards/auth.guard';
 import { StorageService } from './storage.service';
+import { IEvent } from '../interfaces/ievent';
+import { UserService } from './user.service';
+import { rejects } from 'assert';
 
 @Injectable({
   providedIn: 'root'
@@ -12,24 +15,39 @@ import { StorageService } from './storage.service';
 export class SocketService {
   socket;
   initialized = false;
-  resolve: () => void = null;
+  resolve: (() => void)[] = [];
 
   constructor(private authService: AuthService, private storageService: StorageService) {
     this.initializeSocket();
   }
 
-  newMessageReceived(eventId) {
+  subscribeNewMessage(event_id) {
+    let promise = new Promise(resolve => {
+      if (this.initialized) {
+        resolve();
+      } else {
+        //Socket connection not established yet (because its async) => will resolve it when establish
+        this.resolve.push(resolve);
+      }
+    })
+
+    promise.then(() => {
+      this.socket.emit('subscribe_new_message', event_id)
+    })
+  }
+
+  newMessageReceived() {
     let observable = new Observable<IMessage>(observer => {
       let promise = new Promise(resolve => {
         if (this.initialized) {
           resolve();
         } else {
-          this.resolve = resolve;
+          //Socket connection not established yet (because its async) => will resolve it when establish
+          this.resolve.push(resolve);
         }
       })
 
       promise.then(() => {
-        this.socket.emit('subscribe_new_message', eventId)
         console.log(this.socket);
         this.socket.on('new_message', (data) => {
           console.log(data);
@@ -46,17 +64,67 @@ export class SocketService {
   unsubcribeNewMessage(event_id) {
     this.socket.emit("unsubscribe_new_message", event_id);
     this.socket.off("unsubscribe_new_message");
-    this.socket._callbacks.$new_message = [];
+    //Resets the callback For new message, otherwise it will be called multiple times
+    //this.socket._callbacks.$new_message = [];
   }
 
-  private initializeSocket() {
-    let promise = new Promise((resolve) => {
-      this.authService.verifyToken()
-        .then(() => resolve())
-        .catch(() => {
-          this.authService.createToken()
-            .then(() => resolve())
-        })
+  subscribeEvent(event_id) {
+    let promise = new Promise(resolve => {
+      if (this.initialized) {
+        resolve();
+      } else {
+        //Socket connection not established yet (because its async) => will resolve it when establish
+        this.resolve.push(resolve);
+      }
+    })
+
+    promise.then(() => {
+      console.log(event_id);
+      this.socket.emit("subscribe_event", event_id);
+    })
+  }
+
+  eventGotChanged() {
+    let observable = new Observable<IEvent>(observer => {
+      let promise = new Promise(resolve => {
+        if (this.initialized) {
+          resolve();
+        } else {
+          //Socket connection not established yet (because its async) => will resolve it when establish
+          this.resolve.push(resolve);
+        }
+      })
+
+      promise.then(() => {
+        console.log(this.socket);
+        this.socket.on('event_update', (data) => {
+          console.log(data);
+          observer.next(data);
+        });
+        return () => { this.socket.disconnect(); }
+      })
+    });
+    return observable;
+  }
+
+  unsubscribeEvent(events: IEvent[]) {
+    events.forEach((event) => {
+      this.socket.emit("subscribe_event", event.id);
+    })
+  }
+
+  initializeSocket() {
+    let promise = new Promise((resolve, reject) => {
+      if (this.authService.isLoggedIn()) {
+        this.authService.verifyToken()
+          .then(() => resolve())
+          .catch(() => {
+            this.authService.createToken()
+              .then(() => resolve())
+          })
+      } else {
+        reject("Socket service was not initialized, user not logged in");
+      }
     })
 
     promise.then(() => {
@@ -64,11 +132,9 @@ export class SocketService {
       this.socket = io('http://localhost:9000', { query: 'auth_token=' + token });
 
       this.initialized = true;
-      if (this.resolve != null) {
-        this.resolve();
-      }
+      this.resolve.forEach(res => res());
       console.log("initialized")
-    })
+    }).catch(err => console.log(err))
   }
 
 }

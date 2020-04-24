@@ -32,13 +32,10 @@ export class CreateEditEventComponent implements OnInit {
     if (this.isUpdateView) {
       let event_id;
       this.actRoute.snapshot.pathFromRoot.forEach((element: ActivatedRouteSnapshot) => {
-        console.log(element);
         if (element.params.id != undefined && element.params.id != null) {
-          console.log(element.params.id);
           event_id = element.params.id;
         }
       })
-      console.log(event_id)
       this.eventService.getEvent(event_id).then((event) => {
         this.reactiveForm();
         this.event = event;
@@ -107,7 +104,6 @@ export class CreateEditEventComponent implements OnInit {
   }
 
   triggerCallback() {
-    console.log(this.myForm);
     if (!this.myForm.invalid && (this.myForm.get("timePlaceSettings").value == 0 || this.myForm.get('date').value[0] instanceof Date)) {
       let eventWithTimePlaceSuggestion = this.getFormFieldInputAsReturnableObject();
       this.callback.emit(eventWithTimePlaceSuggestion);
@@ -134,10 +130,10 @@ export class CreateEditEventComponent implements OnInit {
     if (this.isUpdateView) {
       event.id = this.event.id;
     }
-    let timePlaceSuggestion: ITimePlaceSuggestion = null;
 
+    let timePlaceSuggestion: ITimePlaceSuggestion = null;
     let timePlaceSettings = this.myForm.get("timePlaceSettings").value;
-    console.log(timePlaceSettings);
+
     if (timePlaceSettings == '2') {
       event.start_date = this.myForm.get('date').value[0];
       event.end_date = this.myForm.get('date').value[1];

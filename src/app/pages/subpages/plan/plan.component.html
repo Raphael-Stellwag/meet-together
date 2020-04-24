@@ -47,9 +47,9 @@
             [expanded]="step === i" (opened)="setStep(i)">
             <mat-expansion-panel-header>
                 <mat-panel-title>
-                    {{outputWriter.printDate(suggestion.start_date)}}
+                    {{helperFunctions.printDate(suggestion.start_date)}}
                     <span *ngIf="suggestion.end_date != null">
-                        <span>&nbsp;-&nbsp;</span>{{outputWriter.printEndDate(suggestion.end_date, suggestion.start_date)}}
+                        <span>&nbsp;-&nbsp;</span>{{helperFunctions.printEndDate(suggestion.end_date, suggestion.start_date)}}
                     </span>
                 </mat-panel-title>
                 <mat-panel-description>
@@ -94,9 +94,9 @@
     <mat-card *ngFor="let suggestion of timePlaceSuggestions | sortBy:'desc':'score'; let i = index"
         style="margin-bottom: 20px;">
         <!--   | sortBy:'desc':'score' -->
-        {{outputWriter.printDate(suggestion.start_date)}}
+        {{helperFunctions.printDate(suggestion.start_date)}}
         <span *ngIf="suggestion.end_date != null">
-            &nbsp;-&nbsp;{{outputWriter.printEndDate(suggestion.end_date, suggestion.start_date)}}
+            &nbsp;-&nbsp;{{helperFunctions.printEndDate(suggestion.end_date, suggestion.start_date)}}
         </span>
         <span *ngIf="suggestion.place != null">
             <br>

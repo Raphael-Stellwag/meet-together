@@ -3,6 +3,7 @@ import { ActivatedRoute, ActivatedRouteSnapshot } from '@angular/router';
 import { MessagesService } from 'src/app/services/messages.service';
 import { IMessage } from 'src/app/interfaces/imessage';
 import { EMessageGenerated } from 'src/app/enums/emessage-generated.enum';
+import { HelperFunctionsService } from 'src/app/services/helper-functions.service';
 
 @Component({
   selector: 'app-messages',
@@ -13,7 +14,7 @@ export class MessagesComponent implements OnInit, OnDestroy {
   messages: IMessage[] = [];
   event_id
 
-  constructor(private actRoute: ActivatedRoute, private messageService: MessagesService) { }
+  constructor(private actRoute: ActivatedRoute, private messageService: MessagesService, private helperFunctions: HelperFunctionsService) { }
 
   ngOnInit(): void {
     this.actRoute.snapshot.pathFromRoot.forEach((element: ActivatedRouteSnapshot) => {
@@ -34,7 +35,7 @@ export class MessagesComponent implements OnInit, OnDestroy {
   }
 
   printGeneratedMessage(msg: IMessage) {
-    let content = JSON.parse(msg.content);
+    let content: any = JSON.parse(msg.content);
     let return_value = "";
     switch (msg.generated_content_description) {
       case EMessageGenerated.event_created: {
@@ -43,6 +44,18 @@ export class MessagesComponent implements OnInit, OnDestroy {
       }
       case EMessageGenerated.user_joined_event: {
         return_value = msg.user_name + " has joined the Event";
+        break;
+      }
+      case EMessageGenerated.event_updated: {
+        return_value = "Event was updated. New Details under Details";
+        break;
+      }
+      case EMessageGenerated.time_place_suggestion_added: {
+        return_value = msg.user_name + " has suggested to meet at " + this.helperFunctions.printDate(this.helperFunctions.jsonDateToJsDate(content).start_date);
+        break;
+      }
+      case EMessageGenerated.time_place_suggestion_choosen: {
+        return_value = msg.user_name + " has choosen to meet at " + this.helperFunctions.printDate(this.helperFunctions.jsonDateToJsDate(content).start_date);
         break;
       }
       default: {

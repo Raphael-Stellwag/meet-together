@@ -3,7 +3,7 @@ import { COMMA, ENTER } from '@angular/cdk/keycodes';
 import { ActivatedRoute, ActivatedRouteSnapshot } from '@angular/router';
 import { EventService } from 'src/app/services/event.service';
 import { ITimePlaceSuggestion } from 'src/app/interfaces/itime-place-suggestion';
-import { OutputWriterService } from 'src/app/services/output-writer.service';
+import { HelperFunctionsService } from 'src/app/services/helper-functions.service';
 import { UserService } from 'src/app/services/user.service';
 import { MatChipInputEvent } from '@angular/material/chips';
 import { FormControl } from '@angular/forms';
@@ -12,6 +12,7 @@ import { MatAutocompleteSelectedEvent, MatAutocomplete } from '@angular/material
 import { map, startWith } from 'rxjs/operators';
 import { IParticipant } from 'src/app/interfaces/iparticipant';
 import { IEvent } from 'src/app/interfaces/ievent';
+import { TimePlaceSuggestionService } from 'src/app/services/time-place-suggestion.service';
 
 
 @Component({
@@ -21,7 +22,6 @@ import { IEvent } from 'src/app/interfaces/ievent';
 })
 export class PlanComponent implements OnInit {
   timePlaceSuggestions: ITimePlaceSuggestion[] = [];
-  //resultTimePlaceSuggestions: ITimePlaceSuggestion[] = [];
   event_id: number;
   user_id: number;
   step = 0;
@@ -29,7 +29,7 @@ export class PlanComponent implements OnInit {
   isResultView = false;
   choosen_id = null;
 
-  constructor(private actRoute: ActivatedRoute, private eventService: EventService, public outputWriter: OutputWriterService, private userService: UserService) {
+  constructor(private actRoute: ActivatedRoute, private eventService: EventService, private timePlaceSuggestionService: TimePlaceSuggestionService, public helperFunctions: HelperFunctionsService, private userService: UserService) {
 
   }
 
@@ -40,16 +40,23 @@ export class PlanComponent implements OnInit {
         this.event_id = Number(element.params.id);
       }
     })
-    let event = this.eventService.internalGetEvent(this.event_id);
-    if (event == null) {
-      this.eventService.notifyWhenGotEvents()
-        .then(() => {
-          event = this.eventService.internalGetEvent(this.event_id);
-          this.initView(event)
-        })
-    } else {
-      this.initView(event);
-    }
+    this.eventService.getEvent(this.event_id)
+      .then((event) => {
+        this.initView(event)
+      })
+    /*
+  let event = this.eventService.internalGetEvent(this.event_id);
+  if (event == null) {
+    // Event Service is not initialized with the events, wait that the get is made from the event.component (parent component) 
+    // => happens when reloading the message component directly
+    this.eventService.notifyWhenGotEvents()
+      .then(() => {
+        event = this.eventService.internalGetEvent(this.event_id);
+        
+      })
+  } else {
+    this.initView(event);
+  }*/
   }
 
   initView(event) {
@@ -61,14 +68,13 @@ export class PlanComponent implements OnInit {
         map((fruit: string | null) => fruit ? this._filter(fruit) : this.allParticipants.slice()));
     }
 
-    this.eventService.getTimePlaceSuggestions(this.event_id)
+    this.timePlaceSuggestionService.getTimePlaceSuggestions(this.event_id)
       .then((data: ITimePlaceSuggestion[]) => {
         this.timePlaceSuggestions = data;
         console.log(data);
         if (this.creator) {
           this.setAllParticipants();
           this.calculateScore();
-          //this.setResultSuggestionsByRelevance(data)
         }
       })
       .catch((err) => console.error(err))
@@ -90,12 +96,12 @@ export class PlanComponent implements OnInit {
     console.log($event, suggestion);
     let suggestion_id = Number(suggestion.id);
     if ($event.checked) {
-      this.eventService.addUserToTimePlaceSuggestion(this.event_id, suggestion_id)
+      this.timePlaceSuggestionService.addUserToTimePlaceSuggestion(this.event_id, suggestion_id)
         .then((new_suggestion: ITimePlaceSuggestion) => {
           suggestion.can_attend = new_suggestion.can_attend;
         })
     } else {
-      this.eventService.removeUserFromTimePlaceSuggestion(this.event_id, suggestion_id)
+      this.timePlaceSuggestionService.removeUserFromTimePlaceSuggestion(this.event_id, suggestion_id)
         .then((new_suggestion: ITimePlaceSuggestion) => {
           suggestion.can_attend = new_suggestion.can_attend;
         })
@@ -114,7 +120,6 @@ export class PlanComponent implements OnInit {
 
   suggestionAdded(data: ITimePlaceSuggestion) {
     this.timePlaceSuggestions.push(data)
-    //this.resultTimePlaceSuggestions.push(data)
   }
 
   showResultsTogglePressed($event) {
@@ -132,32 +137,6 @@ export class PlanComponent implements OnInit {
       })
     })
   }
-
-  /*
-  setResultSuggestionsByRelevance(suggestions: ITimePlaceSuggestion[]) {
-    this.resultTimePlaceSuggestions = [];
-    suggestions.forEach((suggestion) => {
-      let tmp = {
-        score: (suggestion.can_attend.length / this.allParticipants.length),
-        id: suggestion.id,
-        start_date: suggestion.start_date,
-        end_date: suggestion.end_date,
-        place: suggestion.place,
-        link: suggestion.link,
-        can_attend: []
-      }
-      console.log(tmp);
-      suggestion.can_attend.forEach((participant: IParticipant) => {
-        tmp.can_attend.push({ id: participant.id, name: participant.name })
-      })
-      this.resultTimePlaceSuggestions.push(tmp);
-    });
-    this.sortResultSuggestions();
-  }
-
-  sortResultSuggestions() {
-    this.resultTimePlaceSuggestions.sort((a, b) => b.score - a.score);
-  }*/
 
   countImportantParticipantsCanAttend(suggestion) {
     var count = 0;
@@ -184,21 +163,19 @@ export class PlanComponent implements OnInit {
         }
       })
     })
-    //this.sortResultSuggestions();
   }
 
   suggestionChoosen(suggestion) {
-    this.eventService.suggestionChoosen(this.event_id, suggestion.id)
+    this.timePlaceSuggestionService.suggestionChoosen(this.event_id, suggestion.id)
       .then((result: IEvent) => {
         console.log(result);
-        let i = result;
         this.choosen_id = result.choosen_time_place;
         //TODO
       })
   }
 
 
-  //THE FOLLOWING SECTION HANDLES THE MAT-CHIP-AUTOCOMPLETE TO CHOOSE important Participants
+  //THE FOLLOWING SECTION (TILL THE END OF THE FILE) HANDLES THE MAT-CHIP-AUTOCOMPLETE TO CHOOSE important Participants
   separatorKeysCodes: number[] = [ENTER, COMMA];
   participantsCtrl = new FormControl();
   @ViewChild('participantInput') participantInput: ElementRef<HTMLInputElement>;

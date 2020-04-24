@@ -4,6 +4,7 @@ import { IEvent } from 'src/app/interfaces/ievent';
 import { EventService } from 'src/app/services/event.service';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { CreateEditEventComponent } from 'src/app/frames/create-edit-event/create-edit-event.component';
+import { TimePlaceSuggestionService } from 'src/app/services/time-place-suggestion.service';
 
 @Component({
   selector: 'app-new-event-dialog',
@@ -13,19 +14,18 @@ import { CreateEditEventComponent } from 'src/app/frames/create-edit-event/creat
 export class NewEventDialog implements OnInit {
   @ViewChild(CreateEditEventComponent) createEventComponent;
 
-  constructor(private dialogRef: MatDialogRef<NewEventDialog>, private eventService: EventService) { }
+  constructor(private dialogRef: MatDialogRef<NewEventDialog>, private eventService: EventService, private timePlaceSuggestionService: TimePlaceSuggestionService) { }
 
   ngOnInit(): void {
   }
 
   createButtonPressed(data) {
-    console.log(data);
     this.eventService.addEvent(data.event)
       .then((event: IEvent) => {
         if (data.timePlaceSuggestion == null) {
           this.dialogRef.close(event);
         } else {
-          this.eventService.createTimePlaceSuggestion(event.id, data.timePlaceSuggestion)
+          this.timePlaceSuggestionService.createTimePlaceSuggestion(event.id, data.timePlaceSuggestion)
             .then(() => {
               this.dialogRef.close(event);
             })

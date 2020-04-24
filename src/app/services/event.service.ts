@@ -16,7 +16,8 @@ import { connectableObservableDescriptor } from 'rxjs/internal/observable/Connec
 })
 export class EventService {
   events: IEvent[] = [];
-  notifiers = [];
+  isInitializing: boolean = false;
+  initializingNotifiers = [];
 
   constructor(private socketService: SocketService, private userService: UserService, private httpClient: HttpClient, private authService: AuthService, private helperFunctions: HelperFunctionsService) {
     let _this = this;
@@ -36,6 +37,7 @@ export class EventService {
   }
 
   getEvents(): Promise<IEvent[]> {
+    this.isInitializing = true;
     return new Promise<IEvent[]>((resolve, reject) => {
       if (this.userService.getUserId() != null) {
         this.httpClient.get(environment.api_base_uri + "v1/user/" + this.userService.getUserId() + "/event").subscribe(
@@ -46,10 +48,10 @@ export class EventService {
               this.events.push(this.helperFunctions.jsonDateToJsDate(element));
               this.socketService.subscribeEvent(element.id);
             });
-            /*
-            this.notifiers.forEach((notifier) => {
+            this.initializingNotifiers.forEach((notifier) => {
               notifier(this.events);
-            })*/
+            })
+            this.initializingNotifiers = [];
             resolve(this.events);
           },
           (error: HttpErrorResponse) => {
@@ -73,11 +75,16 @@ export class EventService {
   getEvent(event_id: any): any {
     return new Promise<IEvent[]>((resolve, reject) => {
       if (this.events.length == 0) {
-        let _this = this;
-        this.getEvents().then((events: IEvent[]) => {
-          resolve(_this.internalGetEvent(event_id));
-        })
-
+        if (this.isInitializing) {
+          new Promise((inner_resolve) => {
+            this.initializingNotifiers.push(inner_resolve);
+          }).then(() => resolve(this.internalGetEvent(event_id)));
+        } else {
+          let _this = this;
+          this.getEvents().then((events: IEvent[]) => {
+            resolve(_this.internalGetEvent(event_id));
+          })
+        }
       } else {
         resolve(this.internalGetEvent(event_id));
       }

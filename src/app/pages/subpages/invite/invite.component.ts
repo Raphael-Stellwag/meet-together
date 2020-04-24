@@ -21,6 +21,7 @@ import { EmailService } from 'src/app/services/email.service';
 export class InviteComponent implements OnInit {
   accessUrl = "";
   event_id;
+  @ViewChild('shareBtn') shareBtn;
 
   constructor(private actRoute: ActivatedRoute, private emailService: EmailService, private eventService: EventService, private userService: UserService, private helperFunctions: HelperFunctionsService, private snackbar: MatSnackBar) {
   }
@@ -58,6 +59,26 @@ export class InviteComponent implements OnInit {
       this.content = this.content + "\nTo join the event click the following link: " + this.accessUrl + " \n\n";
       this.content = this.content + "Best regards and wishes from the Meet together team"
     })
+
+    this.shareBtn.addEventListener('click', async () => {
+      const resultPara = document.querySelector('.result');
+      try {
+        if ((navigator as any).share) {
+          const shareData = {
+            title: 'MDN',
+            text: 'Learn web development on MDN!',
+            url: 'https://developer.mozilla.org',
+          }
+          await (navigator as any).share(shareData)
+          resultPara.textContent = 'MDN shared successfully'
+        } else {
+          console.error("Not available on this system")
+          resultPara.textContent = 'Error: ' + 'not available'
+        }
+      } catch (err) {
+        resultPara.textContent = 'Error: ' + err
+      }
+    });
   }
 
   sendEmail() {

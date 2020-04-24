@@ -24,9 +24,6 @@ export class EditComponent implements OnInit {
     }
     console.log(data);
     this.eventService.updateEvent(data.event)
-      .then(() => {
-        //EventComponent.getInstance().refreshEvent();
-      })
       .catch(error => console.log(error));
   }
 

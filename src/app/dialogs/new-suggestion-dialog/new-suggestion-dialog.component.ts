@@ -28,7 +28,7 @@ export class NewSuggestionDialog implements OnInit {
         this.dialogRef.close(timePlaceSuggestion);
       })
       .catch((err) => {
-        console.log(err)
+        console.error(err)
       })
   }
 }

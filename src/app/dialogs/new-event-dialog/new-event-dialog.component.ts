@@ -31,6 +31,6 @@ export class NewEventDialog implements OnInit {
             })
         }
       })
-      .catch(error => console.log(error));
+      .catch(error => console.error(error));
   }
 }

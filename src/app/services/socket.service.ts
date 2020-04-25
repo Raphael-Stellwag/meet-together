@@ -64,7 +64,7 @@ export class SocketService {
 
   unsubcribeNewMessage(event_id) {
     this.socket.emit("unsubscribe_new_message", event_id);
-    this.socket.off("unsubscribe_new_message");
+    //this.socket.off("unsubscribe_new_message");
     //Resets the callback For new message, otherwise it will be called multiple times
     //this.socket._callbacks.$new_message = [];
   }
@@ -82,6 +82,7 @@ export class SocketService {
     promise.then(() => {
       console.log(event_id);
       this.socket.emit("subscribe_event", event_id);
+      this.socket.emit('subscribe_new_message', event_id)
     })
   }
 
@@ -110,7 +111,17 @@ export class SocketService {
 
   unsubscribeEvent(event_id: IEvent) {
     this.socket.emit("unsubscribe_event", event_id);
+    this.socket.emit("unsubscribe_new_message", event_id);
 
+  }
+
+  readReceivedMessage(event_id, message_id) {
+    let received_details = {
+      event_id: event_id,
+      user_id: this.storageService.loadUserCredentials().id,
+      message_id: message_id,
+    }
+    this.socket.emit("read_received_message", received_details);
   }
 
   initializeSocket() {

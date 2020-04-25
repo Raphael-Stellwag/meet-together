@@ -6,21 +6,30 @@ import { IEvent } from '../interfaces/ievent';
 import { IMessage } from '../interfaces/imessage';
 import { AuthService } from './auth.service';
 import { deserialize } from 'v8';
+import { EventService } from './event.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class MessagesService {
   messages: IMessage[] = [];
+  event_id = null;
 
-  constructor(private socketService: SocketService, private httpClient: HttpClient, private authService: AuthService) {
+  constructor(private socketService: SocketService, private httpClient: HttpClient, private authService: AuthService, private eventService: EventService) {
     this.socketService.newMessageReceived()
       .subscribe(data => {
-        this.messages.push(this.deserializeMessage(data))
+        let message: IMessage = this.deserializeMessage(data)
+        if (message.event_id == this.event_id) {
+          this.messages.push(message)
+          socketService.readReceivedMessage(this.event_id, message.id)
+        } else {
+          this.eventService.increaseUnreadMessagesCount(message.event_id);
+        }
       });
   }
 
   getMessages(eventId): Promise<IMessage[]> {
+    this.event_id = eventId;
     return new Promise<IMessage[]>((resolve, reject) => {
       this.httpClient.get(environment.api_base_uri + "v1/event/" + eventId + "/messages").subscribe(
         (data: IMessage[]) => {
@@ -29,7 +38,7 @@ export class MessagesService {
           data.forEach((element) => {
             this.messages.push(this.deserializeMessage(element));
           });
-          this.socketService.subscribeNewMessage(eventId);
+          //this.socketService.subscribeNewMessage(eventId);
           resolve(this.messages);
         },
         (error: HttpErrorResponse) => {
@@ -53,8 +62,9 @@ export class MessagesService {
     return message;
   }
 
-  destroy(event_id) {
-    this.socketService.unsubcribeNewMessage(event_id);
+  destroy() {
+    this.event_id = null;
+    //this.socketService.unsubcribeNewMessage(event_id);
   }
 
 }

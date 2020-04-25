@@ -8,7 +8,7 @@
 
 <mat-card [matBadge]="event.count_unread_messages" [matBadgeHidden]="event.count_unread_messages == 0"
     MatBadgeSize="medium" matBadgePosition="after" matBadgeColor="accent" style="margin: 20px 20px;"
-    *ngFor="let event of events" [routerLink]="['/event/', event.id]">
+    *ngFor="let event of events | sortBy:'desc':'last_message_time';" [routerLink]="['/event/', event.id]">
     <!--[routerLink]="['/event/',event.link]"-->
     <h2>{{event.name}}</h2>
     <span *ngIf=" event.start_date!=null">

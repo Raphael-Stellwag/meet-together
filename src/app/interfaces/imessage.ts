@@ -7,4 +7,5 @@ export interface IMessage {
     generated_content_description: EMessageGenerated
     time: Date
     user_id: number
+    event_id: number
 }

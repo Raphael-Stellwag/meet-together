@@ -15,7 +15,6 @@ import { connectableObservableDescriptor } from 'rxjs/internal/observable/Connec
   providedIn: 'root'
 })
 export class EventService {
-
   events: IEvent[] = [];
   isInitializing: boolean = false;
   initializingNotifiers = [];
@@ -223,5 +222,10 @@ export class EventService {
             })
         });
     });
+  }
+
+  increaseUnreadMessagesCount(event_id: number) {
+    let foundElement = this.events.find((event) => event.id = event_id);
+    foundElement.count_unread_messages++;
   }
 }

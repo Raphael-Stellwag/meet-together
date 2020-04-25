@@ -5,4 +5,7 @@
 <mat-card>
     <app-create-edit-event isUpdateView="true" (callback)="updateButtonPressed($event)">
     </app-create-edit-event>
+    <button mat-raised-button style="margin-top: 20px;" color="primary" [routerLink]="['../plan/']">
+        Choose Time & Place
+    </button>
 </mat-card>

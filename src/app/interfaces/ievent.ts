@@ -1,5 +1,4 @@
 export interface IEvent {
-    choosen_time_place?: any;
     id: number,
     name: String,
     description: String,
@@ -9,6 +8,8 @@ export interface IEvent {
     creator?: boolean,
     place: String,
     link: String,
-    count_unread_messages: number,
-    last_read_message: number | null
+    choosen_time_place?: any;
+    count_unread_messages?: number,
+    last_read_message?: number | null,
+    last_message_time?: Date
 }

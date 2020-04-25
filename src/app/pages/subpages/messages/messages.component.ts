@@ -12,26 +12,26 @@ import { HelperFunctionsService } from 'src/app/services/helper-functions.servic
 })
 export class MessagesComponent implements OnInit, OnDestroy {
   messages: IMessage[] = [];
-  event_id
 
   constructor(private actRoute: ActivatedRoute, private messageService: MessagesService, private helperFunctions: HelperFunctionsService) { }
 
   ngOnInit(): void {
+    let event_id = null;
     this.actRoute.snapshot.pathFromRoot.forEach((element: ActivatedRouteSnapshot) => {
       console.log(element);
       if (element.params.id != undefined && element.params.id != null) {
         console.log(element.params.id);
-        this.event_id = element.params.id;
+        event_id = element.params.id;
       }
     })
-    this.messageService.getMessages(this.event_id)
+    this.messageService.getMessages(event_id)
       .then(messages => {
         this.messages = messages;
       })
   }
 
   ngOnDestroy(): void {
-    this.messageService.destroy(this.event_id);
+    this.messageService.destroy();
   }
 
   printGeneratedMessage(msg: IMessage) {

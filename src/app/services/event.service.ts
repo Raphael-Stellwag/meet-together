@@ -15,6 +15,7 @@ import { connectableObservableDescriptor } from 'rxjs/internal/observable/Connec
   providedIn: 'root'
 })
 export class EventService {
+
   events: IEvent[] = [];
   isInitializing: boolean = false;
   initializingNotifiers = [];
@@ -45,6 +46,7 @@ export class EventService {
             console.log("GET Request is successful ", data);
             this.events.splice(0, this.events.length);
             data.forEach((element) => {
+              element.count_unread_messages = Number(element.count_unread_messages);
               this.events.push(this.helperFunctions.jsonDateToJsDate(element));
               this.socketService.subscribeEvent(element.id);
             });
@@ -110,12 +112,10 @@ export class EventService {
         data => {
           console.log("POST Request is successful ", data);
           let event = _this.helperFunctions.jsonDateToJsDate(data)
+          event.count_unread_messages = Number(event.count_unread_messages);
           _this.events.push(event);
           this.socketService.subscribeEvent(event.id);
-          /*
-          this.notifiers.forEach((notifier) => {
-            notifier(this.events);
-          })*/
+
           resolve(event);
         },
         (error: HttpErrorResponse) => {
@@ -151,6 +151,8 @@ export class EventService {
           event.place = data.place;
           event.link = data.link;
           event.start_date = data.start_date
+          event.count_unread_messages = Number(data.count_unread_messages);
+          event.last_read_message = data.last_read_message;
 
           resolve(event);
         },
@@ -173,9 +175,11 @@ export class EventService {
     let _this = this;
     return new Promise((resolve, reject) => {
       this.httpClient.put(environment.api_base_uri + "v1/event/" + event_id + "/user/" + this.userService.getUserId() + "?accesstoken=" + access_token, {}).subscribe(
-        data => {
-          console.log("PUT Request is successful ", data);
-          let event: IEvent = data as IEvent;
+        (event: IEvent) => {
+          console.log("PUT Request is successful ", event);
+          event = _this.helperFunctions.jsonDateToJsDate(event);
+          event.count_unread_messages = Number(event.count_unread_messages);
+
           _this.events.push(event);
           _this.socketService.subscribeEvent(event.id);
           resolve(event);
@@ -187,6 +191,32 @@ export class EventService {
               this.joinEvent(event_id, access_token)
                 .then((data) => resolve(data))
                 .catch((err) => reject(error))
+            })
+            .catch(() => {
+              reject(error);
+            })
+        });
+    });
+  }
+
+  leaveEvent(event_id) {
+    let _this = this;
+    return new Promise((resolve, reject) => {
+      this.httpClient.delete(environment.api_base_uri + "v1/event/" + event_id + "/user/" + this.userService.getUserId(), {}).subscribe(
+        data => {
+          console.log("DELETE Request is successful ", data);
+          _this.events = _this.events.filter((event) => event.id != event_id);
+          console.log(_this.events);
+          _this.socketService.unsubscribeEvent(event_id);
+          resolve();
+        },
+        (error: HttpErrorResponse) => {
+          console.log("Error", error);
+          this.authService.checkErrorAndCreateToken(error.status)
+            .then(() => {
+              this.leaveEvent(event_id)
+                .then(() => resolve())
+                .catch((err) => reject(err))
             })
             .catch(() => {
               reject(error);

@@ -29,6 +29,9 @@
   </div>
   <br>
   <a mat-raised-button color="primary" [routerLink]="['../participants/']">See Participants</a>
+  <button *ngIf="!event.creator" mat-raised-button color="primary" style="margin-left: 20px;"
+    (click)="leaveEvent()">Leave
+    Event</button>
 
 </mat-card>
 <br>

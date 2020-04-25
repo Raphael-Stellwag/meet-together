@@ -39,15 +39,15 @@ export class MessagesComponent implements OnInit, OnDestroy {
     let return_value = "";
     switch (msg.generated_content_description) {
       case EMessageGenerated.event_created: {
-        return_value = msg.user_name + " has created the Event " + content.name;
+        return_value = msg.user_name + " has created the event " + content.name;
         break;
       }
       case EMessageGenerated.user_joined_event: {
-        return_value = msg.user_name + " has joined the Event";
+        return_value = msg.user_name + " has joined the event";
         break;
       }
       case EMessageGenerated.event_updated: {
-        return_value = "Event was updated. New Details under Details";
+        return_value = "Event was updated. New details under details";
         break;
       }
       case EMessageGenerated.time_place_suggestion_added: {
@@ -56,6 +56,10 @@ export class MessagesComponent implements OnInit, OnDestroy {
       }
       case EMessageGenerated.time_place_suggestion_choosen: {
         return_value = msg.user_name + " has choosen to meet at " + this.helperFunctions.printDate(this.helperFunctions.jsonDateToJsDate(content).start_date);
+        break;
+      }
+      case EMessageGenerated.user_left_event: {
+        return_value = msg.user_name + " has left the event.";
         break;
       }
       default: {

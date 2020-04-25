@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef, AfterViewInit } from '@angular/core';
 import { ActivatedRoute, ActivatedRouteSnapshot } from '@angular/router';
 import { EventService } from 'src/app/services/event.service';
 import { EventComponent } from '../../event/event.component';
@@ -12,16 +12,17 @@ import { UserService } from 'src/app/services/user.service';
 import { HelperFunctionsService } from 'src/app/services/helper-functions.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { EmailService } from 'src/app/services/email.service';
+import { MatButton } from '@angular/material/button';
 
 @Component({
   selector: 'app-invite',
   templateUrl: './invite.component.html',
   styleUrls: ['./invite.component.scss']
 })
-export class InviteComponent implements OnInit {
+export class InviteComponent implements OnInit, AfterViewInit {
   accessUrl = "";
   event_id;
-  @ViewChild('shareBtn') shareBtn;
+  @ViewChild('shareBtn') shareBtn: MatButton;
 
   constructor(private actRoute: ActivatedRoute, private emailService: EmailService, private eventService: EventService, private userService: UserService, private helperFunctions: HelperFunctionsService, private snackbar: MatSnackBar) {
   }
@@ -59,8 +60,11 @@ export class InviteComponent implements OnInit {
       this.content = this.content + "\nTo join the event click the following link: " + this.accessUrl + " \n\n";
       this.content = this.content + "Best regards and wishes from the Meet together team"
     })
+  }
 
-    this.shareBtn.addEventListener('click', async () => {
+  ngAfterViewInit() {
+    //Share Button click must be triggered by user interaction: https://developer.mozilla.org/en-US/docs/Web/API/Navigator/share 
+    this.shareBtn._elementRef.nativeElement.addEventListener('click', async () => {
       const resultPara = document.querySelector('.result');
       try {
         if ((navigator as any).share) {
@@ -72,6 +76,7 @@ export class InviteComponent implements OnInit {
           await (navigator as any).share(shareData)
           resultPara.textContent = 'MDN shared successfully'
         } else {
+          alert("Not available on this system, open on mobile device under https site")
           console.error("Not available on this system")
           resultPara.textContent = 'Error: ' + 'not available'
         }

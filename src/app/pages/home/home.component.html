@@ -6,7 +6,8 @@
     Show Last messages
 </mat-slide-toggle>-->
 
-<mat-card matBadge="8" MatBadgeSize="medium" matBadgePosition="after" matBadgeColor="accent" style="margin: 20px 20px;"
+<mat-card [matBadge]="event.count_unread_messages" [matBadgeHidden]="event.count_unread_messages == 0"
+    MatBadgeSize="medium" matBadgePosition="after" matBadgeColor="accent" style="margin: 20px 20px;"
     *ngFor="let event of events" [routerLink]="['/event/', event.id]">
     <!--[routerLink]="['/event/',event.link]"-->
     <h2>{{event.name}}</h2>

@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { IEvent } from 'src/app/interfaces/ievent';
-import { ActivatedRoute, ActivatedRouteSnapshot } from '@angular/router';
+import { ActivatedRoute, ActivatedRouteSnapshot, Router } from '@angular/router';
 import { EventService } from 'src/app/services/event.service';
 import { HelperFunctionsService } from 'src/app/services/helper-functions.service';
 
@@ -13,7 +13,7 @@ export class DetailsComponent implements OnInit {
   event: IEvent = {} as IEvent;
   time = ""
 
-  constructor(private actRoute: ActivatedRoute, private eventService: EventService, private helperFunctions: HelperFunctionsService) { }
+  constructor(private actRoute: ActivatedRoute, private router: Router, private eventService: EventService, private helperFunctions: HelperFunctionsService) { }
 
   ngOnInit(): void {
     this.actRoute.snapshot.pathFromRoot.forEach((element: ActivatedRouteSnapshot) => {
@@ -38,6 +38,13 @@ export class DetailsComponent implements OnInit {
 
   linkClicked() {
     console.log("link clicked")
+  }
+
+  leaveEvent() {
+    this.eventService.leaveEvent(this.event.id)
+      .then(() => {
+        this.router.navigate(['home'])
+      })
   }
 
 }

@@ -8,5 +8,7 @@ export interface IEvent {
     accesstoken: String,
     creator?: boolean,
     place: String,
-    link: String
+    link: String,
+    count_unread_messages: number,
+    last_read_message: number | null
 }

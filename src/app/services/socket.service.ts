@@ -108,10 +108,9 @@ export class SocketService {
     return observable;
   }
 
-  unsubscribeEvent(events: IEvent[]) {
-    events.forEach((event) => {
-      this.socket.emit("subscribe_event", event.id);
-    })
+  unsubscribeEvent(event_id: IEvent) {
+    this.socket.emit("unsubscribe_event", event_id);
+
   }
 
   initializeSocket() {

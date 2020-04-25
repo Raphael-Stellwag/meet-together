@@ -8,6 +8,7 @@ import { StorageService } from './storage.service';
 import { IEvent } from '../interfaces/ievent';
 import { UserService } from './user.service';
 import { rejects } from 'assert';
+import { environment } from 'src/environments/environment';
 
 @Injectable({
   providedIn: 'root'
@@ -129,7 +130,7 @@ export class SocketService {
 
     promise.then(() => {
       let token = this.storageService.getAccessToken();
-      this.socket = io('http://localhost:9000', { query: 'auth_token=' + token });
+      this.socket = io(/*"https://test-ddnss.ddnss.de"*/environment.api_base_uri, { query: 'auth_token=' + token });
 
       this.initialized = true;
       this.resolve.forEach(res => res());

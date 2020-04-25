@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { IUser } from '../interfaces/iuser';
 import * as SecureLS from 'secure-ls';
-import CryptoJS from 'crypto-js';
+import * as CryptoJS from 'crypto-js';
 
 @Injectable({
   providedIn: 'root'

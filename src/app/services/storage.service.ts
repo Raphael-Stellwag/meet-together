@@ -27,9 +27,10 @@ export class StorageService {
 
   loadUserCredentials() {
     let userWithPwd: IUser = this.loadUserCredentialsWithPassword();
+    /*TODO TEST THIS
     if (userWithPwd.id == null) {
       return userWithPwd;
-    }
+    }*/
     let user: IUser = {
       id: userWithPwd.id,
       name: userWithPwd.name,
@@ -64,9 +65,11 @@ export class StorageService {
       return null;
     return accesstoken;
   }
+
   removeAccessToken() {
     this.secure_storage.remove("access_token");
   }
+
   setAccessToken(access_token: any) {
     this.secure_storage.set("access_token", access_token);
   }

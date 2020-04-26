@@ -225,7 +225,8 @@ export class EventService {
   }
 
   increaseUnreadMessagesCount(event_id: number) {
-    let foundElement = this.events.find((event) => event.id = event_id);
+    let foundElement = this.events.find((event) => event.id == event_id);
     foundElement.count_unread_messages++;
+    foundElement.last_message_time = new Date();
   }
 }

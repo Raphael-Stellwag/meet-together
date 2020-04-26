@@ -72,6 +72,7 @@ import { AddSuggestionButtonComponent } from './frames/add-suggestion-button/add
 import { NewSuggestionDialog } from './dialogs/new-suggestion-dialog/new-suggestion-dialog.component';
 import { CreateSuggestionComponent } from './frames/create-suggestion/create-suggestion.component';
 import { AuthGuard } from "./guards/auth.guard";
+import { UpdateUserNameDialog } from './dialogs/update-user-name-dialog/update-user-name-dialog.component';
 
 
 @NgModule({
@@ -98,6 +99,7 @@ import { AuthGuard } from "./guards/auth.guard";
     NewSuggestionDialog,
     CreateSuggestionComponent,
     SortByPipe,
+    UpdateUserNameDialog,
   ],
   imports: [
     BrowserModule,

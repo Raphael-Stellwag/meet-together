@@ -25,6 +25,31 @@ export class UserService {
     return this.user.id;
   }
 
+  getUser() {
+    return this.user;
+  }
+
+  renameUser(username: String) {
+    let _this = this;
+    return new Promise((resolve, reject) => {
+      var body: IUser = {
+        name: username
+      }
+      this.httpClient.put(environment.api_base_uri + "v1/user/" + this.user.id + "/rename", body).subscribe(
+        (data: IUser) => {
+          console.log("POST Request is successful ", data);
+          let fullUser: IUser = _this.storageService.loadUserCredentialsWithPassword();
+          fullUser.name = data.name;
+          _this.storageService.saveUserCredentials(fullUser);
+          _this.user.name = username;
+        },
+        error => {
+          console.log("Error", error);
+          reject(error);
+        });
+    });
+  }
+
   createUserName(username: string) {
     let _this = this;
     return new Promise((resolve, reject) => {

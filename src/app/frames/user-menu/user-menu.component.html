@@ -5,7 +5,7 @@
 </button>
 
 <mat-menu #menu="matMenu">
-    <button mat-menu-item disabled>{{username}}</button>
-    <button mat-menu-item>Settings</button>
+    <button mat-menu-item disabled>{{user.name}}</button>
+    <button mat-menu-item (click)="renameUser()">Rename</button>
     <button mat-menu-item>Register/Logout</button>
 </mat-menu>

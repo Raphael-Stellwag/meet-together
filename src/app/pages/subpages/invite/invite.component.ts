@@ -133,9 +133,7 @@ export class InviteComponent implements OnInit, AfterViewInit {
     const value = event.value;
     console.log(event.value);
 
-    let regexp = new RegExp(/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/);
-
-    if (regexp.test(value)) {
+    if (this.helperFunctions.isValidEmail(value)) {
       this.recipients.push(value);
     }
 

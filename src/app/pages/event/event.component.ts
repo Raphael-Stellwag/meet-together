@@ -25,6 +25,7 @@ export class EventComponent implements OnInit {
   constructor(private actRoute: ActivatedRoute, private router: Router, private eventService: EventService, private breakpointObserver: BreakpointObserver) {
   }
 
+  //Open the menu on mobile devices
   toggleMenu($event) {
     this.sidenav.fixedInViewport = true;
     this.sidenav.toggle();
@@ -48,7 +49,7 @@ export class EventComponent implements OnInit {
         }
       })
       .catch((error) => console.error(error))
-    console.log(window.innerWidth)
+
     if (window.innerWidth < 768) {
       this.sidenav.fixedTopGap = 55;
       this.opened = false;
@@ -69,6 +70,7 @@ export class EventComponent implements OnInit {
     }
   }
 
+  /*TODO REMOVE
   isBiggerScreen() {
     const width = window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth;
     if (width < 768) {
@@ -76,5 +78,5 @@ export class EventComponent implements OnInit {
     } else {
       return false;
     }
-  }
+  }*/
 }

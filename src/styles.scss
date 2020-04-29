@@ -4,6 +4,25 @@ html, body { height: 100%; }
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 
 @import "~ng-pick-datetime/assets/style/picker.min.css";
+@import "@angular/material/prebuilt-themes/indigo-pink.css";
+@import '~@angular/material/theming';
+
+@import './app/pages/subpages/messages/messages.component';
+
+
+@include mat-core();
+
+$primary: mat-palette($mat-indigo, 500, 200, 700);
+$accent:  mat-palette($mat-pink, 500, 200, 700);
+$warn:    mat-palette($mat-grey, 500, 200, 700);
+$custom-theme: mat-light-theme($primary, $accent, $warn);
+
+//$custom-theme-primary: mat-palette($mat-grey, 900);
+//$custom-theme-accent:mat-palette($mat-pink, A200, A100, A400);
+//$custom-theme-warn: mat-palette($mat-red);
+//$custom-theme: mat-light-theme($custom-theme-primary, $custom-theme-accent, $custom-theme-warn);
+//$theme: angular-material-theme();
+@include message-theme($custom-theme);
 
 .mat-radio-button ~ .mat-radio-button {
     margin-left: 16px;

@@ -1,3 +1,37 @@
-<mat-card style="margin: 20px 0px;" *ngFor="let message of messages | sortBy:'asc':'time';">
-    <h4>{{printGeneratedMessage(message)}}</h4>
-</mat-card>
+<div style="min-height: calc(100vh - 250px);">
+
+    <div *ngFor="let message of messages | sortBy:'asc':'time';">
+        <mat-card style="margin: 20px 0px" class="generated-message"
+            *ngIf="message.generated_content_description != null">
+            <span>{{printGeneratedMessage(message)}}</span>
+        </mat-card>
+        <mat-card style="margin: 20px 0px" color="primary" class="own-message"
+            *ngIf="message.generated_content_description == null && message.user_id == user_id">
+            {{message.user_name}}:<br>
+            <span>{{message.content}}</span>
+        </mat-card>
+        <mat-card style="margin: 20px 0px" color="primary" class="foreign-message"
+            *ngIf="message.generated_content_description == null && message.user_id != user_id">
+            {{message.user_name}}:<br>
+            <span>{{message.content}}</span>
+        </mat-card>
+    </div>
+
+</div>
+<div
+    style="position: sticky; margin-left: -2vw; margin-right: -2vw; bottom: 0px; background-color: #fafafa;box-shadow:0 3px 5px -1px rgba(0,0,0,.2),0 6px 10px 0 rgba(0,0,0,.14),0 1px 18px 0 rgba(0,0,0,.12)">
+    <div style="margin: 20px 20px; bottom: 10px;">
+        <span>
+            <mat-form-field style="width: calc(100% - 60px); margin-bottom: calc(-1.3em + 10px); margin-top: 10px;"
+                appearance="outline">
+                <mat-label>Type in your Message</mat-label>
+                <textarea matInput style="min-height: 20px;" cdkTextareaAutosize [(ngModel)]="message"
+                    #autosize="cdkTextareaAutosize" cdkAutosizeMaxRows="5"></textarea>
+            </mat-form-field>
+            <button mat-mini-fab color="accent" aria-label="Example icon button with a plus one icon" style="margin-left: 10px;
+            top: -5px;" (click)="sendMessage()">
+                <mat-icon>send</mat-icon>
+            </button>
+        </span>
+    </div>
+</div>

@@ -11,29 +11,29 @@
         [opened]="(isHandset$ | async) === false">
         <mat-list>
             <mat-list-item (click)="closeMenu($event)" [routerLink]="['./messages/']">
-                <mat-icon>chat</mat-icon>&emsp;Messages
+                <mat-icon fontSet="material-icons-two-tone">chat</mat-icon>&emsp;Messages
             </mat-list-item>
             <mat-list-item (click)="closeMenu($event)" [routerLink]="['./plan/']">
-                <mat-icon>event</mat-icon>&emsp;Plan
+                <mat-icon fontSet="material-icons-two-tone">event</mat-icon>&emsp;Plan
             </mat-list-item>
             <mat-list-item (click)="closeMenu($event)" [routerLink]="['./details/']">
-                <mat-icon>details</mat-icon>&emsp;Details
+                <mat-icon fontSet="material-icons-two-tone">details</mat-icon>&emsp;Details
             </mat-list-item>
             <mat-list-item (click)="closeMenu($event)" [routerLink]="['./participants/']">
-                <mat-icon>group</mat-icon>&emsp;Participants
+                <mat-icon fontSet="material-icons-two-tone">group</mat-icon>&emsp;Participants
             </mat-list-item>
             <mat-list-item (click)="closeMenu($event)" [routerLink]="['./invite/']">
-                <mat-icon>email</mat-icon>&emsp;Invite
+                <mat-icon fontSet="material-icons-two-tone">email</mat-icon>&emsp;Invite
             </mat-list-item>
             <mat-list-item *ngIf="event.creator" (click)="closeMenu($event)" [routerLink]="['./edit/']">
-                <mat-icon>create</mat-icon>&emsp;Edit
+                <mat-icon fontSet="material-icons-two-tone">create</mat-icon>&emsp;Edit
             </mat-list-item>
         </mat-list>
 
     </mat-sidenav>
 
     <!-- Main content "-->
-    <mat-sidenav-content style="overflow:scroll;height: calc(100vh - 130px);">
+    <mat-sidenav-content style="overflow-y: scroll;overflow-x: hidden;height: calc(100vh - 130px);">
         <div class="custom-box">
             <router-outlet></router-outlet>
         </div>

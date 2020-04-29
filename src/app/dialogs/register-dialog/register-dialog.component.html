@@ -1,0 +1,33 @@
+<h1 mat-dialog-title>Sign up to meet together!</h1>
+<form [formGroup]="myForm" (ngSubmit)="register()" novalidate>
+    <div mat-dialog-content>
+        <p>With signing up you can access your account from several devices</p>
+        <p>Your Sign up credentials:</p>
+        <mat-form-field>
+            <mat-label>User name</mat-label>
+            <input required matInput formControlName="name">
+            <mat-error *ngIf="errorHandling('name', 'required')">
+                You have to choose a user name
+            </mat-error>
+        </mat-form-field>
+        <br>
+        <mat-form-field>
+            <mat-label>E-mail Address</mat-label>
+            <input required matInput type="email" formControlName="email" autofocus>
+        </mat-form-field>
+        <mat-error *ngIf="errorHandling('email', 'email')">
+            You must provide at correct email address
+        </mat-error>
+        <br>
+        <mat-form-field>
+            <mat-label>Password</mat-label>
+            <input required matInput type="password" formControlName="password">
+        </mat-form-field>
+        <mat-error *ngIf="errorHandling('password', 'minlength')">
+            You must provide at least <strong>8 characters</strong>
+        </mat-error>
+    </div>
+    <div mat-dialog-actions>
+        <button mat-button type="submit">Sign up</button>
+    </div>
+</form>

@@ -73,6 +73,8 @@ import { NewSuggestionDialog } from './dialogs/new-suggestion-dialog/new-suggest
 import { CreateSuggestionComponent } from './frames/create-suggestion/create-suggestion.component';
 import { AuthGuard } from "./guards/auth.guard";
 import { UpdateUserNameDialog } from './dialogs/update-user-name-dialog/update-user-name-dialog.component';
+import { LoginDialog } from './dialogs/login-dialog/login-dialog.component';
+import { RegisterDialog } from './dialogs/register-dialog/register-dialog.component';
 
 
 @NgModule({
@@ -100,6 +102,8 @@ import { UpdateUserNameDialog } from './dialogs/update-user-name-dialog/update-u
     CreateSuggestionComponent,
     SortByPipe,
     UpdateUserNameDialog,
+    LoginDialog,
+    RegisterDialog,
   ],
   imports: [
     BrowserModule,

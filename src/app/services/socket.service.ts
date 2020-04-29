@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, OnDestroy } from '@angular/core';
 import io from 'socket.io-client';
 import { Observable } from 'rxjs';
 import { IMessage } from '../interfaces/imessage';
@@ -13,7 +13,7 @@ import { environment } from 'src/environments/environment';
 @Injectable({
   providedIn: 'root'
 })
-export class SocketService {
+export class SocketService implements OnDestroy {
   socket;
   initialized = false;
   resolve: (() => void)[] = [];
@@ -22,6 +22,7 @@ export class SocketService {
     this.initializeSocket();
   }
 
+  /* TODO TEST THIS
   subscribeNewMessage(event_id) {
     let promise = new Promise(resolve => {
       if (this.initialized) {
@@ -35,7 +36,7 @@ export class SocketService {
     promise.then(() => {
       this.socket.emit('subscribe_new_message', event_id)
     })
-  }
+  }*/
 
   newMessageReceived() {
     let observable = new Observable<IMessage>(observer => {
@@ -62,12 +63,13 @@ export class SocketService {
     return observable;
   }
 
+  /* TODO TEST THIS
   unsubcribeNewMessage(event_id) {
     this.socket.emit("unsubscribe_new_message", event_id);
     //this.socket.off("unsubscribe_new_message");
     //Resets the callback For new message, otherwise it will be called multiple times
     //this.socket._callbacks.$new_message = [];
-  }
+  }*/
 
   subscribeEvent(event_id) {
     let promise = new Promise(resolve => {
@@ -148,4 +150,15 @@ export class SocketService {
     }).catch(err => console.log(err))
   }
 
+  logout() {
+    this.socket.close();
+    this.socket = null;
+  }
+
+
+  ngOnDestroy() {
+    console.log('ngOnDestroy: cleaning up...');
+    this.socket.close();
+    alert("ngOndestroy called")
+  }
 }

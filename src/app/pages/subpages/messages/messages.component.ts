@@ -1,9 +1,10 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, HostListener, ViewChild, ElementRef } from '@angular/core';
 import { ActivatedRoute, ActivatedRouteSnapshot } from '@angular/router';
 import { MessagesService } from 'src/app/services/messages.service';
 import { IMessage } from 'src/app/interfaces/imessage';
 import { EMessageGenerated } from 'src/app/enums/emessage-generated.enum';
 import { HelperFunctionsService } from 'src/app/services/helper-functions.service';
+import { UserService } from 'src/app/services/user.service';
 
 @Component({
   selector: 'app-messages',
@@ -12,19 +13,24 @@ import { HelperFunctionsService } from 'src/app/services/helper-functions.servic
 })
 export class MessagesComponent implements OnInit, OnDestroy {
   messages: IMessage[] = [];
+  message: String;
+  event_id;
+  user_id;
 
-  constructor(private actRoute: ActivatedRoute, private messageService: MessagesService, private helperFunctions: HelperFunctionsService) { }
+  constructor(private actRoute: ActivatedRoute, private messageService: MessagesService, private helperFunctions: HelperFunctionsService, private userService: UserService) {
+    this.user_id = userService.getUserId();
+  }
 
   ngOnInit(): void {
-    let event_id = null;
+    this.event_id = null;
     this.actRoute.snapshot.pathFromRoot.forEach((element: ActivatedRouteSnapshot) => {
       console.log(element);
       if (element.params.id != undefined && element.params.id != null) {
         console.log(element.params.id);
-        event_id = element.params.id;
+        this.event_id = element.params.id;
       }
     })
-    this.messageService.getMessages(event_id)
+    this.messageService.getMessages(this.event_id)
       .then(messages => {
         this.messages = messages;
       })
@@ -69,4 +75,10 @@ export class MessagesComponent implements OnInit, OnDestroy {
     return return_value;
   }
 
+  sendMessage() {
+    if (this.message.trim().length > 0) {
+      this.messageService.sendMessage(this.event_id, this.message)
+        .then(() => this.message = "")
+    }
+  }
 }

@@ -229,4 +229,9 @@ export class EventService {
     foundElement.count_unread_messages++;
     foundElement.last_message_time = new Date();
   }
+
+  logout() {
+    this.events = [];
+    this.socketService.logout();
+  }
 }

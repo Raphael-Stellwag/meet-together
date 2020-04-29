@@ -2,14 +2,22 @@
 
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 9.1.1.
 
-## Development server
+## Instalation
+Run ...
+```
+	npm install
+```
+to install all the dependencies. Then run ...
+```
+	ng serve
+```
+to run the application ([http://localhost:4200](http://localhost:4200)) or you can also specify the host by ...
+```
+	ng serve --host 0.0.0.0
+```
+... to make the application accessible on other devices ([http://{local-ip}:4200](http://{local-ip}:4200)) 
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
+### crypto-js not found warning
 
-## Build
-
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory. Use the `--prod` flag for a production build.
-
-
-node_modules/@angular-devkit/build-angular/src/angular-cli-files/models/webpack-configs/browser.js
-change "node: false" --> "node: {crypto:true}"
+The app still should work completly find (this error just could get to a problem when built for prod). 
+You can rid of this warning by editting `node_modules/@angular-devkit/build-angular/src/angular-cli-files/models/webpack-configs/browser.js`, change `node: false` to `node: {crypto:true}`.

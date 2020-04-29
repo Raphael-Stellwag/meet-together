@@ -1,0 +1,27 @@
+<h1 mat-dialog-title>Login to meet together!</h1>
+<form [formGroup]="myForm" (ngSubmit)="login()" novalidate>
+    <div mat-dialog-content>
+        <p>To Log in you must already have created an account previously, otherwise you can do that now for free through
+            clicking Sign up in the user menu</p>
+        <p *ngIf="!yetRegistered">With the login your current session with all the data will be terminated</p>
+        <p>Your login credentials:</p>
+        <mat-form-field>
+            <mat-label>E-mail Address</mat-label>
+            <input required matInput type="email" formControlName="email" autofocus>
+        </mat-form-field>
+        <mat-error *ngIf="errorHandling('email', 'email')">
+            You must provide at correct email address
+        </mat-error>
+        <br>
+        <mat-form-field>
+            <mat-label>Password</mat-label>
+            <input required matInput type="password" formControlName="password">
+        </mat-form-field>
+        <mat-error *ngIf="errorHandling('password', 'minlength')">
+            You must provide at least <strong>8 characters</strong>
+        </mat-error>
+    </div>
+    <div mat-dialog-actions>
+        <button mat-button type="submit">Log in</button>
+    </div>
+</form>

@@ -7,15 +7,16 @@ import * as CryptoJS from 'crypto-js';
   providedIn: 'root'
 })
 export class StorageService {
-
-  private storage: Storage;
   private secure_storage: SecureLS;
 
   constructor() {
-    this.storage = localStorage;
     this.secure_storage = new SecureLS({
       encodingType: "aes"
     });
+  }
+
+  logout() {
+    this.secure_storage.removeAll();
   }
 
   saveUserCredentials(user: IUser) {
@@ -34,14 +35,14 @@ export class StorageService {
     let user: IUser = {
       id: userWithPwd.id,
       name: userWithPwd.name,
-      password_generated: userWithPwd.password_generated
+      registered: userWithPwd.registered
     }
     return user;
   }
 
   loadUserCredentialsWithPassword(): IUser {
     if (this.secure_storage.getAllKeys().includes("user") == false) {
-      return { name: null, id: null, password_generated: null };
+      return { name: null, id: null, registered: null };
     }
     let cipherUser = this.secure_storage.get("user");
     let secret = this.secure_storage.get("secret");

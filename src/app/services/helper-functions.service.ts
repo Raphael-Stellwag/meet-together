@@ -6,7 +6,6 @@ import { HttpHeaders } from '@angular/common/http';
   providedIn: 'root'
 })
 export class HelperFunctionsService {
-
   constructor() { }
 
   printDate(date: Date) {
@@ -49,5 +48,10 @@ export class HelperFunctionsService {
   getHttpHeaders() {
     return new HttpHeaders()
       .set('content-type', 'application/json')
+  }
+
+  isValidEmail(value: string) {
+    let regexp = new RegExp(/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/);
+    return regexp.test(value);
   }
 }

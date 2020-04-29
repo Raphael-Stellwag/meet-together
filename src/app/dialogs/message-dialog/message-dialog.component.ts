@@ -7,9 +7,9 @@ import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
   styleUrls: ['./message-dialog.component.scss']
 })
 export class MessageDialogComponent implements OnInit {
-  message; 
+  message: boolean;
   error;
-  
+
   constructor(private dialogRef: MatDialogRef<MessageDialogComponent>, @Inject(MAT_DIALOG_DATA) public data: any) {
     this.error = data.error;
     this.message = data.message;

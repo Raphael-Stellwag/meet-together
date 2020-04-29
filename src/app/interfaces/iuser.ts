@@ -1,6 +1,7 @@
 export interface IUser {
     id?: number
-    name: String
+    name?: String
+    email?: String,
     password?: String,
-    password_generated?: boolean
+    registered?: boolean
 }

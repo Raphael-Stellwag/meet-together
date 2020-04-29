@@ -7,5 +7,7 @@
 <mat-menu #menu="matMenu">
     <button mat-menu-item disabled>{{user.name}}</button>
     <button mat-menu-item (click)="renameUser()">Rename</button>
-    <button mat-menu-item>Register/Logout</button>
+    <button mat-menu-item *ngIf="!user.registered" (click)="login()">Log in</button>
+    <button mat-menu-item *ngIf="!user.registered" (click)="register()">Sign up</button>
+    <button mat-menu-item *ngIf="user.registered" (click)="logout()">Logout</button>
 </mat-menu>

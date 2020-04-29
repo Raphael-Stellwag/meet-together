@@ -1,6 +1,6 @@
 {
-  "name": "meet-together-client",
-  "short_name": "meet-together-client",
+  "name": "Meet Together",
+  "short_name": "Meet Together",
   "theme_color": "#1976d2",
   "background_color": "#fafafa",
   "display": "standalone",

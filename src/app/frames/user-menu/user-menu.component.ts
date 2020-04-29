@@ -28,19 +28,25 @@ export class UserMenuComponent {
 
   renameUser() {
     let dialogRef: MatDialogRef<UpdateUserNameDialog> = this.dialog.open(UpdateUserNameDialog, { data: { name: this.user.name } });
-    dialogRef.afterClosed().toPromise().then((username: String) => {
-      this.userService.renameUser(username);
+    dialogRef.afterClosed().toPromise().then((successfull: boolean) => {
+      if (successfull) {
+        let config = new MatSnackBarConfig();
+        config.duration = 5000;
+        let snackBarRef = this.snackBar.open('User name successfully changed', null, config);
+      }
     })
   }
 
   login() {
     let dialogRef: MatDialogRef<LoginDialog> = this.dialog.open(LoginDialog, { data: { user: this.user } });
-    dialogRef.afterClosed().toPromise().then((user: IUser) => {
-      this.eventService.logout();
-      this.messageService.logout();
-      this.zone.runOutsideAngular(() => {
-        location.reload();
-      });
+    dialogRef.afterClosed().toPromise().then((successfull: boolean) => {
+      if (successfull) {
+        this.eventService.logout();
+        this.messageService.logout();
+        this.zone.runOutsideAngular(() => {
+          location.reload();
+        });
+      }
     })
   }
 
@@ -55,11 +61,12 @@ export class UserMenuComponent {
 
   register() {
     let dialogRef: MatDialogRef<RegisterDialog> = this.dialog.open(RegisterDialog, { data: { user: this.user } });
-    dialogRef.afterClosed().toPromise().then((user: IUser) => {
-      console.log(user);
-      let config = new MatSnackBarConfig();
-      config.duration = 6000;
-      let snackBarRef = this.snackBar.open('Sign up was successfull, dont forget your password', null, config);
+    dialogRef.afterClosed().toPromise().then((successfull: boolean) => {
+      if (successfull) {
+        let config = new MatSnackBarConfig();
+        config.duration = 5000;
+        let snackBarRef = this.snackBar.open('Sign up was successfull, dont forget your password', null, config);
+      }
     })
   }
 }

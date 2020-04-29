@@ -1,12 +1,8 @@
 import { Component, OnInit, ViewChild, ElementRef, AfterViewInit } from '@angular/core';
 import { ActivatedRoute, ActivatedRouteSnapshot } from '@angular/router';
 import { EventService } from 'src/app/services/event.service';
-import { EventComponent } from '../../event/event.component';
 import { ENTER, COMMA, SPACE } from '@angular/cdk/keycodes';
 import { FormControl } from '@angular/forms';
-import { MatAutocomplete } from '@angular/material/autocomplete';
-import { Observable } from 'rxjs';
-import { IParticipant } from 'src/app/interfaces/iparticipant';
 import { MatChipInputEvent } from '@angular/material/chips';
 import { UserService } from 'src/app/services/user.service';
 import { HelperFunctionsService } from 'src/app/services/helper-functions.service';
@@ -35,53 +31,56 @@ export class InviteComponent implements OnInit, AfterViewInit {
     })
     console.log(this.event_id)
     this.eventService.getEvent(this.event_id).then((event) => {
-      this.accessUrl = window.location.protocol + "//" + window.location.host + "/join-event/" + this.event_id + "?accesstoken=" + event.accesstoken;
-
-      this.subject = this.userService.getUserName() + " invited you to join the Event: " + event.name;
-      this.content =
-        "Hi, \n" + this.userService.getUserName() + " invited you to join the Event: " + event.name + "\n\n" +
-        "Here are some details about the event: \n" +
-        "\t- Name: " + event.name + "\n" +
-        "\t- Description: " + event.description + "\n";
-      if (event.start_date != null) {
-        this.content = this.content + "\t- Start: " + this.helperFunctions.printDate(event.start_date);
-        if (event.end_date != null) {
-          this.content = this.content + " - " + this.helperFunctions.printEndDate(event.end_date, event.start_date);
-        }
-        this.content = this.content + "\n";
-        if (event.place != null) {
-          this.content = this.content + "\t- Location: " + event.place + "\n";
-        }
-
-        if (event.link != null) {
-          this.content = this.content + "\t- More information about the location: " + event.link + " \n";
-        }
-      }
-      this.content = this.content + "\nTo join the event click the following link: " + this.accessUrl + " \n\n";
-      this.content = this.content + "Best regards and wishes from the Meet together team"
+      console.log(window.location);
+      let base_href = window.location.href.substring(0, window.location.href.indexOf("/event/"));
+      console.log(base_href);
+      this.accessUrl = base_href + "/join-event/" + this.event_id + "?accesstoken=" + event.accesstoken;
+      this.initializeMailContentAndSubject(event);
     })
   }
 
+  private initializeMailContentAndSubject(event: any) {
+    this.subject = this.userService.getUserName() + " invited you to join the Event: " + event.name;
+    this.content =
+      "Hi, \n" + this.userService.getUserName() + " invited you to join the Event: " + event.name + "\n\n" +
+      "Here are some details about the event: \n" +
+      "\t- Name: " + event.name + "\n" +
+      "\t- Description: " + event.description + "\n";
+    if (event.start_date != null) {
+      this.content = this.content + "\t- Start: " + this.helperFunctions.printDate(event.start_date);
+      if (event.end_date != null) {
+        this.content = this.content + " - " + this.helperFunctions.printEndDate(event.end_date, event.start_date);
+      }
+      this.content = this.content + "\n";
+      if (event.place != null) {
+        this.content = this.content + "\t- Location: " + event.place + "\n";
+      }
+
+      if (event.link != null) {
+        this.content = this.content + "\t- More information about the location: " + event.link + " \n";
+      }
+    }
+    this.content = this.content + "\nTo join the event click the following link: " + this.accessUrl + " \n\n";
+    this.content = this.content + "Best regards and wishes from the Meet together team"
+  }
+
   ngAfterViewInit() {
+    let _this = this
     //Share Button click must be triggered by user interaction: https://developer.mozilla.org/en-US/docs/Web/API/Navigator/share 
     this.shareBtn._elementRef.nativeElement.addEventListener('click', async () => {
-      const resultPara = document.querySelector('.result');
       try {
         if ((navigator as any).share) {
           const shareData = {
-            title: 'MDN',
-            text: 'Learn web development on MDN!',
-            url: 'https://developer.mozilla.org',
+            title: _this.subject,
+            text: this.content,
           }
           await (navigator as any).share(shareData)
-          resultPara.textContent = 'MDN shared successfully'
         } else {
           alert("Not available on this system, open on mobile device under https site")
           console.error("Not available on this system")
-          resultPara.textContent = 'Error: ' + 'not available'
         }
       } catch (err) {
-        resultPara.textContent = 'Error: ' + err
+        console.log(err);
       }
     });
   }

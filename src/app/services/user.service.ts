@@ -48,6 +48,7 @@ export class UserService {
           fullUser.name = data.name;
           _this.storageService.saveUserCredentials(fullUser);
           _this.user.name = username;
+          resolve();
         },
         error => {
           console.log("Error", error);

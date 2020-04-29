@@ -13,7 +13,7 @@
                 {{email}}
                 <mat-icon matChipRemove>cancel</mat-icon>
             </mat-chip>
-            <input placeholder="Recipients" #participantInput [formControl]="recipientsCtrl"
+            <input placeholder="Recipients (email address)" #participantInput [formControl]="recipientsCtrl"
                 [matChipInputFor]="chipList" [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
                 (matChipInputTokenEnd)="add($event)">
         </mat-chip-list>
@@ -21,19 +21,19 @@
 
     <mat-form-field style="width: 100%;" appearance="outline">
         <mat-label>Subject</mat-label>
-        <textarea matInput style="min-height: 20px;" cdkTextareaAutosize [(ngModel)]="subject"
+        <textarea matInput style="margin: 0 0; padding: 0 0;" cdkTextareaAutosize [(ngModel)]="subject"
             #autosize="cdkTextareaAutosize" cdkAutosizeMaxRows="3"></textarea>
     </mat-form-field>
 
     <mat-form-field style="width: 100%;" appearance="outline">
         <mat-label>Content</mat-label>
-        <textarea matInput cdkTextareaAutosize [(ngModel)]="content" #autosize="cdkTextareaAutosize"></textarea>
+        <textarea style="min-height: 20px !important;" matInput cdkTextareaAutosize [(ngModel)]="content"
+            #autosize="cdkTextareaAutosize"></textarea>
     </mat-form-field>
 
     <button *ngIf="recipients.length > 0" mat-raised-button color="primary" (click)="sendEmail()">Send Email</button>
-    <button *ngIf="recipients.length == 0" mat-raised-button disabled color="grey">You need at least one
-        recipient</button>
+    <button style="margin-left: 20px; margin-top: 20px" mat-raised-button color="primary" #shareBtn>Share via
+        phone</button>
 
-    <button style="margin-left: 20px;" mat-raised-button color="primary" #shareBtn>Share via phone</button>
 
 </mat-card>

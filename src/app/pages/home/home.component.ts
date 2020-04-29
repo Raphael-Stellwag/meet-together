@@ -15,8 +15,6 @@ import { HelperFunctionsService } from 'src/app/services/helper-functions.servic
   styleUrls: ['./home.component.scss']
 })
 export class HomeComponent {
-  title = 'meet-together-client';
-
   checked: boolean = false;
   disabled: boolean = false;
   color: String = "primary";

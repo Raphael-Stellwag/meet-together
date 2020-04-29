@@ -5,8 +5,6 @@
 export const environment = {
   production: false,
   //api_base_uri: "https://test-ddnss.ddnss.de/"
-  //api_base_uri: "http://192.168.1.66:80/"
-
   api_base_uri: "http://localhost:9000/"
 };
 

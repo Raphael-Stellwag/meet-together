@@ -21,3 +21,17 @@ to run the application ([http://localhost:4200](http://localhost:4200)) or you c
 
 The app still should work completly find (this error just could get to a problem when built for prod). 
 You can rid of this warning by editting `node_modules/@angular-devkit/build-angular/src/angular-cli-files/models/webpack-configs/browser.js`, change `node: false` to `node: {crypto:true}`.
+
+
+## Build for production
+
+To build for production run:
+
+```
+	ng build --prod --base-href /meet-together/
+```
+
+and then publish to github pages by:
+```
+	ngh
+```

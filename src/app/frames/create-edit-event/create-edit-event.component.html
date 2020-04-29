@@ -14,7 +14,7 @@
     <mat-form-field style="width: 100%;" appearance="outline">
         <mat-label>Description</mat-label>
         <textarea matInput cdkTextareaAutosize formControlName="description" #autosize="cdkTextareaAutosize"
-            cdkAutosizeMinRows="1" cdkAutosizeMaxRows="5"></textarea>
+            cdkAutosizeMinRows="1" cdkAutosizeMaxRows="5" style="min-height: 20px !important;"></textarea>
     </mat-form-field>
     <div *ngIf="!isUpdateView">
         <br>

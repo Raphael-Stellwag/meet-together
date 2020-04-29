@@ -3,7 +3,7 @@
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
-    "meet-together-client": {
+    "meet-together": {
       "projectType": "application",
       "schematics": {
         "@schematics/angular:component": {
@@ -69,18 +69,18 @@
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
           "options": {
-            "browserTarget": "meet-together-client:build"
+            "browserTarget": "meet-together:build"
           },
           "configurations": {
             "production": {
-              "browserTarget": "meet-together-client:build:production"
+              "browserTarget": "meet-together:build:production"
             }
           }
         },
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "browserTarget": "meet-together-client:build"
+            "browserTarget": "meet-together:build"
           }
         },
         "test": {
@@ -119,16 +119,16 @@
           "builder": "@angular-devkit/build-angular:protractor",
           "options": {
             "protractorConfig": "e2e/protractor.conf.js",
-            "devServerTarget": "meet-together-client:serve"
+            "devServerTarget": "meet-together:serve"
           },
           "configurations": {
             "production": {
-              "devServerTarget": "meet-together-client:serve:production"
+              "devServerTarget": "meet-together:serve:production"
             }
           }
         }
       }
     }
   },
-  "defaultProject": "meet-together-client"
+  "defaultProject": "meet-together"
 }

@@ -15,7 +15,7 @@
                     Show Results
                 </mat-slide-toggle>
             </div>
-            <div *ngIf="isResultView" class="col">
+            <div *ngIf="isResultView" class="col" style="margin-top: 10px;">
                 <mat-form-field style="width: 100%;">
                     <mat-chip-list #chipList aria-label="Fruit selection">
                         <mat-chip *ngFor="let participant of importantParticipants" selectable="true"
@@ -90,10 +90,9 @@
     </div>
 </div>
 <div *ngIf="isResultView">
-    <!--TODO TEST THIS initial sort works wird aber nicht ausreichend aktualisiert-->
     <mat-card *ngFor="let suggestion of timePlaceSuggestions | sortBy:'desc':'score'; let i = index"
         style="margin-bottom: 20px;">
-        <!--   | sortBy:'desc':'score' -->
+
         {{helperFunctions.printDate(suggestion.start_date)}}
         <span *ngIf="suggestion.end_date != null">
             &nbsp;-&nbsp;{{helperFunctions.printEndDate(suggestion.end_date, suggestion.start_date)}}
@@ -107,14 +106,6 @@
             <br>
             Link to Location: {{suggestion.link}}
         </span>
-        <!--<br>
-        Hidden in Future: {{suggestion.score}}
-        <br>
-        {{countParticipantsCanAttend(suggestion)}} out of {{allParticipants.length}} Participants can attend
-        <br>
-        {{countImportantParticipantsCanAttend(suggestion)}} out of {{importantParticipants.length}} important
-        Participants can attend-->
-        <br>
 
         All Participants who can attend: <br>
         <span *ngFor="let attendee of suggestion.can_attend, let o = index">

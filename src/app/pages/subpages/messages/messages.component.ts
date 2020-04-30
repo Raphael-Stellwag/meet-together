@@ -24,9 +24,7 @@ export class MessagesComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.event_id = null;
     this.actRoute.snapshot.pathFromRoot.forEach((element: ActivatedRouteSnapshot) => {
-      console.log(element);
       if (element.params.id != undefined && element.params.id != null) {
-        console.log(element.params.id);
         this.event_id = element.params.id;
       }
     })

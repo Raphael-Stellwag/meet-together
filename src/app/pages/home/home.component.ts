@@ -35,13 +35,11 @@ export class HomeComponent {
         const dialogRef = this.dialog.open(NewUserDialog);
 
         dialogRef.afterClosed().subscribe(userName => {
-          console.log(userName);
           _this.addJoinButton.showToolTip();
           this.userService.createUserName(userName).then(() => {
             _this.topBarComponent.userMenu.updateUserName();
             this.eventSerivce.getEvents()
               .then((events: IEvent[]) => this.events = events)
-
           });
         });
       })

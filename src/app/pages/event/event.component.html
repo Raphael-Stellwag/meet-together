@@ -5,10 +5,9 @@
 </div>
 
 <mat-sidenav-container>
-    <!-- mode="side" opened="true"     (added)="eventAdded($event)"-->
     <mat-sidenav #sidenav style="width: 200px;" class="my-sidenav"
-        [attr.role]="(isHandset$ | async) ? 'dialog' : 'navigation'" [mode]="(isHandset$ | async) ? 'over' : 'side'"
-        [opened]="(isHandset$ | async) === false">
+        [attr.role]="(isHandset$ | async) ? 'dialog' : 'navigation'" [opened]="(isHandset$ | async) === false"
+        [mode]="(isHandset$ | async) ? 'over' : 'side'">
         <mat-list>
             <mat-list-item (click)="closeMenu($event)" [routerLink]="['./messages/']">
                 <mat-icon fontSet="material-icons-two-tone">chat</mat-icon>&emsp;Messages

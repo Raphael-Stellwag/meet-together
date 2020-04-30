@@ -15,7 +15,6 @@ export class AuthInterceptor implements HttpInterceptor {
     intercept(req: HttpRequest<any>,
         next: HttpHandler): Observable<HttpEvent<any>> {
 
-        //TODO FIX THIS
         let url = req.url;
         if (url == this.createTokenUrl) {
             return next.handle(this.addBasicAuthorizationHeader(req));
@@ -27,7 +26,7 @@ export class AuthInterceptor implements HttpInterceptor {
 
         const idToken = this.storage.getAccessToken();
         if (idToken == null) {
-            console.error("Secured url was called before the user was initilized, please fix this")
+            console.error(url, "Secured url was called before the user was initilized, please fix this")
             return next.handle(this.addAccessTokenAuthorizationHeader(req));
         } else {
             return next.handle(this.addAccessTokenAuthorizationHeader(req));

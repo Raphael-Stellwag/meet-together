@@ -22,9 +22,8 @@ export class EditComponent implements OnInit {
     if (data.timePlaceSuggestion != null) {
       console.error("Should be null: ", data.timePlaceSuggestion);
     }
-    console.log(data);
     this.eventService.updateEvent(data.event)
-      .catch(error => console.log(error));
+      .catch(error => console.error(error));
   }
 
 }

@@ -28,7 +28,7 @@ export class TimePlaceSuggestionService {
               })
           },
           (error: HttpErrorResponse) => {
-            console.log("Error", error);
+            console.warn("Error", error);
             this.authService.checkErrorAndCreateToken(error.status)
               .then(() => {
                 this.createTimePlaceSuggestion(eventId, timeplaceSuggestion)
@@ -47,11 +47,11 @@ export class TimePlaceSuggestionService {
     return new Promise((resolve, reject) => {
       this.httpClient.put(environment.api_base_uri + "v1/event/" + eventId + "/time-place-suggestion/" + timePlaceSuggestionId + "/user/" + this.userService.getUserId(), {}).subscribe(
         (data: any[]) => {
-          console.log("Get Request is successful ", data);
+          console.debug("Get Request is successful ", data);
           resolve(_this.helperFunctions.jsonDateToJsDate(data));
         },
         (error: HttpErrorResponse) => {
-          console.log("Error", error);
+          console.warn("Error", error);
           this.authService.checkErrorAndCreateToken(error.status)
             .then(() => {
               this.addUserToTimePlaceSuggestion(eventId, timePlaceSuggestionId)
@@ -70,11 +70,11 @@ export class TimePlaceSuggestionService {
     return new Promise((resolve, reject) => {
       this.httpClient.delete(environment.api_base_uri + "v1/event/" + event_id + "/time-place-suggestion/" + suggestion_id + "/user/" + this.userService.getUserId(), {}).subscribe(
         (data: ITimePlaceSuggestion) => {
-          console.log("Get Request is successful ", data);
+          console.debug("Get Request is successful ", data);
           resolve(_this.helperFunctions.jsonDateToJsDate(data));
         },
         (error: HttpErrorResponse) => {
-          console.log("Error", error);
+          console.warn("Error", error);
           this.authService.checkErrorAndCreateToken(error.status)
             .then(() => {
               this.removeUserFromTimePlaceSuggestion(event_id, suggestion_id)
@@ -99,7 +99,7 @@ export class TimePlaceSuggestionService {
           resolve(data);
         },
         (error: HttpErrorResponse) => {
-          console.log("Error", error);
+          console.warn("Error", error);
           this.authService.checkErrorAndCreateToken(error.status)
             .then(() => {
               this.getTimePlaceSuggestions(event_id)
@@ -121,12 +121,11 @@ export class TimePlaceSuggestionService {
         .then((event) => {
           event.choosen_time_place = suggestion_id
           let json = this.helperFunctions.ObjectToJSON(event);
-          console.log(json);
           this.httpClient.put(
             environment.api_base_uri + "v1/event/" + event_id + "/time-place-suggestion/" + suggestion_id + "/user/" + this.userService.getUserId() + "/choosen",
             json, { headers: this.helperFunctions.getHttpHeaders() }).subscribe(
               (data: IEvent) => {
-                console.log("PUT Request is successful ", data);
+                console.debug("PUT Request is successful ", data);
                 data = _this.helperFunctions.jsonDateToJsDate(data);
                 event.accesstoken = data.accesstoken;
                 event.description = data.description;
@@ -139,7 +138,7 @@ export class TimePlaceSuggestionService {
                 resolve(event);
               },
               (error: HttpErrorResponse) => {
-                console.log("Error", error);
+                console.warn("Error", error);
                 this.authService.checkErrorAndCreateToken(error.status)
                   .then(() => {
                     this.suggestionChoosen(event_id, suggestion_id)

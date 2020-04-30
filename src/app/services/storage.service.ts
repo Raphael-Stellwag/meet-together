@@ -28,10 +28,6 @@ export class StorageService {
 
   loadUserCredentials() {
     let userWithPwd: IUser = this.loadUserCredentialsWithPassword();
-    /*TODO TEST THIS
-    if (userWithPwd.id == null) {
-      return userWithPwd;
-    }*/
     let user: IUser = {
       id: userWithPwd.id,
       name: userWithPwd.name,

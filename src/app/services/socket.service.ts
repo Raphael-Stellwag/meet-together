@@ -22,37 +22,21 @@ export class SocketService implements OnDestroy {
     this.initializeSocket();
   }
 
-  /* TODO TEST THIS
-  subscribeNewMessage(event_id) {
-    let promise = new Promise(resolve => {
-      if (this.initialized) {
-        resolve();
-      } else {
-        //Socket connection not established yet (because its async) => will resolve it when establish
-        this.resolve.push(resolve);
-      }
-    })
-
-    promise.then(() => {
-      this.socket.emit('subscribe_new_message', event_id)
-    })
-  }*/
-
   newMessageReceived() {
     let observable = new Observable<IMessage>(observer => {
       let promise = new Promise(resolve => {
         if (this.initialized) {
           resolve();
         } else {
-          //Socket connection not established yet (because its async) => will resolve it when establish
+          //Socket connection not established yet (because its async) => will resolve it when established
           this.resolve.push(resolve);
         }
       })
 
       promise.then(() => {
-        console.log(this.socket);
+        console.debug(this.socket);
         this.socket.on('new_message', (data) => {
-          console.log(data);
+          console.debug(data);
           observer.next(data);
         });
         return () => { this.socket.disconnect(); }
@@ -62,14 +46,6 @@ export class SocketService implements OnDestroy {
 
     return observable;
   }
-
-  /* TODO TEST THIS
-  unsubcribeNewMessage(event_id) {
-    this.socket.emit("unsubscribe_new_message", event_id);
-    //this.socket.off("unsubscribe_new_message");
-    //Resets the callback For new message, otherwise it will be called multiple times
-    //this.socket._callbacks.$new_message = [];
-  }*/
 
   subscribeEvent(event_id) {
     let promise = new Promise(resolve => {
@@ -82,7 +58,6 @@ export class SocketService implements OnDestroy {
     })
 
     promise.then(() => {
-      console.log(event_id);
       this.socket.emit("subscribe_event", event_id);
       this.socket.emit('subscribe_new_message', event_id)
     })
@@ -100,9 +75,9 @@ export class SocketService implements OnDestroy {
       })
 
       promise.then(() => {
-        console.log(this.socket);
+        console.debug(this.socket);
         this.socket.on('event_update', (data) => {
-          console.log(data);
+          console.debug(data);
           observer.next(data);
         });
         return () => { this.socket.disconnect(); }
@@ -146,8 +121,8 @@ export class SocketService implements OnDestroy {
 
       this.initialized = true;
       this.resolve.forEach(res => res());
-      console.log("initialized")
-    }).catch(err => console.log(err))
+      console.log("Socket initilized")
+    }).catch(err => console.error(err))
   }
 
   logout() {
@@ -157,8 +132,6 @@ export class SocketService implements OnDestroy {
 
 
   ngOnDestroy() {
-    console.log('ngOnDestroy: cleaning up...');
     this.socket.close();
-    alert("ngOndestroy called")
   }
 }

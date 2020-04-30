@@ -52,31 +52,17 @@ export class EventComponent implements OnInit {
 
     if (window.innerWidth < 768) {
       this.sidenav.fixedTopGap = 55;
-      this.opened = false;
     } else {
-      this.sidenav.fixedTopGap = 55;
-      this.opened = true;
+      this.sidenav.fixedTopGap = 112;
     }
   }
 
   @HostListener('window:resize', ['$event'])
   onResize(event) {
     if (event.target.innerWidth < 768) {
-      this.sidenav.fixedTopGap = 55;
-      this.opened = false;
+      this.sidenav.fixedTopGap = 56;
     } else {
-      this.sidenav.fixedTopGap = 55
-      this.opened = true;
+      this.sidenav.fixedTopGap = 112
     }
   }
-
-  /*TODO REMOVE
-  isBiggerScreen() {
-    const width = window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth;
-    if (width < 768) {
-      return true;
-    } else {
-      return false;
-    }
-  }*/
 }

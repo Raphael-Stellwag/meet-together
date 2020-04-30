@@ -2,6 +2,7 @@
 
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 9.1.1.
 
+
 ## Instalation
 Run ...
 ```
@@ -21,6 +22,10 @@ to run the application ([http://localhost:4200](http://localhost:4200)) or you c
 
 The app still should work completly find (this error just could get to a problem when built for prod). 
 You can rid of this warning by editting `node_modules/@angular-devkit/build-angular/src/angular-cli-files/models/webpack-configs/browser.js`, change `node: false` to `node: {crypto:true}`.
+
+### Optional Configuration
+
+You can specify a different api_base_uri in the `environment/environment.ts` files. The api_base_uri is used for the http requests as well as for the socket.io connection.
 
 
 ## Build for production

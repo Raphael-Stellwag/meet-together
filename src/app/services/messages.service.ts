@@ -33,21 +33,20 @@ export class MessagesService {
     return new Promise<IMessage[]>((resolve, reject) => {
       this.httpClient.get(environment.api_base_uri + "v1/event/" + eventId + "/messages").subscribe(
         (data: IMessage[]) => {
-          console.log("GET Request is successful ", data);
+          console.debug("GET Request is successful ", data);
           this.messages.splice(0, this.messages.length);
           data.forEach((element) => {
             this.messages.push(this.deserializeMessage(element));
           });
-          //this.socketService.subscribeNewMessage(eventId);
           resolve(this.messages);
         },
         (error: HttpErrorResponse) => {
-          console.log("Error", error);
+          console.warn("Error", error);
           this.authService.checkErrorAndCreateToken(error.status)
             .then(() => {
               this.getMessages(eventId)
                 .then((data) => resolve(data))
-                .catch((err) => console.log(err))
+                .catch((err) => console.error(err))
             })
             .catch(() => {
               reject(error);
@@ -72,18 +71,18 @@ export class MessagesService {
       }
       this.httpClient.post(environment.api_base_uri + "v1/event/" + event_id + "/user/" + this.userService.getUserId() + "/message", messageObj).subscribe(
         (message: IMessage) => {
-          console.log("POST Request is successful ", message);
+          console.debug("POST Request is successful ", message);
           message = this.deserializeMessage(message);
           this.newMessageWithCorrospondingEventId(message)
           resolve(message);
         },
         (error: HttpErrorResponse) => {
-          console.log("Error", error);
+          console.warn("Error", error);
           this.authService.checkErrorAndCreateToken(error.status)
             .then(() => {
               this.sendMessage(event_id, content)
                 .then((data) => resolve(data))
-                .catch((err) => console.log(err))
+                .catch((err) => console.error(err))
             })
             .catch(() => {
               reject(error);
@@ -100,7 +99,6 @@ export class MessagesService {
 
   destroy() {
     this.event_id = null;
-    //this.socketService.unsubcribeNewMessage(event_id);
   }
 
   logout() {

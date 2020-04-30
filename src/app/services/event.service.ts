@@ -42,7 +42,7 @@ export class EventService {
       if (this.userService.getUserId() != null) {
         this.httpClient.get(environment.api_base_uri + "v1/user/" + this.userService.getUserId() + "/event").subscribe(
           (data: IEvent[]) => {
-            console.log("GET Request is successful ", data);
+            console.debug("GET Request is successful ", data);
             this.events.splice(0, this.events.length);
             data.forEach((element) => {
               element.count_unread_messages = Number(element.count_unread_messages);
@@ -56,12 +56,12 @@ export class EventService {
             resolve(this.events);
           },
           (error: HttpErrorResponse) => {
-            console.log("Error", error);
+            console.warn("Error", error);
             this.authService.checkErrorAndCreateToken(error.status)
               .then(() => {
                 this.getEvents()
                   .then((data) => resolve(data))
-                  .catch((err) => console.log(err))
+                  .catch((err) => console.error(err))
               })
               .catch(() => {
                 reject(error);
@@ -106,10 +106,9 @@ export class EventService {
     let _this = this;
     return new Promise((resolve, reject) => {
       let json = this.helperFunctions.ObjectToJSON(event);
-      console.log(json);
       this.httpClient.post(environment.api_base_uri + "v1/user/" + this.userService.getUserId() + "/event", json, { headers: this.helperFunctions.getHttpHeaders() }).subscribe(
         data => {
-          console.log("POST Request is successful ", data);
+          console.debug("POST Request is successful ", data);
           let event = _this.helperFunctions.jsonDateToJsDate(data)
           event.count_unread_messages = Number(event.count_unread_messages);
           _this.events.push(event);
@@ -118,7 +117,7 @@ export class EventService {
           resolve(event);
         },
         (error: HttpErrorResponse) => {
-          console.log("Error", error);
+          console.error("Error", error);
           this.authService.checkErrorAndCreateToken(error.status)
             .then(() => {
               this.addEvent(event)
@@ -136,11 +135,10 @@ export class EventService {
     let _this = this;
     return new Promise((resolve, reject) => {
       let json = this.helperFunctions.ObjectToJSON(event);
-      console.log(json);
       this.httpClient.put(environment.api_base_uri + "v1/user/" + this.userService.getUserId() + "/event/" + event.id, json, { headers: this.helperFunctions.getHttpHeaders() }).subscribe(
         (data: IEvent) => {
           data = _this.helperFunctions.jsonDateToJsDate(data);
-          console.log("PUT Request is successful ", data);
+          console.debug("PUT Request is successful ", data);
 
           let event = _this.events.find((event) => event.id == data.id);
           event.accesstoken = data.accesstoken;
@@ -156,7 +154,7 @@ export class EventService {
           resolve(event);
         },
         (error: HttpErrorResponse) => {
-          console.log("Error", error);
+          console.error("Error", error);
           this.authService.checkErrorAndCreateToken(error.status)
             .then(() => {
               this.updateEvent(event)
@@ -175,7 +173,7 @@ export class EventService {
     return new Promise((resolve, reject) => {
       this.httpClient.put(environment.api_base_uri + "v1/event/" + event_id + "/user/" + this.userService.getUserId() + "?accesstoken=" + access_token, {}).subscribe(
         (event: IEvent) => {
-          console.log("PUT Request is successful ", event);
+          console.debug("PUT Request is successful ", event);
           event = _this.helperFunctions.jsonDateToJsDate(event);
           event.count_unread_messages = Number(event.count_unread_messages);
 
@@ -184,7 +182,7 @@ export class EventService {
           resolve(event);
         },
         (error: HttpErrorResponse) => {
-          console.log("Error", error);
+          console.warn("Error", error);
           this.authService.checkErrorAndCreateToken(error.status)
             .then(() => {
               this.joinEvent(event_id, access_token)
@@ -203,14 +201,13 @@ export class EventService {
     return new Promise((resolve, reject) => {
       this.httpClient.delete(environment.api_base_uri + "v1/event/" + event_id + "/user/" + this.userService.getUserId(), {}).subscribe(
         data => {
-          console.log("DELETE Request is successful ", data);
+          console.debug("DELETE Request is successful ", data);
           _this.events = _this.events.filter((event) => event.id != event_id);
-          console.log(_this.events);
           _this.socketService.unsubscribeEvent(event_id);
           resolve();
         },
         (error: HttpErrorResponse) => {
-          console.log("Error", error);
+          console.warn("Error", error);
           this.authService.checkErrorAndCreateToken(error.status)
             .then(() => {
               this.leaveEvent(event_id)

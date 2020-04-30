@@ -16,13 +16,10 @@ export class ParticipantsComponent implements OnInit {
   ngOnInit(): void {
     let event_id;
     this.actRoute.snapshot.pathFromRoot.forEach((element: ActivatedRouteSnapshot) => {
-      console.log(element);
       if (element.params.id != undefined && element.params.id != null) {
-        console.log(element.params.id);
         event_id = element.params.id;
       }
     })
-    console.log(event_id)
     this.participantsService.getParticipants(event_id).then((participants: any[]) => {
       this.participants = participants
     })

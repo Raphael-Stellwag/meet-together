@@ -29,11 +29,9 @@ export class InviteComponent implements OnInit, AfterViewInit {
         this.event_id = element.params.id;
       }
     })
-    console.log(this.event_id)
     this.eventService.getEvent(this.event_id).then((event) => {
-      console.log(window.location);
+      //also works when the angular app runs in subfolder
       let base_href = window.location.href.substring(0, window.location.href.indexOf("/event/"));
-      console.log(base_href);
       this.accessUrl = base_href + "/join-event/" + this.event_id + "?accesstoken=" + event.accesstoken;
       this.initializeMailContentAndSubject(event);
     })
@@ -80,7 +78,7 @@ export class InviteComponent implements OnInit, AfterViewInit {
           console.error("Not available on this system")
         }
       } catch (err) {
-        console.log(err);
+        console.error(err);
       }
     });
   }
@@ -113,9 +111,8 @@ export class InviteComponent implements OnInit, AfterViewInit {
           });
           this.recipients = result.rejected
         }
-        console.log(result)
       })
-      .catch((err) => console.log(err));
+      .catch((err) => console.error(err));
   }
 
 
@@ -130,7 +127,6 @@ export class InviteComponent implements OnInit, AfterViewInit {
   add(event: MatChipInputEvent): void {
     const input = event.input;
     const value = event.value;
-    console.log(event.value);
 
     if (this.helperFunctions.isValidEmail(value)) {
       this.recipients.push(value);

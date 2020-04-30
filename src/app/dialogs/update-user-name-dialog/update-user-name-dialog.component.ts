@@ -21,7 +21,7 @@ export class UpdateUserNameDialog implements OnInit {
   close() {
     if (this.username != "") {
       this.userService.renameUser(this.username)
-        .then(() => this.dialogRef.close(this.username))
+        .then(() => this.dialogRef.close(true))
         .catch(() => {
           this.dialog.open(MessageDialogComponent, {
             data: {

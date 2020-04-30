@@ -40,7 +40,7 @@ export class JoinEventComponent {
         this.router.navigate(['/home']);
       })
     }).catch((errorResponse: HttpErrorResponse) => {
-      console.log(errorResponse);
+      console.warn(errorResponse);
       const dialogRef = this.matDialog.open(MessageDialogComponent, {
         data: {
           error: true,

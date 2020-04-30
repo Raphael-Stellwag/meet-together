@@ -24,7 +24,7 @@ export class EmailService {
             resolve(data);
           },
           (error: HttpErrorResponse) => {
-            console.log("Error", error);
+            console.error("Error", error);
             this.authService.checkErrorAndCreateToken(error.status)
               .then(() => {
                 this.sendEmail(event_id, recipients, subject, html5_content)

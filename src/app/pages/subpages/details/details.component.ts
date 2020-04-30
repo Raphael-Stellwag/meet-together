@@ -17,13 +17,10 @@ export class DetailsComponent implements OnInit {
 
   ngOnInit(): void {
     this.actRoute.snapshot.pathFromRoot.forEach((element: ActivatedRouteSnapshot) => {
-      console.log(element);
       if (element.params.id != undefined && element.params.id != null) {
-        console.log(element.params.id);
         this.event.id = element.params.id;
       }
     })
-    console.log(this.event.id)
     this.eventService.getEvent(this.event.id)
       .then((event: IEvent) => {
         this.event = event;
@@ -34,10 +31,6 @@ export class DetailsComponent implements OnInit {
           }
         }
       })
-  }
-
-  linkClicked() {
-    console.log("link clicked")
   }
 
   leaveEvent() {

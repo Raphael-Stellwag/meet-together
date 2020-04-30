@@ -43,7 +43,7 @@ export class UserService {
       }
       this.httpClient.put(environment.api_base_uri + "v1/user/" + this.user.id + "/rename", body, { headers: this.helperFunctions.getHttpHeaders() }).subscribe(
         (data: IUser) => {
-          console.log("POST Request is successful ", data);
+          console.debug("POST Request is successful ", data);
           let fullUser: IUser = _this.storageService.loadUserCredentialsWithPassword();
           fullUser.name = data.name;
           _this.storageService.saveUserCredentials(fullUser);
@@ -51,7 +51,7 @@ export class UserService {
           resolve();
         },
         error => {
-          console.log("Error", error);
+          console.warn("Error", error);
           reject(error);
         });
     });
@@ -67,7 +67,7 @@ export class UserService {
       }
       this.httpClient.post(environment.api_base_uri + "v1/user/", body, { headers: this.helperFunctions.getHttpHeaders() }).subscribe(
         (data: IUser) => {
-          console.log("POST Request is successful ", data);
+          console.debug("POST Request is successful ", data);
 
           _this.user = data;
           body.id = data.id;
@@ -79,7 +79,7 @@ export class UserService {
             })
         },
         error => {
-          console.log("Error", error);
+          console.warn("Error", error);
           reject(error);
         });
     });
@@ -95,7 +95,7 @@ export class UserService {
 
       this.httpClient.put(environment.api_base_uri + "v1/user/login", body, { headers: this.helperFunctions.getHttpHeaders() }).subscribe(
         (data: IUser) => {
-          console.log("PUT Request is successful ", data);
+          console.debug("PUT Request is successful ", data);
           _this.user = data;
           body.id = data.id;
           body.name = data.name;
@@ -104,7 +104,7 @@ export class UserService {
           resolve(_this.user);
         },
         (error: HttpErrorResponse) => {
-          console.log("Error", error);
+          console.warn("Error", error);
           if (error.status == 403) {
             //Token not anymore valid --> create new token and try again
             _this.authService.checkErrorAndCreateToken(error.status)
@@ -114,11 +114,10 @@ export class UserService {
                   .catch((err) => reject(err))
               })
               .catch(() => {
+                console.warn(error);
                 reject(error);
               })
           } else {
-            //TODO --> For example credentials not valid
-            console.log(error);
             reject(error);
           }
         });
@@ -136,7 +135,7 @@ export class UserService {
       }
       this.httpClient.put(environment.api_base_uri + "v1/user/" + this.user.id + "/register", body, { headers: this.helperFunctions.getHttpHeaders() }).subscribe(
         (data: IUser) => {
-          console.log("PUT Request is successful ", data);
+          console.debug("PUT Request is successful ", data);
           _this.user.name = data.name;
           _this.user.email = data.email;
           _this.user.registered = data.registered;
@@ -145,7 +144,7 @@ export class UserService {
           resolve(_this.user);
         },
         (error: HttpErrorResponse) => {
-          console.log("Error", error);
+          console.warn("Error", error);
           if (error.status == 403) {
             //Token not anymore valid --> create new token and try again
             _this.authService.checkErrorAndCreateToken(error.status)
@@ -158,7 +157,7 @@ export class UserService {
                 reject(error);
               })
           } else {
-            //TODO --> For example email already registered
+            //For example email already registered
             reject(error);
           }
         });

@@ -20,11 +20,11 @@ export class AuthService {
     return new Promise((resolve, reject) => {
       this.httpClient.get(this.verifyTokenUrl).subscribe(
         () => {
-          console.log("Token verified");
+          console.debug("Token verified");
           resolve();
         },
         error => {
-          console.log("Error", error);
+          console.error("Error", error);
           this.createToken().then(() => resolve()).catch(() => reject());
         });
     })
@@ -50,12 +50,12 @@ export class AuthService {
     return new Promise((resolve, reject) => {
       this.httpClient.get(this.createTokenUrl).subscribe(
         (data: any) => {
-          console.log("GET Request is successful ", data);
+          console.debug("GET Request is successful ", data);
           this.storage.setAccessToken(data.token);
           resolve(true);
         },
         error => {
-          console.log("Error", error);
+          console.error("Error", error);
           reject(error);
         });
     })

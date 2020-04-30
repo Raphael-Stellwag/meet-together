@@ -29,7 +29,7 @@ export class LoginDialog {
           this.dialogRef.close(true);
         })
         .catch((error) => {
-          console.log(error.error.message);
+          console.warn(error.error.message);
           const dialogRef = this.dialog.open(MessageDialogComponent, {
             data: {
               error: true,

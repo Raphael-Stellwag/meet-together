@@ -71,7 +71,6 @@ export class PlanComponent implements OnInit {
     this.timePlaceSuggestionService.getTimePlaceSuggestions(this.event_id)
       .then((data: ITimePlaceSuggestion[]) => {
         this.timePlaceSuggestions = data;
-        console.log(data);
         if (this.creator) {
           this.setAllParticipants();
           this.calculateScore();
@@ -93,7 +92,6 @@ export class PlanComponent implements OnInit {
   }
 
   togglePressed($event, suggestion) {
-    console.log($event, suggestion);
     let suggestion_id = Number(suggestion.id);
     if ($event.checked) {
       this.timePlaceSuggestionService.addUserToTimePlaceSuggestion(this.event_id, suggestion_id)
@@ -131,7 +129,6 @@ export class PlanComponent implements OnInit {
     this.timePlaceSuggestions.forEach((suggestion) => {
       suggestion.can_attend.forEach((participant: IParticipant) => {
         if (!this.allParticipants.some(arrayParticipant => arrayParticipant.id == participant.id)) {
-          console.log(participant);
           this.allParticipants.push(participant);
         }
       })
@@ -168,9 +165,7 @@ export class PlanComponent implements OnInit {
   suggestionChoosen(suggestion) {
     this.timePlaceSuggestionService.suggestionChoosen(this.event_id, suggestion.id)
       .then((result: IEvent) => {
-        console.log(result);
         this.choosen_id = result.choosen_time_place;
-        //TODO
       })
   }
 
@@ -187,7 +182,6 @@ export class PlanComponent implements OnInit {
   add(event: MatChipInputEvent): void {
     const input = event.input;
     const value = event.value;
-    console.log(event.value);
 
     let participantHits = this.allParticipants.filter((participant: IParticipant) => {
       return participant.name.toLowerCase().startsWith(value.toLowerCase().trim())

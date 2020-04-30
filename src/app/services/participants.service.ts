@@ -14,11 +14,11 @@ export class ParticipantsService {
     return new Promise((resolve, reject) => {
       this.httpClient.get(environment.api_base_uri + "v1/event/" + event_id + "/participants/", {}).subscribe(
         (data: any[]) => {
-          console.log("Get Request is successful ", data);
+          console.debug("Get Request is successful ", data);
           resolve(data);
         },
         (error: HttpErrorResponse) => {
-          console.log("Error", error);
+          console.warn("Error", error);
           this.authService.checkErrorAndCreateToken(error.status)
             .then(() => {
               this.getParticipants(event_id)

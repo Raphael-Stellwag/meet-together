@@ -37,7 +37,7 @@ export class AuthInterceptor implements HttpInterceptor {
         let user = this.storage.loadUserCredentialsWithPassword();
         const cloned = req.clone({
             headers: req.headers.set("Authorization",
-                "Basic " + window.btoa(user.id + " " + user.password))
+                "Basic " + window.btoa(user.id + ":" + user.password))
         });
         return cloned;
     }

@@ -4,8 +4,7 @@ import { HttpClient } from '@angular/common/http';
 import { StorageService } from './storage.service';
 import { environment } from 'src/environments/environment';
 import { IUser } from '../interfaces/iuser';
-import { resolve } from 'dns';
-import { rejects } from 'assert';
+import { map, delay } from "rxjs/operators";
 
 @Injectable({
   providedIn: 'root'
@@ -16,49 +15,31 @@ export class AuthService {
 
   constructor(private httpClient: HttpClient, private storage: StorageService) { }
 
-  verifyToken(): Promise<any> {
-    return new Promise((resolve, reject) => {
-      this.httpClient.get(this.verifyTokenUrl).subscribe(
-        () => {
-          console.debug("Token verified");
-          resolve();
-        },
-        error => {
-          console.error("Error", error);
-          this.createToken().then(() => resolve()).catch(() => reject());
-        });
-    })
+  async verifyToken(): Promise<any> {
+    try {
+      let result = await this.httpClient.get(this.verifyTokenUrl).toPromise();
+      console.debug("Token verified");
+      return true;
+    } catch (error) {
+      await this.createToken();
+      return true;
+    }
   }
 
-  checkErrorAndCreateToken(statuscode) {
-    return new Promise((resolve, reject) => {
-      if (statuscode == 403) {
-        this.createToken()
-          .then(() => {
-            resolve();
-          })
-          .catch(() => {
-            reject();
-          })
-      } else {
-        reject();
+  async checkErrorAndCreateToken(statuscode) {
+      if (statuscode == 403 || statuscode == 401) {
+        await this.createToken();
+        return true;
       }
-    })
+      throw new Error("Was not 401 or 403 error")
   }
 
-  createToken(): Promise<any> {
-    return new Promise((resolve, reject) => {
-      this.httpClient.get(this.createTokenUrl).subscribe(
-        (data: any) => {
-          console.debug("GET Request is successful ", data);
-          this.storage.setAccessToken(data.token);
-          resolve(true);
-        },
-        error => {
-          console.error("Error", error);
-          reject(error);
-        });
-    })
+  async createToken(): Promise<any> {
+    let result: any = await this.httpClient.get(this.createTokenUrl).toPromise();
+
+    console.debug("GET Request is successful ", result);
+    this.storage.setAccessToken(result.token);
+    return (true);
   }
 
   isLoggedIn(): boolean {

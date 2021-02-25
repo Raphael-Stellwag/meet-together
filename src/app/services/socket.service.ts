@@ -1,6 +1,6 @@
 import { Injectable, OnDestroy } from '@angular/core';
 import io from 'socket.io-client';
-import { Observable } from 'rxjs';
+import { Observable, Subscriber } from 'rxjs';
 import { IMessage } from '../interfaces/imessage';
 import { AuthService } from './auth.service';
 import { AuthGuard } from '../guards/auth.guard';
@@ -14,101 +14,58 @@ import { environment } from 'src/environments/environment';
   providedIn: 'root'
 })
 export class SocketService implements OnDestroy {
-  socket;
+  socket: WebSocket;
   initialized = false;
   resolve: (() => void)[] = [];
+  eventGotChangedObserver: Subscriber<IEvent>;
+  newMessageReceivedObserver: Subscriber<IMessage>;
+  _this;
 
   constructor(private authService: AuthService, private storageService: StorageService) {
+    this._this = this;
     this.initializeSocket();
   }
 
   newMessageReceived() {
     let observable = new Observable<IMessage>(observer => {
-      let promise = new Promise(resolve => {
-        if (this.initialized) {
-          resolve();
-        } else {
-          //Socket connection not established yet (because its async) => will resolve it when established
-          this.resolve.push(resolve);
-        }
-      })
-
-      promise.then(() => {
-        console.debug(this.socket);
-        this.socket.on('new_message', (data) => {
-          console.debug(data);
-          observer.next(data);
-        });
-        return () => { this.socket.disconnect(); }
-      })
-
+      this.newMessageReceivedObserver = observer;
     });
 
     return observable;
-  }
-
-  subscribeEvent(event_id) {
-    let promise = new Promise(resolve => {
-      if (this.initialized) {
-        resolve();
-      } else {
-        //Socket connection not established yet (because its async) => will resolve it when establish
-        this.resolve.push(resolve);
-      }
-    })
-
-    promise.then(() => {
-      this.socket.emit("subscribe_event", event_id);
-      this.socket.emit('subscribe_new_message', event_id)
-    })
   }
 
   eventGotChanged() {
     let observable = new Observable<IEvent>(observer => {
-      let promise = new Promise(resolve => {
-        if (this.initialized) {
-          resolve();
-        } else {
-          //Socket connection not established yet (because its async) => will resolve it when establish
-          this.resolve.push(resolve);
-        }
-      })
-
-      promise.then(() => {
-        console.debug(this.socket);
-        this.socket.on('event_update', (data) => {
-          console.debug(data);
-          observer.next(data);
-        });
-        return () => { this.socket.disconnect(); }
-      })
+      this.eventGotChangedObserver = observer;
     });
+
     return observable;
   }
 
-  unsubscribeEvent(event_id: IEvent) {
-    this.socket.emit("unsubscribe_event", event_id);
-    this.socket.emit("unsubscribe_new_message", event_id);
-
-  }
-
   readReceivedMessage(event_id, message_id) {
+    
     let received_details = {
       event_id: event_id,
       user_id: this.storageService.loadUserCredentials().id,
       message_id: message_id,
     }
-    this.socket.emit("read_received_message", received_details);
+    let customObj = {
+      method: "READ_RECEIVED_DATA",
+      additional_data: received_details
+    }
+    this.socket.send(JSON.stringify(customObj));
+  
   }
 
   initializeSocket() {
+    let _this = this;
     let promise = new Promise((resolve, reject) => {
       if (this.authService.isLoggedIn()) {
         this.authService.verifyToken()
-          .then(() => resolve())
+          .then(() => resolve(null))
           .catch(() => {
             this.authService.createToken()
-              .then(() => resolve())
+              .then(() => resolve(null))
           })
       } else {
         reject("Socket service was not initialized, user not logged in");
@@ -117,19 +74,46 @@ export class SocketService implements OnDestroy {
 
     promise.then(() => {
       let token = this.storageService.getAccessToken();
-      this.socket = io(/*"https://test-ddnss.ddnss.de"*/environment.api_base_uri, { query: 'auth_token=' + token });
 
-      this.initialized = true;
-      this.resolve.forEach(res => res());
+      let socket = new WebSocket(environment.ws_base_uri);
+      this.socket = socket;
+      
+      this.socket.onopen = function(e) {
+        let custumObj = {
+          token: token,
+          method: "AUTHENTICATE"
+        }
+        socket.send(JSON.stringify(custumObj));
+      }
+
+      this.socket.onmessage = function(event:any) {
+        _this.onMessage(event, _this)
+      } 
+
       console.log("Socket initilized")
     }).catch(err => console.error(err))
+    
+  }
+
+  private onMessage(event: any, _this: any) {
+    console.debug("WebSocket message received:", event);
+
+    let data = JSON.parse(event.data);
+    console.log(data);
+
+    if (data.method == "NEW_MESSAGE") {
+      _this.newMessageReceivedObserver.next(JSON.parse(data.additional_data));
+    } else if (data.method == "EVENT_UPDATE") {
+      _this.eventGotChangedObserver.next(JSON.parse(data.additional_data));
+    } else {
+      console.log("Websocket message received with Content OK");
+    }
   }
 
   logout() {
     this.socket.close();
     this.socket = null;
   }
-
 
   ngOnDestroy() {
     this.socket.close();

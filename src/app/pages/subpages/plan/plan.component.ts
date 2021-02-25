@@ -37,7 +37,7 @@ export class PlanComponent implements OnInit {
     this.user_id = this.userService.getUserId();
     this.actRoute.snapshot.pathFromRoot.forEach((element: ActivatedRouteSnapshot) => {
       if (element.params.id != undefined && element.params.id != null) {
-        this.event_id = Number(element.params.id);
+        this.event_id = element.params.id;
       }
     })
     this.eventService.getEvent(this.event_id)
@@ -92,7 +92,7 @@ export class PlanComponent implements OnInit {
   }
 
   togglePressed($event, suggestion) {
-    let suggestion_id = Number(suggestion.id);
+    let suggestion_id = suggestion.id;
     if ($event.checked) {
       this.timePlaceSuggestionService.addUserToTimePlaceSuggestion(this.event_id, suggestion_id)
         .then((new_suggestion: ITimePlaceSuggestion) => {

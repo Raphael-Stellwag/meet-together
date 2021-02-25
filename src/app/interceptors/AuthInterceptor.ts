@@ -25,6 +25,7 @@ export class AuthInterceptor implements HttpInterceptor {
         }
 
         const idToken = this.storage.getAccessToken();
+
         if (idToken == null) {
             console.error(url, "Secured url was called before the user was initilized, please fix this")
             return next.handle(this.addAccessTokenAuthorizationHeader(req));

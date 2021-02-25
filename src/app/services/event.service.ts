@@ -21,6 +21,7 @@ export class EventService {
 
   constructor(private socketService: SocketService, private userService: UserService, private httpClient: HttpClient, private authService: AuthService, private helperFunctions: HelperFunctionsService) {
     let _this = this;
+    
     socketService.eventGotChanged().subscribe(
       (changed_event: IEvent) => {
         changed_event = _this.helperFunctions.jsonDateToJsDate(changed_event);
@@ -34,6 +35,7 @@ export class EventService {
         found_event.link = changed_event.link;
         found_event.start_date = changed_event.start_date
       });
+      
   }
 
   getEvents(): Promise<IEvent[]> {
@@ -47,7 +49,7 @@ export class EventService {
             data.forEach((element) => {
               element.count_unread_messages = Number(element.count_unread_messages);
               this.events.push(this.helperFunctions.jsonDateToJsDate(element));
-              this.socketService.subscribeEvent(element.id);
+              //this.socketService.subscribeEvent(element.id);
             });
             this.initializingNotifiers.forEach((notifier) => {
               notifier(this.events);
@@ -112,7 +114,7 @@ export class EventService {
           let event = _this.helperFunctions.jsonDateToJsDate(data)
           event.count_unread_messages = Number(event.count_unread_messages);
           _this.events.push(event);
-          this.socketService.subscribeEvent(event.id);
+          //this.socketService.subscribeEvent(event.id);
 
           resolve(event);
         },
@@ -178,7 +180,7 @@ export class EventService {
           event.count_unread_messages = Number(event.count_unread_messages);
 
           _this.events.push(event);
-          _this.socketService.subscribeEvent(event.id);
+          //_this.socketService.subscribeEvent(event.id);
           resolve(event);
         },
         (error: HttpErrorResponse) => {
@@ -203,15 +205,15 @@ export class EventService {
         data => {
           console.debug("DELETE Request is successful ", data);
           _this.events = _this.events.filter((event) => event.id != event_id);
-          _this.socketService.unsubscribeEvent(event_id);
-          resolve();
+          //_this.socketService.unsubscribeEvent(event_id);
+          resolve(null);
         },
         (error: HttpErrorResponse) => {
           console.warn("Error", error);
           this.authService.checkErrorAndCreateToken(error.status)
             .then(() => {
               this.leaveEvent(event_id)
-                .then(() => resolve())
+                .then(() => resolve(null))
                 .catch((err) => reject(err))
             })
             .catch(() => {

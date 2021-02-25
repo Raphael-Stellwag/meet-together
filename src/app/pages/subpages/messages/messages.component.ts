@@ -39,7 +39,12 @@ export class MessagesComponent implements OnInit, OnDestroy {
   }
 
   printGeneratedMessage(msg: IMessage) {
-    let content: any = JSON.parse(msg.content);
+    let content: any;
+    try {
+      content = JSON.parse(msg.content);
+    } catch (error) {
+      console.log("In generated message was in content no json (maybe ok)")
+    }
     let return_value = "";
     switch (msg.generated_content_description) {
       case EMessageGenerated.event_created: {

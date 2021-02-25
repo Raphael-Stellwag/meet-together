@@ -24,11 +24,11 @@ export class HelperFunctionsService {
 
   jsonDateToJsDate(data) {
     let event: IEvent = data as IEvent;
-    if (event.start_date != null)
+    if (event.start_date != null && !(event.start_date instanceof Date))
       event.start_date = new Date(event.start_date);
-    if (event.end_date != null)
+    if (event.end_date != null && !(event.end_date instanceof Date))
       event.end_date = new Date(event.end_date);
-    if (event.last_message_time != null)
+    if (event.last_message_time != null && !(event.last_message_time instanceof Date))
       event.last_message_time = new Date(event.last_message_time);
     return event;
   }

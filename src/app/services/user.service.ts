@@ -101,6 +101,7 @@ export class UserService {
           body.name = data.name;
           body.registered = data.registered;
           _this.storageService.saveUserCredentials(body);
+          _this.storageService.removeAccessToken();
           resolve(_this.user);
         },
         (error: HttpErrorResponse) => {

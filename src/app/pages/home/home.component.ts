@@ -17,32 +17,21 @@ import { HelperFunctionsService } from 'src/app/services/helper-functions.servic
 export class HomeComponent {
   checked: boolean = false;
   disabled: boolean = false;
-  color: String = "primary";
+  color: string = "primary";
   @ViewChild(TopBarComponent) topBarComponent: TopBarComponent;
   @ViewChild(AddEventButtonComponent) addJoinButton: AddEventButtonComponent;
 
   events: IEvent[] = [];
 
-  constructor(public dialog: MatDialog, private userService: UserService, private eventSerivce: EventService, public helperFunctions: HelperFunctionsService) { }
+  constructor(public dialog: MatDialog, private userService: UserService, private eventSerivce: EventService, public helperFunctions: HelperFunctionsService) { 
+    console.log("constructor of home called");
+  }
 
-  ngOnInit() {
-    if (this.userService.getUserName() != null) {
-      this.eventSerivce.getEvents()
-        .then((events: IEvent[]) => this.events = events)
-    } else {
-      let _this = this
-      setTimeout(() => {
-        const dialogRef = this.dialog.open(NewUserDialog);
-
-        dialogRef.afterClosed().subscribe(userName => {
-          _this.addJoinButton.showToolTip();
-          this.userService.createUserName(userName).then(() => {
-            _this.topBarComponent.userMenu.updateUserName();
-            this.eventSerivce.getEvents()
-              .then((events: IEvent[]) => this.events = events)
-          });
-        });
-      })
+  async ngOnInit() {
+    console.log("ngOnInit of home called");
+    this.events = await this.eventSerivce.getEvents();
+    if (this.events.length == 0) {
+      this.addJoinButton.showToolTip();
     }
   }
 }

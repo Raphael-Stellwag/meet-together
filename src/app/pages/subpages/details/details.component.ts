@@ -10,34 +10,32 @@ import { HelperFunctionsService } from 'src/app/services/helper-functions.servic
   styleUrls: ['./details.component.scss']
 })
 export class DetailsComponent implements OnInit {
+  url_event_id: string;
   event: IEvent = {} as IEvent;
   time = ""
 
   constructor(private actRoute: ActivatedRoute, private router: Router, private eventService: EventService, private helperFunctions: HelperFunctionsService) { }
 
-  ngOnInit(): void {
+  async ngOnInit() {
     this.actRoute.snapshot.pathFromRoot.forEach((element: ActivatedRouteSnapshot) => {
       if (element.params.id != undefined && element.params.id != null) {
-        this.event.id = element.params.id;
+        this.url_event_id = element.params.id;
       }
     })
-    this.eventService.getEvent(this.event.id)
-      .then((event: IEvent) => {
-        this.event = event;
-        if (event.start_date != null) {
-          this.time = this.helperFunctions.printDate(event.start_date);
-          if (event.end_date != null) {
-            this.time = this.time + " - " + this.helperFunctions.printEndDate(event.end_date, event.start_date);
-          }
-        }
-      })
+    this.event = await this.eventService.getEvent(this.url_event_id);
+
+    if (this.event.start_date != null) {
+      this.time = this.helperFunctions.printDate(this.event.start_date);
+      if (this.event.end_date != null) {
+        this.time = this.time + " - " + this.helperFunctions.printEndDate(this.event.end_date, this.event.start_date);
+      }
+    }
+     
   }
 
-  leaveEvent() {
-    this.eventService.leaveEvent(this.event.id)
-      .then(() => {
-        this.router.navigate(['home'])
-      })
+  async leaveEvent() {
+    await this.eventService.leaveEvent(this.event.id);
+    this.router.navigate(['home'])  
   }
 
 }

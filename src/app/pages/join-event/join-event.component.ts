@@ -17,15 +17,7 @@ export class JoinEventComponent {
   constructor(private router: Router, private actRoute: ActivatedRoute, private userService: UserService, private eventService: EventService, private matDialog: MatDialog) {
     let event_id = this.actRoute.snapshot.params.id;
     let access_token = this.actRoute.snapshot.queryParams.accesstoken;
-    if (this.userService.getUserId() != null) {
-      this.addEvent(event_id, access_token);
-    } else {
-      const dialogRef = this.matDialog.open(NewUserDialog);
-
-      dialogRef.afterClosed().subscribe(userName => {
-        this.userService.createUserName(userName).then(() => this.addEvent(event_id, access_token));
-      });
-    }
+    this.addEvent(event_id, access_token);
   }
 
   addEvent(event_id, accesstoken) {

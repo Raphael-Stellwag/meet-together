@@ -1,28 +1,32 @@
+import { IToken } from './../interfaces/itoken';
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 
 import { StorageService } from './storage.service';
 import { environment } from 'src/environments/environment';
 import { IUser } from '../interfaces/iuser';
-import { map, delay } from "rxjs/operators";
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
-  createTokenUrl = environment.api_base_uri + "v1/token/create";
-  verifyTokenUrl = environment.api_base_uri + "v1/token/verify";
+  readonly createTokenUrl = environment.api_base_uri + "v1/token/create";
+  readonly verifyTokenUrl = environment.api_base_uri + "v1/token/verify";
 
   constructor(private httpClient: HttpClient, private storage: StorageService) { }
 
   async verifyToken(): Promise<any> {
     try {
-      let result = await this.httpClient.get(this.verifyTokenUrl).toPromise();
+      await this.httpClient.get(this.verifyTokenUrl).toPromise();
       console.debug("Token verified");
       return true;
     } catch (error) {
-      await this.createToken();
-      return true;
+      try {
+        await this.createToken();
+        return true;
+      } catch (e) {
+        return false;
+      }
     }
   }
 
@@ -35,11 +39,11 @@ export class AuthService {
   }
 
   async createToken(): Promise<any> {
-    let result: any = await this.httpClient.get(this.createTokenUrl).toPromise();
+    let result: IToken = await this.httpClient.get(this.createTokenUrl).toPromise() as IToken;
 
     console.debug("GET Request is successful ", result);
-    this.storage.setAccessToken(result.token);
-    return (true);
+    this.storage.setAccessToken(result);
+    return result;
   }
 
   isLoggedIn(): boolean {

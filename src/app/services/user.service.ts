@@ -1,6 +1,5 @@
 import { Injectable } from '@angular/core';
-import { rejects } from 'assert';
-import { HttpClient, HttpResponse, HttpErrorResponse } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { IUser } from '../interfaces/iuser';
 import { StorageService } from './storage.service';
 import { environment } from 'src/environments/environment';
@@ -35,7 +34,7 @@ export class UserService {
     this.storageService.logout();
   }
 
-  renameUser(username: String) {
+  renameUser(username: string) {
     let _this = this;
     return new Promise((resolve, reject) => {
       var body: IUser = {
@@ -48,7 +47,7 @@ export class UserService {
           fullUser.name = data.name;
           _this.storageService.saveUserCredentials(fullUser);
           _this.user.name = username;
-          resolve();
+          resolve(null);
         },
         error => {
           console.warn("Error", error);

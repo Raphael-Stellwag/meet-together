@@ -1,15 +1,11 @@
 import { Injectable } from '@angular/core';
 import { IEvent } from '../interfaces/ievent';
 import { UserService } from './user.service';
-import { HttpClient, HttpHeaders, HttpErrorResponse } from '@angular/common/http';
-import { element } from 'protractor';
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { AuthService } from './auth.service';
-import { IUser } from '../interfaces/iuser';
-import { ITimePlaceSuggestion } from '../interfaces/itime-place-suggestion';
 import { environment } from 'src/environments/environment';
 import { HelperFunctionsService } from './helper-functions.service';
 import { SocketService } from './socket.service';
-import { connectableObservableDescriptor } from 'rxjs/internal/observable/ConnectableObservable';
 
 @Injectable({
   providedIn: 'root'
@@ -104,123 +100,61 @@ export class EventService {
     return ret_event;
   }
 
-  addEvent(event: IEvent) {
-    let _this = this;
-    return new Promise((resolve, reject) => {
-      let json = this.helperFunctions.ObjectToJSON(event);
-      this.httpClient.post(environment.api_base_uri + "v1/user/" + this.userService.getUserId() + "/event", json, { headers: this.helperFunctions.getHttpHeaders() }).subscribe(
-        data => {
-          console.debug("POST Request is successful ", data);
-          let event = _this.helperFunctions.jsonDateToJsDate(data)
-          event.count_unread_messages = Number(event.count_unread_messages);
-          _this.events.push(event);
-          //this.socketService.subscribeEvent(event.id);
+  async addEvent(event: IEvent) {
+    let json = this.helperFunctions.ObjectToJSON(event);
+    let data = await this.httpClient.post(environment.api_base_uri + "v1/user/" + this.userService.getUserId() + "/event", json, 
+                          { headers: this.helperFunctions.getHttpHeaders() }).toPromise();
 
-          resolve(event);
-        },
-        (error: HttpErrorResponse) => {
-          console.error("Error", error);
-          this.authService.checkErrorAndCreateToken(error.status)
-            .then(() => {
-              this.addEvent(event)
-                .then((data) => resolve(data))
-                .catch((err) => reject(error))
-            })
-            .catch(() => {
-              reject(error);
-            })
-        });
-    });
+    console.debug("POST Request is successful ", data);
+
+    let serverEvent = this.helperFunctions.jsonDateToJsDate(data)
+    serverEvent.count_unread_messages = Number(serverEvent.count_unread_messages);
+    this.events.push(serverEvent);
+
+    return serverEvent;    
   }
 
-  updateEvent(event: IEvent) {
-    let _this = this;
-    return new Promise((resolve, reject) => {
-      let json = this.helperFunctions.ObjectToJSON(event);
-      this.httpClient.put(environment.api_base_uri + "v1/user/" + this.userService.getUserId() + "/event/" + event.id, json, { headers: this.helperFunctions.getHttpHeaders() }).subscribe(
-        (data: IEvent) => {
-          data = _this.helperFunctions.jsonDateToJsDate(data);
-          console.debug("PUT Request is successful ", data);
+  async updateEvent(event: IEvent) {
+    let json = this.helperFunctions.ObjectToJSON(event);
+    
+    let data: IEvent = (await this.httpClient.put(environment.api_base_uri + "v1/user/" + this.userService.getUserId() + "/event/" + event.id, json, 
+                              { headers: this.helperFunctions.getHttpHeaders() }).toPromise()) as IEvent;
+    
+    data = this.helperFunctions.jsonDateToJsDate(data);
+    console.debug("PUT Request is successful ", data);
 
-          let event = _this.events.find((event) => event.id == data.id);
-          event.accesstoken = data.accesstoken;
-          event.description = data.description;
-          event.end_date = data.end_date;
-          event.name = data.name;
-          event.place = data.place;
-          event.link = data.link;
-          event.start_date = data.start_date
-          event.count_unread_messages = Number(data.count_unread_messages);
-          event.last_read_message = data.last_read_message;
+    let localEvent = this.events.find((e) => e.id == data.id);
+    localEvent.accesstoken = data.accesstoken;
+    localEvent.description = data.description;
+    localEvent.end_date = data.end_date;
+    localEvent.name = data.name;
+    localEvent.place = data.place;
+    localEvent.link = data.link;
+    localEvent.start_date = data.start_date
+    localEvent.count_unread_messages = Number(data.count_unread_messages);
+    localEvent.last_read_message = data.last_read_message;
 
-          resolve(event);
-        },
-        (error: HttpErrorResponse) => {
-          console.error("Error", error);
-          this.authService.checkErrorAndCreateToken(error.status)
-            .then(() => {
-              this.updateEvent(event)
-                .then((data) => resolve(data))
-                .catch((err) => reject(error))
-            })
-            .catch(() => {
-              reject(error);
-            })
-        });
-    });
+    return localEvent;
   }
 
-  joinEvent(event_id: any, access_token: any) {
-    let _this = this;
-    return new Promise((resolve, reject) => {
-      this.httpClient.put(environment.api_base_uri + "v1/event/" + event_id + "/user/" + this.userService.getUserId() + "?accesstoken=" + access_token, {}).subscribe(
-        (event: IEvent) => {
-          console.debug("PUT Request is successful ", event);
-          event = _this.helperFunctions.jsonDateToJsDate(event);
-          event.count_unread_messages = Number(event.count_unread_messages);
+  async joinEvent(event_id: any, access_token: any) {
+    
+    let event: IEvent = await this.httpClient.put(environment.api_base_uri + "v1/event/" + event_id + "/user/" + this.userService.getUserId() + "?accesstoken=" + access_token, 
+                                {}).toPromise() as IEvent;
+    console.debug("PUT Request is successful ", event);
+    event = this.helperFunctions.jsonDateToJsDate(event);
+    event.count_unread_messages = Number(event.count_unread_messages);
 
-          _this.events.push(event);
-          //_this.socketService.subscribeEvent(event.id);
-          resolve(event);
-        },
-        (error: HttpErrorResponse) => {
-          console.warn("Error", error);
-          this.authService.checkErrorAndCreateToken(error.status)
-            .then(() => {
-              this.joinEvent(event_id, access_token)
-                .then((data) => resolve(data))
-                .catch((err) => reject(error))
-            })
-            .catch(() => {
-              reject(error);
-            })
-        });
-    });
+    this.events.push(event);
+    return event;
+
   }
 
-  leaveEvent(event_id) {
-    let _this = this;
-    return new Promise((resolve, reject) => {
-      this.httpClient.delete(environment.api_base_uri + "v1/event/" + event_id + "/user/" + this.userService.getUserId(), {}).subscribe(
-        data => {
-          console.debug("DELETE Request is successful ", data);
-          _this.events = _this.events.filter((event) => event.id != event_id);
-          //_this.socketService.unsubscribeEvent(event_id);
-          resolve(null);
-        },
-        (error: HttpErrorResponse) => {
-          console.warn("Error", error);
-          this.authService.checkErrorAndCreateToken(error.status)
-            .then(() => {
-              this.leaveEvent(event_id)
-                .then(() => resolve(null))
-                .catch((err) => reject(err))
-            })
-            .catch(() => {
-              reject(error);
-            })
-        });
-    });
+  async leaveEvent(event_id) {
+    let data = await this.httpClient.delete(environment.api_base_uri + "v1/event/" + event_id + "/user/" + this.userService.getUserId(), {}).toPromise();
+
+    console.debug("DELETE Request is successful ", data);
+    this.events = this.events.filter((event) => event.id != event_id);
   }
 
   increaseUnreadMessagesCount(event_id: number) {

@@ -1,3 +1,4 @@
+import { IToken } from './../interfaces/itoken';
 import { Injectable } from '@angular/core';
 import { IUser } from '../interfaces/iuser';
 import * as SecureLS from 'secure-ls';
@@ -56,18 +57,34 @@ export class StorageService {
     return retVal;
   }
 
-  getAccessToken() {
-    let accesstoken = this.secure_storage.get("access_token");
-    if (accesstoken == "")
+  getAccessToken(): IToken {
+    let accesstoken: any = this.secure_storage.get("access_token");
+    if (accesstoken == "" || accesstoken == null)
       return null;
-    return accesstoken;
+    
+    (accesstoken as IToken).expiration_date = new Date(Date.parse(accesstoken.expiration_date));
+    return accesstoken as IToken;
   }
 
   removeAccessToken() {
     this.secure_storage.remove("access_token");
   }
 
-  setAccessToken(access_token: any) {
+  setAccessToken(access_token: IToken) {
     this.secure_storage.set("access_token", access_token);
+  }
+
+  getLastBackendCall(): Date {
+    let timestamp = this.secure_storage.get("last_backend_call");
+    if (Number.isInteger(timestamp)) {
+      let date = new Date();
+      date.setTime(timestamp);
+      return date;
+    }
+    return null;
+  }
+
+  setLastBackendCall(last_backend_call: Date) {
+    this.secure_storage.set("last_backend_call", last_backend_call.getTime());
   }
 }

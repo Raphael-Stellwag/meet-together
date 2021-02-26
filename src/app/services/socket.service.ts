@@ -1,13 +1,9 @@
 import { Injectable, OnDestroy } from '@angular/core';
-import io from 'socket.io-client';
 import { Observable, Subscriber } from 'rxjs';
 import { IMessage } from '../interfaces/imessage';
 import { AuthService } from './auth.service';
-import { AuthGuard } from '../guards/auth.guard';
 import { StorageService } from './storage.service';
 import { IEvent } from '../interfaces/ievent';
-import { UserService } from './user.service';
-import { rejects } from 'assert';
 import { environment } from 'src/environments/environment';
 
 @Injectable({

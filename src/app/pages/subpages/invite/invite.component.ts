@@ -1,3 +1,4 @@
+import { MatDialog } from '@angular/material/dialog';
 import { Component, OnInit, ViewChild, ElementRef, AfterViewInit } from '@angular/core';
 import { ActivatedRoute, ActivatedRouteSnapshot } from '@angular/router';
 import { EventService } from 'src/app/services/event.service';
@@ -9,6 +10,7 @@ import { HelperFunctionsService } from 'src/app/services/helper-functions.servic
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { EmailService } from 'src/app/services/email.service';
 import { MatButton } from '@angular/material/button';
+import { MessageDialogComponent } from 'src/app/dialogs/message-dialog/message-dialog.component';
 
 @Component({
   selector: 'app-invite',
@@ -16,11 +18,11 @@ import { MatButton } from '@angular/material/button';
   styleUrls: ['./invite.component.scss']
 })
 export class InviteComponent implements OnInit, AfterViewInit {
-  accessUrl = "";
   event_id;
+  accessUrl = "";
   @ViewChild('shareBtn') shareBtn: MatButton;
 
-  constructor(private actRoute: ActivatedRoute, private emailService: EmailService, private eventService: EventService, private userService: UserService, private helperFunctions: HelperFunctionsService, private snackbar: MatSnackBar) {
+  constructor(private actRoute: ActivatedRoute, private emailService: EmailService, private eventService: EventService, private userService: UserService, private helperFunctions: HelperFunctionsService, private snackbar: MatSnackBar, private matDialog: MatDialog) {
   }
 
   ngOnInit(): void {
@@ -74,7 +76,12 @@ export class InviteComponent implements OnInit, AfterViewInit {
           }
           await (navigator as any).share(shareData)
         } else {
-          alert("Not available on this system, open on mobile device under https site")
+          this.matDialog.open(MessageDialogComponent, {
+            data: {
+              error: true,
+              message: "Not available in this browser. Open in Safari, Edge or on a mobile browser."
+            }
+          });
           console.error("Not available on this system")
         }
       } catch (err) {
@@ -120,9 +127,9 @@ export class InviteComponent implements OnInit, AfterViewInit {
   separatorKeysCodes: number[] = [ENTER, COMMA, SPACE];
   recipientsCtrl = new FormControl();
   @ViewChild('recipientInput') recipientInput: ElementRef<HTMLInputElement>;
-  recipients: String[] = [];
+  recipients: string[] = [];
   subject;
-  content: String;
+  content: string;
 
   add(event: MatChipInputEvent): void {
     const input = event.input;
@@ -140,7 +147,7 @@ export class InviteComponent implements OnInit, AfterViewInit {
     this.recipientsCtrl.setValue(null);
   }
 
-  remove(email: String): void {
+  remove(email: string): void {
     const index = this.recipients.indexOf(email);
 
     if (index >= 0) {

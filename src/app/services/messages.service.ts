@@ -2,10 +2,8 @@ import { Injectable } from '@angular/core';
 import { SocketService } from './socket.service';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
-import { IEvent } from '../interfaces/ievent';
 import { IMessage } from '../interfaces/imessage';
 import { AuthService } from './auth.service';
-import { deserialize } from 'v8';
 import { EventService } from './event.service';
 import { UserService } from './user.service';
 

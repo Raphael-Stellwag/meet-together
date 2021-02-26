@@ -51,7 +51,7 @@ export class EventComponent implements OnInit {
       .catch((error) => console.error(error))
 
     if (window.innerWidth < 768) {
-      this.sidenav.fixedTopGap = 55;
+      this.sidenav.fixedTopGap = 56;
     } else {
       this.sidenav.fixedTopGap = 112;
     }

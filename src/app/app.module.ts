@@ -16,7 +16,6 @@ import { TopBarComponent } from './frames/top-bar/top-bar.component';
 import { EventComponent } from './pages/event/event.component';
 import { NewEventDialog } from './dialogs/new-event-dialog/new-event-dialog.component';
 import { HomeComponent } from './pages/home/home.component';
-import { SideNavBarComponent } from './frames/side-nav-bar/side-nav-bar.component';
 import { MessagesComponent } from './pages/subpages/messages/messages.component';
 import { PlanComponent } from './pages/subpages/plan/plan.component';
 import { DetailsComponent } from './pages/subpages/details/details.component';
@@ -90,7 +89,6 @@ import { LoadingScreenComponent } from './frames/loading-screen/loading-screen.c
     EventComponent,
     NewEventDialog,
     HomeComponent,
-    SideNavBarComponent,
     MessagesComponent,
     PlanComponent,
     DetailsComponent,

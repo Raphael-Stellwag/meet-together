@@ -76,7 +76,7 @@ export class SocketService implements OnDestroy {
       
       this.socket.onopen = function(e) {
         let custumObj = {
-          token: token,
+          token: token.token,
           method: "AUTHENTICATE"
         }
         socket.send(JSON.stringify(custumObj));

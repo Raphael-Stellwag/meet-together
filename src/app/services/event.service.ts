@@ -34,6 +34,7 @@ export class EventService {
       
   }
 
+  //TODO refactor this
   getEvents(): Promise<IEvent[]> {
     this.isInitializing = true;
     return new Promise<IEvent[]>((resolve, reject) => {
@@ -71,6 +72,7 @@ export class EventService {
     });
   }
 
+  //TODO refactor this
   getEvent(event_id: any): any {
     return new Promise<IEvent[]>((resolve, reject) => {
       if (this.events.length == 0) {

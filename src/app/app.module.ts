@@ -1,3 +1,4 @@
+import { LoadingScreenService } from './frames/loading-screen/loading-screen.service';
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
@@ -75,6 +76,7 @@ import { AuthGuard } from "./guards/auth.guard";
 import { UpdateUserNameDialog } from './dialogs/update-user-name-dialog/update-user-name-dialog.component';
 import { LoginDialog } from './dialogs/login-dialog/login-dialog.component';
 import { RegisterDialog } from './dialogs/register-dialog/register-dialog.component';
+import { LoadingScreenComponent } from './frames/loading-screen/loading-screen.component';
 
 
 @NgModule({
@@ -83,6 +85,7 @@ import { RegisterDialog } from './dialogs/register-dialog/register-dialog.compon
     AddEventButtonComponent,
     NewUserDialog,
     TopBarComponent,
+    LoadingScreenComponent,
     UserMenuComponent,
     EventComponent,
     NewEventDialog,
@@ -154,7 +157,10 @@ import { RegisterDialog } from './dialogs/register-dialog/register-dialog.compon
   ],
   providers: [
     { provide: OWL_DATE_TIME_LOCALE, useValue: 'de' },
-    { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true }, AuthGuard],
+    { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true }, 
+    AuthGuard,
+    LoadingScreenService
+  ],
   bootstrap: [AppComponent],
   schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })

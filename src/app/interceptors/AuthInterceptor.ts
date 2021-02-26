@@ -44,18 +44,14 @@ export class AuthInterceptor implements HttpInterceptor {
 
         //Is the token already expired or will do so soon
         if (idToken == null || Date.now() > (idToken.expiration_date.getTime() - 5000)) {
-            let newToken = await this.auth.createToken();
-            clonedRequest = req.clone({
-                headers: req.headers.set("Authorization",
-                    "Bearer " + newToken.token)
-            });
-        } else {
-            clonedRequest = req.clone({
-                headers: req.headers.set("Authorization",
-                    "Bearer " + idToken.token)
-            });
+            idToken = await this.auth.createToken();
         }
-
+        
+        clonedRequest = req.clone({
+            headers: req.headers.set("Authorization",
+                "Bearer " + idToken.token)
+        });
+        
         return next.handle(clonedRequest).toPromise();
     }
 

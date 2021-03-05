@@ -34,94 +34,79 @@ export class UserService {
     this.storageService.logout();
   }
 
-  renameUser(username: string) {
-    let _this = this;
-    return new Promise((resolve, reject) => {
-      var body: IUser = {
-        name: username
-      }
-      this.httpClient.put(environment.api_base_uri + "v1/user/" + this.user.id + "/rename", body, { headers: this.helperFunctions.getHttpHeaders() }).subscribe(
-        (data: IUser) => {
-          console.debug("POST Request is successful ", data);
-          let fullUser: IUser = _this.storageService.loadUserCredentialsWithPassword();
-          fullUser.name = data.name;
-          _this.storageService.saveUserCredentials(fullUser);
-          _this.user.name = username;
-          resolve(null);
-        },
-        error => {
-          console.warn("Error", error);
-          reject(error);
-        });
-    });
+  async renameUser(username: string) {
+    var body: IUser = {
+      name: username
+    }
+    let data = await this.httpClient.put(environment.api_base_uri + "v1/rename", body).toPromise();
+                       
+    console.debug("POST Request is successful ", data);
+    let storageUser: IUser = this.storageService.loadUserCredentialsWithPassword();
+    storageUser.name = (data as IUser).name;
+    this.storageService.saveUserCredentials(storageUser);
+    this.user.name = username;
   }
 
-  createUserName(username: string) {
-    let _this = this;
-    return new Promise((resolve, reject) => {
-      var body: IUser = {
-        name: username,
-        password: this.storageService.generateRandomString(20),
-        registered: false
-      }
-      this.httpClient.post(environment.api_base_uri + "v1/user/", body, { headers: this.helperFunctions.getHttpHeaders() }).subscribe(
-        (data: IUser) => {
-          console.debug("POST Request is successful ", data);
+  /**
+   * This creates a new user in the backend. The user is not logged in.
+   * @param username User choose this name 
+   */
+  async createUserName(username: string) {
+    var body: IUser = {
+      name: username,
+      password: this.storageService.generateRandomString(20),
+      registered: false
+    }
 
-          _this.user = data;
-          body.id = data.id;
-          _this.storageService.saveUserCredentials(body);
-          this.authService.createToken()
-            .then(() => {
-              this.socketService.initializeSocket();
-              resolve(_this.user);
-            })
-        },
-        error => {
-          console.warn("Error", error);
-          reject(error);
-        });
-    });
+    let data: IUser = await this.httpClient.post(environment.api_base_uri + "v1/user/", body).toPromise();
+    
+    console.debug("POST Request is successful ", data);
+
+    this.user = data;
+    body.id = data.id;
+    this.storageService.saveUserCredentials(body);
+
+    await this.authService.createToken()
+    this.socketService.initializeSocket();
+    
+    return this.user;
   }
 
-  loginUser(email: string, password: string) {
-    let _this = this;
-    return new Promise((resolve, reject) => {
-      var body: IUser = {
-        email: email,
-        password: password,
-      }
+  async loginUser(email: string, password: string) {
+    var body: IUser = {
+      email: email,
+      password: password,
+    }
 
-      this.httpClient.put(environment.api_base_uri + "v1/user/login", body, { headers: this.helperFunctions.getHttpHeaders() }).subscribe(
-        (data: IUser) => {
-          console.debug("PUT Request is successful ", data);
-          _this.user = data;
-          body.id = data.id;
-          body.name = data.name;
-          body.registered = data.registered;
-          _this.storageService.saveUserCredentials(body);
-          _this.storageService.removeAccessToken();
-          resolve(_this.user);
-        },
-        (error: HttpErrorResponse) => {
-          console.warn("Error", error);
-          if (error.status == 403) {
-            //Token not anymore valid --> create new token and try again
-            _this.authService.checkErrorAndCreateToken(error.status)
-              .then(() => {
-                _this.loginUser(email, password)
-                  .then((data) => resolve(data))
-                  .catch((err) => reject(err))
-              })
-              .catch(() => {
-                console.warn(error);
-                reject(error);
-              })
-          } else {
-            reject(error);
-          }
-        });
-    });
+    let data: IUser;
+    try {
+      data = await this.httpClient.put(environment.api_base_uri + "v1/user/login", body).toPromise();
+    } catch (error: any) {
+      console.warn("Error", error);
+      if (error.status == 403) {
+        //Token not anymore valid --> create new token and try again
+        try {
+          await this.authService.checkErrorAndCreateToken(error.status);
+          data = await this.httpClient.put(environment.api_base_uri + "v1/user/login", body).toPromise();
+
+        } catch (innerError) {
+          // Not possible to create a new Token
+          console.warn(innerError);
+          throw error;
+        }
+      } else {
+        throw error;
+      }
+    }
+        
+    console.debug("PUT Request is successful ", data);
+    this.user = data;
+    body.id = data.id;
+    body.name = data.name;
+    body.registered = data.registered;
+    this.storageService.saveUserCredentials(body);
+    this.storageService.removeAccessToken();
+    return this.user;
   }
 
   registerUser(name: string, email: string, password: string) {
@@ -133,7 +118,7 @@ export class UserService {
         password: password,
         registered: true
       }
-      this.httpClient.put(environment.api_base_uri + "v1/user/" + this.user.id + "/register", body, { headers: this.helperFunctions.getHttpHeaders() }).subscribe(
+      this.httpClient.put(environment.api_base_uri + "v1/register", body, { headers: this.helperFunctions.getHttpHeaders() }).subscribe(
         (data: IUser) => {
           console.debug("PUT Request is successful ", data);
           _this.user.name = data.name;

@@ -96,9 +96,7 @@ export class CreateEditEventComponent implements OnInit {
   }
 
   nameChanged(newValue) {
-    if (!this.isUpdateView) {
-      this.myForm.get('link').setValue(encodeURIComponent(newValue).concat(this.random_part_of_link.toString()));
-    } else if (this.myForm.value.updateLink) {
+    if (!this.isUpdateView || this.myForm.value.updateLink) {
       this.myForm.get('link').setValue(encodeURIComponent(newValue).concat(this.random_part_of_link.toString()));
     }
   }

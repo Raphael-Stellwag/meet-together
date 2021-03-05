@@ -1,3 +1,4 @@
+import { HttpHeaderInterceptor } from './interceptors/HttpHeaderInterceptor';
 import { LoadingScreenService } from './frames/loading-screen/loading-screen.service';
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
@@ -156,6 +157,7 @@ import { LoadingScreenComponent } from './frames/loading-screen/loading-screen.c
   providers: [
     { provide: OWL_DATE_TIME_LOCALE, useValue: 'de' },
     { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true }, 
+    { provide: HTTP_INTERCEPTORS, useClass: HttpHeaderInterceptor, multi: true }, 
     AuthGuard,
     LoadingScreenService
   ],

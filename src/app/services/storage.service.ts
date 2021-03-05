@@ -1,6 +1,6 @@
-import { IToken } from './../interfaces/itoken';
-import { Injectable } from '@angular/core';
-import { IUser } from '../interfaces/iuser';
+import {IToken} from '../interfaces/itoken';
+import {Injectable} from '@angular/core';
+import {IUser} from '../interfaces/iuser';
 import * as SecureLS from 'secure-ls';
 import * as CryptoJS from 'crypto-js';
 
@@ -43,9 +43,8 @@ export class StorageService {
     }
     let cipherUser = this.secure_storage.get("user");
     let secret = this.secure_storage.get("secret");
-    var bytes = CryptoJS.AES.decrypt(cipherUser, secret);
-    var decryptedUser: IUser = JSON.parse(bytes.toString(CryptoJS.enc.Utf8));
-    return decryptedUser;
+    let bytes = CryptoJS.AES.decrypt(cipherUser, secret);
+    return JSON.parse(bytes.toString(CryptoJS.enc.Utf8));
   }
 
   generateRandomString(length: number) {
@@ -61,7 +60,7 @@ export class StorageService {
     let accesstoken: any = this.secure_storage.get("access_token");
     if (accesstoken == "" || accesstoken == null)
       return null;
-    
+
     (accesstoken as IToken).expiration_date = new Date(Date.parse(accesstoken.expiration_date));
     return accesstoken as IToken;
   }

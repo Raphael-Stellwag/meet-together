@@ -33,33 +33,19 @@ export class PlanComponent implements OnInit {
 
   }
 
-  ngOnInit(): void {
+  async ngOnInit() {
     this.user_id = this.userService.getUserId();
     this.actRoute.snapshot.pathFromRoot.forEach((element: ActivatedRouteSnapshot) => {
-      if (element.params.id != undefined && element.params.id != null) {
+      if (element.params.id != undefined) {
         this.event_id = element.params.id;
       }
     })
-    this.eventService.getEvent(this.event_id)
-      .then((event) => {
-        this.initView(event)
-      })
-    /*
-  let event = this.eventService.internalGetEvent(this.event_id);
-  if (event == null) {
-    // Event Service is not initialized with the events, wait that the get is made from the event.component (parent component) 
-    // => happens when reloading the message component directly
-    this.eventService.notifyWhenGotEvents()
-      .then(() => {
-        event = this.eventService.internalGetEvent(this.event_id);
-        
-      })
-  } else {
+    let event = await this.eventService.getEvent(this.event_id);
     this.initView(event);
-  }*/
+
   }
 
-  initView(event) {
+  async initView(event) {
     this.creator = event.creator;
     this.choosen_id = event.choosen_time_place;
     if (this.creator) {
@@ -68,15 +54,12 @@ export class PlanComponent implements OnInit {
         map((fruit: string | null) => fruit ? this._filter(fruit) : this.allParticipants.slice()));
     }
 
-    this.timePlaceSuggestionService.getTimePlaceSuggestions(this.event_id)
-      .then((data: ITimePlaceSuggestion[]) => {
-        this.timePlaceSuggestions = data;
-        if (this.creator) {
-          this.setAllParticipants();
-          this.calculateScore();
-        }
-      })
-      .catch((err) => console.error(err))
+    this.timePlaceSuggestions = await this.timePlaceSuggestionService.getTimePlaceSuggestions(this.event_id) as ITimePlaceSuggestion[];
+
+    if (this.creator) {
+      this.setAllParticipants();
+      this.calculateScore();
+    }
   }
 
   setStep(index: number) {
@@ -120,7 +103,7 @@ export class PlanComponent implements OnInit {
     this.timePlaceSuggestions.push(data)
   }
 
-  showResultsTogglePressed($event) {
+  showResultsTogglePressed() {
     this.isResultView = !this.isResultView
   }
 

@@ -26,29 +26,26 @@ export class EventComponent implements OnInit {
   }
 
   //Open the menu on mobile devices
-  toggleMenu($event) {
+  toggleMenu() {
     this.sidenav.fixedInViewport = true;
     this.sidenav.toggle();
   }
 
-  closeMenu($event) {
+  closeMenu() {
     //Close the menu on mobile devices
     if (this.sidenav.mode == "over") {
       this.sidenav.close()
     }
   }
 
-  ngOnInit() {
+  async ngOnInit() {
     let event_id = this.actRoute.snapshot.params.id;
-    this.eventService.getEvent(event_id)
-      .then((event) => {
-        if (event == null) {
-          this.router.navigate(['home']);
-        } else {
-          this.event = event;
-        }
-      })
-      .catch((error) => console.error(error))
+    let event = await this.eventService.getEvent(event_id)
+    if (event == null) {
+      this.router.navigate(['home']);
+    } else {
+      this.event = event;
+    }
 
     if (window.innerWidth < 768) {
       this.sidenav.fixedTopGap = 56;

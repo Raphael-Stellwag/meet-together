@@ -18,7 +18,7 @@ export class DetailsComponent implements OnInit {
 
   async ngOnInit() {
     this.actRoute.snapshot.pathFromRoot.forEach((element: ActivatedRouteSnapshot) => {
-      if (element.params.id != undefined && element.params.id != null) {
+      if (element.params.id != undefined) {
         this.url_event_id = element.params.id;
       }
     })
@@ -30,12 +30,12 @@ export class DetailsComponent implements OnInit {
         this.time = this.time + " - " + this.helperFunctions.printEndDate(this.event.end_date, this.event.start_date);
       }
     }
-     
+
   }
 
   async leaveEvent() {
     await this.eventService.leaveEvent(this.event.id);
-    this.router.navigate(['home'])  
+    this.router.navigate(['home'])
   }
 
 }

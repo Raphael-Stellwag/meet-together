@@ -1,4 +1,4 @@
-import { IToken } from './../interfaces/itoken';
+import { IToken } from '../interfaces/itoken';
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 
@@ -31,11 +31,11 @@ export class AuthService {
   }
 
   async checkErrorAndCreateToken(statuscode) {
-      if (statuscode == 403 || statuscode == 401) {
-        await this.createToken();
-        return true;
-      }
-      throw new Error("Was not 401 or 403 error")
+    if (statuscode == 403 || statuscode == 401) {
+      await this.createToken();
+      return true;
+    }
+    throw new Error("Was not 401 or 403 error");
   }
 
   async createToken(): Promise<any> {
@@ -48,8 +48,6 @@ export class AuthService {
 
   isLoggedIn(): boolean {
     let user: IUser = this.storage.loadUserCredentials();
-    if (user.id != null)
-      return true;
-    return false;
+    return user.id != null;
   }
 }

@@ -21,21 +21,21 @@ export class LoginDialog {
     })
   }
 
-  login() {
+  async login() {
     if (this.myForm.valid) {
-      this.userService.loginUser(this.myForm.get("email").value, this.myForm.get("password").value)
-        .then(() => {
-          this.dialogRef.close(true);
-        })
-        .catch((error) => {
-          console.warn(error.error.message);
-          this.dialog.open(MessageDialogComponent, {
-            data: {
-              error: true,
-              message: error.error.message
-            }
-          });
-        })
+      try {
+
+        await this.userService.loginUser(this.myForm.get("email").value, this.myForm.get("password").value);
+        this.dialogRef.close(true);
+
+      } catch (error) {
+        this.dialog.open(MessageDialogComponent, {
+          data: {
+            error: true,
+            message: error.error.message
+          }
+        });
+      }
     }
   }
 

@@ -17,16 +17,15 @@ export class AddSuggestionButtonComponent implements OnInit {
   ngOnInit(): void {
   }
 
-  openNewSuggestionDialog() {
+  async openNewSuggestionDialog() {
     const dialogRef = this.dialog.open(NewSuggestionDialog, {
       data: {
         event_id: this.event_id
       }
     });
 
-    dialogRef.afterClosed().subscribe((suggestion: ITimePlaceSuggestion) => {
-      this.added.emit(suggestion);
-    });
+    let suggestion: ITimePlaceSuggestion = await dialogRef.afterClosed().toPromise();
+    this.added.emit(suggestion);
   }
 
 }

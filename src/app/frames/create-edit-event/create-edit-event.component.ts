@@ -30,9 +30,8 @@ export class CreateEditEventComponent implements OnInit {
         if (element.params.id != undefined) {
           event_id = element.params.id;
         }
-      })
+      });
       this.eventService.getEvent(event_id).then((event) => {
-        this.reactiveForm();
         this.event = event;
         this.myForm.get("name").setValue(event.name);
         this.myForm.get("description").setValue(event.description);

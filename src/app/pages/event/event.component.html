@@ -1,6 +1,6 @@
 <div>
     <app-top-bar title="Meet Together" subpage="true" [subpageName]="event.name" [start_date]="event.start_date"
-        (triggerShowMenu)="toggleMenu($event)" [end_date]="event.end_date">
+        (triggerShowMenu)="toggleMenu()" [end_date]="event.end_date">
     </app-top-bar>
 </div>
 
@@ -9,22 +9,22 @@
         [attr.role]="(isHandset$ | async) ? 'dialog' : 'navigation'" [opened]="(isHandset$ | async) === false"
         [mode]="(isHandset$ | async) ? 'over' : 'side'">
         <mat-list>
-            <mat-list-item (click)="closeMenu($event)" [routerLink]="['./messages/']">
+            <mat-list-item (click)="closeMenu()" [routerLink]="['./messages/']">
                 <mat-icon fontSet="material-icons-two-tone">chat</mat-icon>&emsp;Messages
             </mat-list-item>
-            <mat-list-item (click)="closeMenu($event)" [routerLink]="['./plan/']">
+            <mat-list-item (click)="closeMenu()" [routerLink]="['./plan/']">
                 <mat-icon fontSet="material-icons-two-tone">event</mat-icon>&emsp;Plan
             </mat-list-item>
-            <mat-list-item (click)="closeMenu($event)" [routerLink]="['./details/']">
+            <mat-list-item (click)="closeMenu()" [routerLink]="['./details/']">
                 <mat-icon fontSet="material-icons-two-tone">details</mat-icon>&emsp;Details
             </mat-list-item>
-            <mat-list-item (click)="closeMenu($event)" [routerLink]="['./participants/']">
+            <mat-list-item (click)="closeMenu()" [routerLink]="['./participants/']">
                 <mat-icon fontSet="material-icons-two-tone">group</mat-icon>&emsp;Participants
             </mat-list-item>
-            <mat-list-item (click)="closeMenu($event)" [routerLink]="['./invite/']">
+            <mat-list-item (click)="closeMenu()" [routerLink]="['./invite/']">
                 <mat-icon fontSet="material-icons-two-tone">email</mat-icon>&emsp;Invite
             </mat-list-item>
-            <mat-list-item *ngIf="event.creator" (click)="closeMenu($event)" [routerLink]="['./edit/']">
+            <mat-list-item *ngIf="event.creator" (click)="closeMenu()" [routerLink]="['./edit/']">
                 <mat-icon fontSet="material-icons-two-tone">create</mat-icon>&emsp;Edit
             </mat-list-item>
         </mat-list>

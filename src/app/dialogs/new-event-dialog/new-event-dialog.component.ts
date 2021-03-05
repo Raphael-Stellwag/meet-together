@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
 import { MatDialogRef } from '@angular/material/dialog';
 import { IEvent } from 'src/app/interfaces/ievent';
 import { EventService } from 'src/app/services/event.service';
@@ -10,26 +10,19 @@ import { TimePlaceSuggestionService } from 'src/app/services/time-place-suggesti
   templateUrl: './new-event-dialog.component.html',
   styleUrls: ['./new-event-dialog.component.scss']
 })
-export class NewEventDialog implements OnInit {
+export class NewEventDialog {
   @ViewChild(CreateEditEventComponent) createEventComponent;
 
   constructor(private dialogRef: MatDialogRef<NewEventDialog>, private eventService: EventService, private timePlaceSuggestionService: TimePlaceSuggestionService) { }
 
-  ngOnInit(): void {
-  }
+  async createButtonPressed(data) {
+    let event: IEvent = await this.eventService.addEvent(data.event);
 
-  createButtonPressed(data) {
-    this.eventService.addEvent(data.event)
-      .then((event: IEvent) => {
-        if (data.timePlaceSuggestion == null) {
-          this.dialogRef.close(event);
-        } else {
-          this.timePlaceSuggestionService.createTimePlaceSuggestion(event.id, data.timePlaceSuggestion)
-            .then(() => {
-              this.dialogRef.close(event);
-            })
-        }
-      })
-      .catch(error => console.error(error));
+    if (data.timePlaceSuggestion == null) {
+      this.dialogRef.close(event);
+    } else {
+      await this.timePlaceSuggestionService.createTimePlaceSuggestion(event.id, data.timePlaceSuggestion)
+      this.dialogRef.close(event);
+    }
   }
 }

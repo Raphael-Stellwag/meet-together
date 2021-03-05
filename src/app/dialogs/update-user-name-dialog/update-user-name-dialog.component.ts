@@ -18,18 +18,19 @@ export class UpdateUserNameDialog implements OnInit {
   ngOnInit(): void {
   }
 
-  close() {
+  async close() {
     if (this.username != "") {
-      this.userService.renameUser(this.username)
-        .then(() => this.dialogRef.close(true))
-        .catch(() => {
-          this.dialog.open(MessageDialogComponent, {
-            data: {
-              error: true,
-              message: "Username couldnt be changed, try it later again"
-            }
-          })
+      try {
+        await this.userService.renameUser(this.username)
+        this.dialogRef.close(true);
+      } catch(e) {
+        this.dialog.open(MessageDialogComponent, {
+          data: {
+            error: true,
+            message: "Username couldnt be changed, try it later again"
+          }
         })
+      }
     }
   }
 }

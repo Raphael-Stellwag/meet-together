@@ -25,18 +25,18 @@ export class InviteComponent implements OnInit, AfterViewInit {
   constructor(private actRoute: ActivatedRoute, private emailService: EmailService, private eventService: EventService, private userService: UserService, private helperFunctions: HelperFunctionsService, private snackbar: MatSnackBar, private matDialog: MatDialog) {
   }
 
-  ngOnInit(): void {
+  async ngOnInit() {
     this.actRoute.snapshot.pathFromRoot.forEach((element: ActivatedRouteSnapshot) => {
-      if (element.params.id != undefined && element.params.id != null) {
+      if (element.params.id != undefined) {
         this.event_id = element.params.id;
       }
     })
-    this.eventService.getEvent(this.event_id).then((event) => {
-      //also works when the angular app runs in subfolder
-      let base_href = window.location.href.substring(0, window.location.href.indexOf("/event/"));
-      this.accessUrl = base_href + "/join-event/" + this.event_id + "?accesstoken=" + event.accesstoken;
-      this.initializeMailContentAndSubject(event);
-    })
+    let event = await this.eventService.getEvent(this.event_id);
+    //also works when the angular app runs in subfolder
+    let base_href = window.location.href.substring(0, window.location.href.indexOf("/event/"));
+    this.accessUrl = base_href + "/join-event/" + this.event_id + "?accesstoken=" + event.accesstoken;
+    this.initializeMailContentAndSubject(event);
+
   }
 
   private initializeMailContentAndSubject(event: any) {
@@ -66,7 +66,7 @@ export class InviteComponent implements OnInit, AfterViewInit {
 
   ngAfterViewInit() {
     let _this = this
-    //Share Button click must be triggered by user interaction: https://developer.mozilla.org/en-US/docs/Web/API/Navigator/share 
+    //Share Button click must be triggered by user interaction: https://developer.mozilla.org/en-US/docs/Web/API/Navigator/share
     this.shareBtn._elementRef.nativeElement.addEventListener('click', async () => {
       try {
         if ((navigator as any).share) {
@@ -82,7 +82,6 @@ export class InviteComponent implements OnInit, AfterViewInit {
               message: "Not available in this browser. Open in Safari, Edge or on a mobile browser."
             }
           });
-          console.error("Not available on this system")
         }
       } catch (err) {
         console.error(err);

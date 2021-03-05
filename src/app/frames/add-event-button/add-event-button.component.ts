@@ -34,12 +34,10 @@ export class AddEventButtonComponent implements OnInit, AfterViewInit {
     });
   }
 
-  openNewEventDialog() {
-    const dialogRef = this.dialog.open(NewEventDialog, {
-    });
+  async openNewEventDialog() {
+    const dialogRef = this.dialog.open(NewEventDialog, {});
 
-    dialogRef.afterClosed().subscribe(event => {
-      this.added.emit(event);
-    });
+    let event = await dialogRef.afterClosed().toPromise();
+    this.added.emit(event);
   }
 }

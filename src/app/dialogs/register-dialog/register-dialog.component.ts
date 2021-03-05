@@ -24,21 +24,20 @@ export class RegisterDialog implements OnInit {
   ngOnInit(): void {
   }
 
-  register() {
+  async register() {
     if (this.myForm.valid) {
-      this.userService.registerUser(this.myForm.get("name").value, this.myForm.get("email").value, this.myForm.get("password").value)
-        .then(() => {
-          this.dialogRef.close(true);
-        })
-        .catch((error) => {
-          console.warn(error.error.message);
-          this.dialog.open(MessageDialogComponent, {
-            data: {
-              error: true,
-              message: error.error.message
-            }
-          });
-        })
+      try {
+        await this.userService.registerUser(this.myForm.get("name").value, this.myForm.get("email").value, this.myForm.get("password").value);
+        this.dialogRef.close(true);
+      } catch (error) {
+        console.warn(error.error.message);
+        this.dialog.open(MessageDialogComponent, {
+          data: {
+            error: true,
+            message: error.error.message
+          }
+        });
+      }
     }
   }
 

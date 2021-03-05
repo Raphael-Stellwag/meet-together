@@ -13,16 +13,14 @@ export class ParticipantsComponent implements OnInit {
 
   constructor(private actRoute: ActivatedRoute, private eventService: EventService, private participantsService: ParticipantsService) { }
 
-  ngOnInit(): void {
+  async ngOnInit() {
     let event_id;
     this.actRoute.snapshot.pathFromRoot.forEach((element: ActivatedRouteSnapshot) => {
-      if (element.params.id != undefined && element.params.id != null) {
+      if (element.params.id != undefined) {
         event_id = element.params.id;
       }
     })
-    this.participantsService.getParticipants(event_id).then((participants: any[]) => {
-      this.participants = participants
-    })
+    this.participants = await this.participantsService.getParticipants(event_id) as any[];
   }
 
 }

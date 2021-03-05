@@ -1,10 +1,10 @@
-import { Injectable, OnDestroy } from '@angular/core';
-import { Observable, Subscriber } from 'rxjs';
-import { IMessage } from '../interfaces/imessage';
-import { AuthService } from './auth.service';
-import { StorageService } from './storage.service';
-import { IEvent } from '../interfaces/ievent';
-import { environment } from 'src/environments/environment';
+import {Injectable, OnDestroy} from '@angular/core';
+import {Observable, Subscriber} from 'rxjs';
+import {IMessage} from '../interfaces/imessage';
+import {AuthService} from './auth.service';
+import {StorageService} from './storage.service';
+import {IEvent} from '../interfaces/ievent';
+import {environment} from 'src/environments/environment';
 
 @Injectable({
   providedIn: 'root'
@@ -23,23 +23,19 @@ export class SocketService implements OnDestroy {
   }
 
   newMessageReceived() {
-    let observable = new Observable<IMessage>(observer => {
+    return new Observable<IMessage>(observer => {
       this.newMessageReceivedObserver = observer;
     });
-
-    return observable;
   }
 
   eventGotChanged() {
-    let observable = new Observable<IEvent>(observer => {
+    return new Observable<IEvent>(observer => {
       this.eventGotChangedObserver = observer;
     });
-
-    return observable;
   }
 
   readReceivedMessage(event_id, message_id) {
-    
+
     let received_details = {
       event_id: event_id,
       user_id: this.storageService.loadUserCredentials().id,
@@ -50,7 +46,7 @@ export class SocketService implements OnDestroy {
       additional_data: received_details
     }
     this.socket.send(JSON.stringify(customObj));
-  
+
   }
 
   initializeSocket() {
@@ -73,7 +69,7 @@ export class SocketService implements OnDestroy {
 
       let socket = new WebSocket(environment.ws_base_uri);
       this.socket = socket;
-      
+
       this.socket.onopen = function(e) {
         let custumObj = {
           token: token.token,
@@ -84,11 +80,11 @@ export class SocketService implements OnDestroy {
 
       this.socket.onmessage = function(event:any) {
         _this.onMessage(event, _this)
-      } 
+      }
 
       console.log("Socket initilized")
     }).catch(err => console.error(err))
-    
+
   }
 
   private onMessage(event: any, _this: any) {

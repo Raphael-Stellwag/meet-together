@@ -6,54 +6,28 @@
     $primary: map-get($theme, primary);
     $accent: map-get($theme, accent);
     $warn: map-get($theme, warn);
-  
+
     .own-message {
         // Get the default hue for a palette.
         //color: mat-color($primary);
-        
-        // Get a specific hue for a palette. 
+
+        // Get a specific hue for a palette.
         // See https://material.io/archive/guidelines/style/color.html#color-color-palette for hues.
         background-color: mat-color($primary, 200);
-        
+
         // Get a relative color for a hue ('lighter' or 'darker')
         //outline-color: mat-color($accent, lighter);
-      
+
         // Get a contrast color for a hue by adding `-contrast` to any other key.
         //border-color: mat-color($primary, '100-contrast');
 
       }
-  
+
     .foreign-message {
       background-color: mat-color($accent, 200);
     }
-  
+
     .generated-message {
       background-color: mat-color($warn, 200);
     }
   }
-
-  /*
-  @import '~@angular/material/theming';
-
-  @mixin tile-theme($theme) {
-      $accent: map-get($theme, accent);
-      $background: map-get($theme, background);
-      $background-color: mat-color($background, card);
-  
-      .tile {
-          @include mat-elevation(2);
-          background-color: mat-color($accent);
-          border: 1rem solid $background-color;
-          padding: 2rem;
-          min-height: 200px;
-          min-width: 200px;
-          
-          p {
-              color: $background-color;
-              font-family: 'Pacifico';
-              line-height: 2.4rem;
-              font-size: 2rem;
-          }
-      }
-    }
-*/

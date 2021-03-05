@@ -26,28 +26,26 @@ export class UserMenuComponent {
     this.user = this.userService.getUser()
   }
 
-  renameUser() {
+  async renameUser() {
     let dialogRef: MatDialogRef<UpdateUserNameDialog> = this.dialog.open(UpdateUserNameDialog, { data: { name: this.user.name } });
-    dialogRef.afterClosed().toPromise().then((successfull: boolean) => {
-      if (successfull) {
-        let config = new MatSnackBarConfig();
-        config.duration = 5000;
-        this.snackBar.open('User name successfully changed', null, config);
-      }
-    })
+    let successful: boolean = await dialogRef.afterClosed().toPromise();
+    if (successful) {
+      let config = new MatSnackBarConfig();
+      config.duration = 5000;
+      this.snackBar.open('User name successfully changed', null, config);
+    }
   }
 
-  login() {
+  async login() {
     let dialogRef: MatDialogRef<LoginDialog> = this.dialog.open(LoginDialog, { data: { user: this.user } });
-    dialogRef.afterClosed().toPromise().then((successfull: boolean) => {
-      if (successfull) {
-        this.eventService.logout();
-        this.messageService.logout();
-        this.zone.runOutsideAngular(() => {
-          location.reload();
-        });
-      }
-    })
+    let successful: boolean = await dialogRef.afterClosed().toPromise();
+    if (successful) {
+      this.eventService.logout();
+      this.messageService.logout();
+      this.zone.runOutsideAngular(() => {
+        location.reload();
+      });
+    }
   }
 
   logout() {
@@ -59,14 +57,14 @@ export class UserMenuComponent {
     });
   }
 
-  register() {
+  async register() {
     let dialogRef: MatDialogRef<RegisterDialog> = this.dialog.open(RegisterDialog, { data: { user: this.user } });
-    dialogRef.afterClosed().toPromise().then((successfull: boolean) => {
-      if (successfull) {
-        let config = new MatSnackBarConfig();
-        config.duration = 5000;
-        this.snackBar.open('Sign up was successfull, dont forget your password', null, config);
-      }
-    })
+    let successful: boolean = await dialogRef.afterClosed().toPromise();
+    if (successful) {
+      let config = new MatSnackBarConfig();
+      config.duration = 5000;
+      this.snackBar.open('Sign up was successfull, dont forget your password', null, config);
+    }
+
   }
 }

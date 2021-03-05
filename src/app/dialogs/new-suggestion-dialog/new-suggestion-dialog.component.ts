@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, Inject } from '@angular/core';
+import { Component, ViewChild, Inject } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { EventService } from 'src/app/services/event.service';
 import { ITimePlaceSuggestion } from 'src/app/interfaces/itime-place-suggestion';
@@ -10,7 +10,7 @@ import { TimePlaceSuggestionService } from 'src/app/services/time-place-suggesti
   templateUrl: './new-suggestion-dialog.component.html',
   styleUrls: ['./new-suggestion-dialog.component.scss']
 })
-export class NewSuggestionDialog implements OnInit {
+export class NewSuggestionDialog {
   event_id;
 
   @ViewChild(CreateSuggestionComponent) createsuggestionComponent;
@@ -19,16 +19,8 @@ export class NewSuggestionDialog implements OnInit {
     this.event_id = data.event_id;
   }
 
-  ngOnInit(): void {
-  }
-
-  createButtonPressed(data: ITimePlaceSuggestion) {
-    this.timePlaceSuggestionService.createTimePlaceSuggestion(this.event_id, data)
-      .then((timePlaceSuggestion) => {
-        this.dialogRef.close(timePlaceSuggestion);
-      })
-      .catch((err) => {
-        console.error(err)
-      })
+  async createButtonPressed(data: ITimePlaceSuggestion) {
+    let timePlaceSuggestion = await this.timePlaceSuggestionService.createTimePlaceSuggestion(this.event_id, data);
+    this.dialogRef.close(timePlaceSuggestion);
   }
 }

@@ -5,7 +5,6 @@ import { environment } from 'src/environments/environment';
 import { IMessage } from '../interfaces/imessage';
 import { AuthService } from './auth.service';
 import { EventService } from './event.service';
-import { UserService } from './user.service';
 
 @Injectable({
   providedIn: 'root'
@@ -14,7 +13,7 @@ export class MessagesService {
   messages: IMessage[] = [];
   event_id = null;
 
-  constructor(private socketService: SocketService, private httpClient: HttpClient, private authService: AuthService, private eventService: EventService, private userService: UserService) {
+  constructor(private socketService: SocketService, private httpClient: HttpClient, private authService: AuthService, private eventService: EventService) {
     this.socketService.newMessageReceived()
       .subscribe(data => {
         let message: IMessage = this.deserializeMessage(data)
@@ -29,7 +28,7 @@ export class MessagesService {
   async getMessages(eventId): Promise<IMessage[]> {
     this.event_id = eventId;
     let data: IMessage[] =  (await this.httpClient.get(environment.api_base_uri +
-                                      "v1/event/" + eventId + "/messages").toPromise()) as IMessage[];
+                                      "v1/event/" + eventId + "/message").toPromise()) as IMessage[];
 
     console.debug("GET Request is successful ", data);
     this.messages.splice(0, this.messages.length);
@@ -43,8 +42,8 @@ export class MessagesService {
     let messageObj: IMessage = {
       content: content
     }
-    let message: IMessage = (await this.httpClient.post(environment.api_base_uri + "v1/event/" + event_id +
-      "/user/" + this.userService.getUserId() + "/message", messageObj).toPromise()) as IMessage;
+    let message: IMessage = (await this.httpClient.post(environment.api_base_uri + "v1/event/" + event_id
+          + "/message", messageObj).toPromise()) as IMessage;
 
     console.debug("POST Request is successful ", message);
     message = this.deserializeMessage(message);

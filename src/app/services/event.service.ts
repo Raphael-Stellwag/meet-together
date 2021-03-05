@@ -37,8 +37,7 @@ export class EventService {
   async getEvents(): Promise<IEvent[]> {
     this.isInitializing = true;
     if (this.userService.getUserId() != null) {
-      let data: IEvent[] = (await this.httpClient.get(environment.api_base_uri + "v1/user/" +
-                                          this.userService.getUserId() + "/event").toPromise()) as IEvent[];
+      let data: IEvent[] = (await this.httpClient.get(environment.api_base_uri + "v1/event").toPromise()) as IEvent[];
 
       console.debug("GET Request is successful ", data);
       this.events.splice(0, this.events.length);
@@ -81,8 +80,7 @@ export class EventService {
 
   async addEvent(event: IEvent): Promise<IEvent> {
     let json = this.helperFunctions.ObjectToJSON(event);
-    let data = await this.httpClient.post(environment.api_base_uri + "v1/user/" + this.userService.getUserId() + "/event", json,
-                          { headers: this.helperFunctions.getHttpHeaders() }).toPromise();
+    let data = await this.httpClient.post(environment.api_base_uri + "v1/event", json).toPromise();
 
     console.debug("POST Request is successful ", data);
 
@@ -96,7 +94,7 @@ export class EventService {
   async updateEvent(event: IEvent): Promise<IEvent> {
     let json = this.helperFunctions.ObjectToJSON(event);
 
-    let data: IEvent = (await this.httpClient.put(environment.api_base_uri + "v1/user/" + this.userService.getUserId() + "/event/" + event.id, json,
+    let data: IEvent = (await this.httpClient.put(environment.api_base_uri + "v1/event/" + event.id, json,
                               { headers: this.helperFunctions.getHttpHeaders() }).toPromise()) as IEvent;
 
     data = this.helperFunctions.jsonDateToJsDate(data);
@@ -118,7 +116,7 @@ export class EventService {
 
   async joinEvent(event_id: any, access_token: any): Promise<IEvent> {
 
-    let event: IEvent = await this.httpClient.put(environment.api_base_uri + "v1/event/" + event_id + "/user/" + this.userService.getUserId() + "?accesstoken=" + access_token,
+    let event: IEvent = await this.httpClient.put(environment.api_base_uri + "v1/event/" + event_id + "/user" + "?accesstoken=" + access_token,
                                 {}).toPromise() as IEvent;
     console.debug("PUT Request is successful ", event);
     event = this.helperFunctions.jsonDateToJsDate(event);
@@ -130,7 +128,7 @@ export class EventService {
   }
 
   async leaveEvent(event_id) {
-    let data = await this.httpClient.delete(environment.api_base_uri + "v1/event/" + event_id + "/user/" + this.userService.getUserId(), {}).toPromise();
+    let data = await this.httpClient.delete(environment.api_base_uri + "v1/event/" + event_id + "/user", {}).toPromise();
 
     console.debug("DELETE Request is successful ", data);
     this.events = this.events.filter((event) => event.id != event_id);

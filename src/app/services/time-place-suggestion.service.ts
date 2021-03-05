@@ -45,7 +45,7 @@ export class TimePlaceSuggestionService {
   addUserToTimePlaceSuggestion(eventId, timePlaceSuggestionId) {
     let _this = this;
     return new Promise((resolve, reject) => {
-      this.httpClient.put(environment.api_base_uri + "v1/event/" + eventId + "/time-place-suggestion/" + timePlaceSuggestionId + "/user/" + this.userService.getUserId(), {}).subscribe(
+      this.httpClient.put(environment.api_base_uri + "v1/event/" + eventId + "/time-place-suggestion/" + timePlaceSuggestionId + "/user", {}).subscribe(
         (data: any[]) => {
           console.debug("Get Request is successful ", data);
           resolve(_this.helperFunctions.jsonDateToJsDate(data));
@@ -68,7 +68,7 @@ export class TimePlaceSuggestionService {
   removeUserFromTimePlaceSuggestion(event_id: number, suggestion_id: any) {
     let _this = this;
     return new Promise((resolve, reject) => {
-      this.httpClient.delete(environment.api_base_uri + "v1/event/" + event_id + "/time-place-suggestion/" + suggestion_id + "/user/" + this.userService.getUserId(), {}).subscribe(
+      this.httpClient.delete(environment.api_base_uri + "v1/event/" + event_id + "/time-place-suggestion/" + suggestion_id + "/user", {}).subscribe(
         (data: ITimePlaceSuggestion) => {
           console.debug("Get Request is successful ", data);
           resolve(_this.helperFunctions.jsonDateToJsDate(data));
@@ -122,7 +122,7 @@ export class TimePlaceSuggestionService {
           event.choosen_time_place = suggestion_id
           let json = this.helperFunctions.ObjectToJSON(event);
           this.httpClient.put(
-            environment.api_base_uri + "v1/event/" + event_id + "/time-place-suggestion/" + suggestion_id + "/user/" + this.userService.getUserId() + "/choosen",
+            environment.api_base_uri + "v1/event/" + event_id + "/time-place-suggestion/" + suggestion_id + "/choosen",
             json, { headers: this.helperFunctions.getHttpHeaders() }).subscribe(
               (data: IEvent) => {
                 console.debug("PUT Request is successful ", data);

@@ -9,6 +9,7 @@
     "lint": "ng lint",
     "e2e": "ng e2e",
     "build:prod": "ng build --prod --base-href /meet-together/",
+    "build:deploy": "ng build --prod --base-href /meet-together/ && ngh",
     "publish": "ngh"
   },
   "private": true,

@@ -1,8 +1,7 @@
 <form [formGroup]="myForm" (ngSubmit)="triggerCallback()" novalidate>
     <mat-form-field style="width: 100%;" appearance="outline">
         <mat-label>Name</mat-label>
-        <input required matInput required minlength="4" autofocus formControlName="name"
-            (change)="nameChanged($event.target.value)" placeholder="Event name">
+        <input required matInput required minlength="4" autofocus formControlName="name" placeholder="Event name">
         <mat-error *ngIf="errorHandling('name', 'required')">
             You must provide a <strong>name</strong>
         </mat-error>
@@ -32,7 +31,6 @@
             <br>
             <mat-form-field style=" width: 100%;">
                 <mat-label>Date</mat-label>
-                <!--<input type="datetime" matInput formControlName="date">-->
                 <input required [owlDateTime]="dt1" [min]="minDate" [selectMode]="'range'" [owlDateTimeTrigger]="dt1"
                     placeholder="Date" matInput formControlName="date">
                 <owl-date-time #dt1></owl-date-time>
@@ -54,19 +52,7 @@
             </mat-form-field>
         </div>
     </div>
-    <br>
 
-    <mat-slide-toggle *ngIf="isUpdateView" formControlName="updateLink" (change)="updateInvitationLink()">
-        Update invitation link (not recommended: your old link will not work anymore)
-    </mat-slide-toggle>
-
-    <span *ngIf="!isUpdateView">Future Invitation Link for this event</span>
-    <br>
-    <br>
-    <mat-form-field style="width: 100%;" appearance="outline">
-        <mat-label>Invitation Link</mat-label>
-        <input matInput formControlName="link">
-    </mat-form-field>
     <br>
     <button *ngIf="isUpdateView" mat-raised-button color="primary">Update Event</button>
     <button *ngIf="!isUpdateView" hidden #hiddenButton></button>

@@ -4,6 +4,7 @@ import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { ActivatedRoute, ActivatedRouteSnapshot } from '@angular/router';
 import { EventService } from 'src/app/services/event.service';
 import { ITimePlaceSuggestion } from 'src/app/interfaces/itime-place-suggestion';
+import { v4 as uuidv4 } from 'uuid';
 
 @Component({
   selector: 'app-create-edit-event',
@@ -14,19 +15,14 @@ export class CreateEditEventComponent implements OnInit {
   event: IEvent = {} as IEvent
   myForm: FormGroup;
   dateDisabled: boolean = true;
-  random_part_of_link: String = "";
   minDate = new Date();
-  oldLink: String = null;
   @Input() isUpdateView: boolean = false;
   @Output() callback = new EventEmitter<Object>();
   @ViewChild("hiddenButton") button;
 
   constructor(private actRoute: ActivatedRoute, private formBuilder: FormBuilder, private eventService: EventService) { }
 
-  ngOnInit(): void {
-    var timestamp = new Date().getTime();
-    var random = Math.floor((Math.random() * 1000000000) + 1);
-    this.random_part_of_link = timestamp + "" + random;
+  ngOnInit(): void {;
     this.reactiveForm();
 
     if (this.isUpdateView) {
@@ -41,7 +37,6 @@ export class CreateEditEventComponent implements OnInit {
         this.event = event;
         this.myForm.get("name").setValue(event.name);
         this.myForm.get("description").setValue(event.description);
-        this.myForm.get("link").setValue(event.accesstoken);
 
         if (event.start_date != null) {
           let date: Date[] = [event.start_date, event.end_date]
@@ -56,7 +51,6 @@ export class CreateEditEventComponent implements OnInit {
         }
       })
     } else {
-      this.myForm.get("link").setValue(this.random_part_of_link);
       this.myForm.get("timePlaceSettings").setValue("0");
       this.myForm.get("date").disable();
     }
@@ -67,7 +61,6 @@ export class CreateEditEventComponent implements OnInit {
       name: ['', [Validators.required]],
       description: [''],
       date: [{ value: '', }, [Validators.required]],
-      link: [{ value: '', disabled: true }],
       location: [{ value: '', disabled: true }],
       location_link: [{ value: '', disabled: true }],
       updateLink: [''],
@@ -84,20 +77,6 @@ export class CreateEditEventComponent implements OnInit {
       this.myForm.get("date").disable();
       this.myForm.get("location").disable();
       this.myForm.get("location_link").disable();
-    }
-  }
-
-  updateInvitationLink() {
-    if (this.myForm.value.updateLink) {
-      this.nameChanged(this.myForm.value.name)
-    } else {
-      this.myForm.get("link").setValue(this.event.accesstoken);
-    }
-  }
-
-  nameChanged(newValue) {
-    if (!this.isUpdateView || this.myForm.value.updateLink) {
-      this.myForm.get('link').setValue(encodeURIComponent(newValue).concat(this.random_part_of_link.toString()));
     }
   }
 
@@ -118,7 +97,7 @@ export class CreateEditEventComponent implements OnInit {
       id: null,
       name: this.myForm.get('name').value,
       description: this.myForm.get('description').value,
-      accesstoken: this.myForm.get('link').value,
+      accesstoken: null,
       start_date: null,
       end_date: null,
       place: null,

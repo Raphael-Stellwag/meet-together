@@ -16,7 +16,7 @@ export class TimePlaceSuggestionService {
   constructor(private httpClient: HttpClient, private authService: AuthService, private userService: UserService, private helperFunctions: HelperFunctionsService, private eventService: EventService) { }
 
   async createTimePlaceSuggestion(eventId, timeplaceSuggestion: ITimePlaceSuggestion) {
-      let json = this.helperFunctions.ObjectToJSON(timeplaceSuggestion);
+      let json = this.helperFunctions.objectToJSON(timeplaceSuggestion);
       let data: any[] = (await this.httpClient.post(environment.api_base_uri + "v1/event/" + eventId +
         "/time-place-suggestion/", json).toPromise()) as any[];
 
@@ -56,7 +56,7 @@ export class TimePlaceSuggestionService {
   async suggestionChoosen(event_id: number, suggestion_id: any) {
     let event = await this.eventService.getEvent(event_id)
     event.choosen_time_place = suggestion_id
-    let json = this.helperFunctions.ObjectToJSON(event);
+    let json = this.helperFunctions.objectToJSON(event);
     let data: IEvent = await this.httpClient.put(environment.api_base_uri + "v1/event/" + event_id + "/time-place-suggestion/" +
       suggestion_id + "/choosen", json).toPromise() as IEvent;
 

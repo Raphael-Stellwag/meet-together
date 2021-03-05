@@ -79,7 +79,7 @@ export class EventService {
   }
 
   async addEvent(event: IEvent): Promise<IEvent> {
-    let json = this.helperFunctions.ObjectToJSON(event);
+    let json = this.helperFunctions.objectToJSON(event);
     let data = await this.httpClient.post(environment.api_base_uri + "v1/event", json).toPromise();
 
     console.debug("POST Request is successful ", data);
@@ -92,10 +92,10 @@ export class EventService {
   }
 
   async updateEvent(event: IEvent): Promise<IEvent> {
-    let json = this.helperFunctions.ObjectToJSON(event);
+    let json = this.helperFunctions.objectToJSON(event);
 
     let data: IEvent = (await this.httpClient.put(environment.api_base_uri + "v1/event/" + event.id, json,
-                              { headers: this.helperFunctions.getHttpHeaders() }).toPromise()) as IEvent;
+                              ).toPromise()) as IEvent;
 
     data = this.helperFunctions.jsonDateToJsDate(data);
     console.debug("PUT Request is successful ", data);

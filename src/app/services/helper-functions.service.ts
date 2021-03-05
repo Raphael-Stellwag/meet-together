@@ -1,6 +1,5 @@
 import { Injectable } from '@angular/core';
 import { IEvent } from '../interfaces/ievent';
-import { HttpHeaders } from '@angular/common/http';
 
 @Injectable({
   providedIn: 'root'
@@ -21,7 +20,6 @@ export class HelperFunctionsService {
     return date.toLocaleDateString("de") + " " + date.toLocaleTimeString("de", { hour: '2-digit', minute: '2-digit' });
   }
 
-
   jsonDateToJsDate(data) {
     let event: IEvent = data as IEvent;
     if (event.start_date != null && !(event.start_date instanceof Date))
@@ -33,15 +31,10 @@ export class HelperFunctionsService {
     return event;
   }
 
-  ObjectToJSON(data) {
+  objectToJSON(data) {
     return JSON.stringify(data, (key, value) => {
       if (value !== null) return value
     })
-  }
-
-  getHttpHeaders() {
-    return new HttpHeaders()
-      .set('content-type', 'application/json')
   }
 
   isValidEmail(value: string) {

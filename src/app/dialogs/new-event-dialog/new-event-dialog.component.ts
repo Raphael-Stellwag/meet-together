@@ -2,7 +2,6 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { MatDialogRef } from '@angular/material/dialog';
 import { IEvent } from 'src/app/interfaces/ievent';
 import { EventService } from 'src/app/services/event.service';
-import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { CreateEditEventComponent } from 'src/app/frames/create-edit-event/create-edit-event.component';
 import { TimePlaceSuggestionService } from 'src/app/services/time-place-suggestion.service';
 

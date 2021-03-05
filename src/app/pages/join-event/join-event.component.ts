@@ -1,10 +1,9 @@
-import { Component, OnInit, AfterViewInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { UserService } from 'src/app/services/user.service';
 import { EventService } from 'src/app/services/event.service';
 import { MatDialog } from '@angular/material/dialog';
 import { MessageDialogComponent } from 'src/app/dialogs/message-dialog/message-dialog.component';
-import { NewUserDialog } from 'src/app/dialogs/new-user-dialog/new-user-dialog.component';
 import { HttpErrorResponse } from '@angular/common/http';
 
 @Component({

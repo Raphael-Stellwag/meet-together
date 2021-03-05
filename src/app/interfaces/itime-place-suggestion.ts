@@ -4,8 +4,8 @@ export interface ITimePlaceSuggestion {
     id?: number;
     start_date: Date,
     end_date: Date,
-    place: String,
-    link: String,
+    place: string,
+    link: string,
     score?: number,
     can_attend?: IParticipant[]
 }

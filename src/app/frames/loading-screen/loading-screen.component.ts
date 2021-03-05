@@ -1,4 +1,3 @@
-import { AuthService } from './../../services/auth.service';
 import { Component, OnDestroy, OnInit } from "@angular/core";
 import { Subscription } from "rxjs";
 import { LoadingScreenService } from "./loading-screen.service";
@@ -25,7 +24,7 @@ export class LoadingScreenComponent implements OnInit, OnDestroy {
             this.loading = value;
         });
     }
-    
+
     AfterViewInit() {
         console.log("After View init callede");
     }

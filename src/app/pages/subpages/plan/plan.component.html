@@ -42,7 +42,6 @@
 
 <div *ngIf="!isResultView">
     <mat-accordion>
-        <!-- [expanded]="step === 0" (opened)="setStep(0)" hideToggle  | sortBy:'asc':'start_date'-->
         <mat-expansion-panel *ngFor="let suggestion of timePlaceSuggestions | sortBy:'asc':'start_date'; let i = index"
             [expanded]="step === i" (opened)="setStep(i)">
             <mat-expansion-panel-header>

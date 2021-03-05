@@ -1,6 +1,5 @@
 import { Component, OnInit, Inject } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA, MatDialog } from '@angular/material/dialog';
-import { IUser } from 'src/app/interfaces/iuser';
 import { HelperFunctionsService } from 'src/app/services/helper-functions.service';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { UserService } from 'src/app/services/user.service';
@@ -33,7 +32,7 @@ export class RegisterDialog implements OnInit {
         })
         .catch((error) => {
           console.warn(error.error.message);
-          const dialogRef = this.dialog.open(MessageDialogComponent, {
+          this.dialog.open(MessageDialogComponent, {
             data: {
               error: true,
               message: error.error.message

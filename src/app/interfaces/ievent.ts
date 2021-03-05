@@ -1,13 +1,13 @@
 export interface IEvent {
     id: number,
-    name: String,
-    description: String,
+    name: string,
+    description: string,
     start_date: Date,
     end_date: Date,
-    accesstoken: String,
+    accesstoken: string,
     creator?: boolean,
-    place: String,
-    link: String,
+    place: string,
+    link: string,
     choosen_time_place?: any;
     count_unread_messages?: number,
     last_read_message?: number | null,

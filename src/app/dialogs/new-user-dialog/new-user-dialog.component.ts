@@ -7,7 +7,7 @@ import { MatDialogRef } from '@angular/material/dialog';
   styleUrls: ['./new-user-dialog.component.scss']
 })
 export class NewUserDialog implements OnInit {
-  username: String = "";
+  username: string = "";
 
   constructor(private dialogRef: MatDialogRef<NewUserDialog>){
     dialogRef.disableClose = true;

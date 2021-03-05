@@ -1,10 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRouteSnapshot, ActivatedRoute } from '@angular/router';
 import { EventService } from 'src/app/services/event.service';
-import { IEvent } from 'src/app/interfaces/ievent';
-import { FormGroup, FormBuilder, Validators } from '@angular/forms';
-import { EventComponent } from '../../event/event.component';
-import { ITimePlaceSuggestion } from 'src/app/interfaces/itime-place-suggestion';
 
 @Component({
   selector: 'app-edit',

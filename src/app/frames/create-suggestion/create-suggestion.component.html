@@ -1,7 +1,6 @@
 <form [formGroup]="myForm" (ngSubmit)="triggerCallback()" novalidate>
     <mat-form-field style=" width: 100%;">
         <mat-label>Date</mat-label>
-        <!--<input type="datetime" matInput formControlName="date">-->
         <input required [owlDateTime]="dt1" [min]="minDate" [selectMode]="'range'" [owlDateTimeTrigger]="dt1"
             placeholder="Date" matInput formControlName="date">
         <owl-date-time #dt1></owl-date-time>

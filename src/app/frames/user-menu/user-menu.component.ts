@@ -1,4 +1,4 @@
-import { Component, OnInit, NgZone } from '@angular/core';
+import { Component, NgZone } from '@angular/core';
 import { UserService } from 'src/app/services/user.service';
 import { IUser } from 'src/app/interfaces/iuser';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
@@ -8,7 +8,7 @@ import { MessagesService } from 'src/app/services/messages.service';
 import { Router } from '@angular/router';
 import { LoginDialog } from 'src/app/dialogs/login-dialog/login-dialog.component';
 import { RegisterDialog } from 'src/app/dialogs/register-dialog/register-dialog.component';
-import { SimpleSnackBar, MatSnackBar, MatSnackBarConfig } from '@angular/material/snack-bar';
+import { MatSnackBar, MatSnackBarConfig } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-user-menu',
@@ -32,7 +32,7 @@ export class UserMenuComponent {
       if (successfull) {
         let config = new MatSnackBarConfig();
         config.duration = 5000;
-        let snackBarRef = this.snackBar.open('User name successfully changed', null, config);
+        this.snackBar.open('User name successfully changed', null, config);
       }
     })
   }
@@ -65,7 +65,7 @@ export class UserMenuComponent {
       if (successfull) {
         let config = new MatSnackBarConfig();
         config.duration = 5000;
-        let snackBarRef = this.snackBar.open('Sign up was successfull, dont forget your password', null, config);
+        this.snackBar.open('Sign up was successfull, dont forget your password', null, config);
       }
     })
   }

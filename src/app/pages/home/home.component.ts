@@ -1,7 +1,6 @@
-import { Component, OnInit, AfterViewInit, ViewChild } from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 
-import { NewUserDialog } from 'src/app/dialogs/new-user-dialog/new-user-dialog.component';
 import { TopBarComponent } from 'src/app/frames/top-bar/top-bar.component';
 import { IEvent } from 'src/app/interfaces/ievent';
 import { UserService } from 'src/app/services/user.service';
@@ -23,7 +22,7 @@ export class HomeComponent {
 
   events: IEvent[] = [];
 
-  constructor(public dialog: MatDialog, private userService: UserService, private eventSerivce: EventService, public helperFunctions: HelperFunctionsService) { 
+  constructor(public dialog: MatDialog, private userService: UserService, private eventSerivce: EventService, public helperFunctions: HelperFunctionsService) {
     console.log("constructor of home called");
   }
 

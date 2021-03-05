@@ -1,7 +1,6 @@
 import { Component, OnInit, ViewChild, Output, EventEmitter } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
-import { ActivatedRoute } from '@angular/router';
-import { ITimePlaceSuggestion } from 'src/app/interfaces/itime-place-suggestion';
+import {ITimePlaceSuggestion} from "../../interfaces/itime-place-suggestion";
 
 @Component({
   selector: 'app-create-suggestion',
@@ -42,15 +41,13 @@ export class CreateSuggestionComponent implements OnInit {
     this.button.nativeElement.dispatchEvent(event);
   }
 
-  private getFormFieldInputAsReturnableObject() {
-    let timePlaceSuggestion = {
+  private getFormFieldInputAsReturnableObject(): ITimePlaceSuggestion {
+    return  {
       start_date: this.myForm.get('date').value[0],
       end_date: this.myForm.get('date').value[1],
       place: this.myForm.get('location').value,
       link: this.myForm.get('location_link').value
     }
-
-    return timePlaceSuggestion;
   }
 
   /* Handle form errors in Angular 8 */

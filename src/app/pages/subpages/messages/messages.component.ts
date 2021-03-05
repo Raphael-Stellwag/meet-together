@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, HostListener, ViewChild, ElementRef } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute, ActivatedRouteSnapshot } from '@angular/router';
 import { MessagesService } from 'src/app/services/messages.service';
 import { IMessage } from 'src/app/interfaces/imessage';
@@ -13,7 +13,7 @@ import { UserService } from 'src/app/services/user.service';
 })
 export class MessagesComponent implements OnInit, OnDestroy {
   messages: IMessage[] = [];
-  message: String;
+  message: string;
   event_id;
   user_id;
 
@@ -24,7 +24,7 @@ export class MessagesComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.event_id = null;
     this.actRoute.snapshot.pathFromRoot.forEach((element: ActivatedRouteSnapshot) => {
-      if (element.params.id != undefined && element.params.id != null) {
+      if (element.params.id != undefined) {
         this.event_id = element.params.id;
       }
     })

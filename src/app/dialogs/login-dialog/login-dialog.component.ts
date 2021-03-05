@@ -1,5 +1,4 @@
-import { Component, OnInit, Inject } from '@angular/core';
-import { IUser } from 'src/app/interfaces/iuser';
+import { Component, Inject } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA, MatDialog } from '@angular/material/dialog';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { UserService } from 'src/app/services/user.service';
@@ -30,7 +29,7 @@ export class LoginDialog {
         })
         .catch((error) => {
           console.warn(error.error.message);
-          const dialogRef = this.dialog.open(MessageDialogComponent, {
+          this.dialog.open(MessageDialogComponent, {
             data: {
               error: true,
               message: error.error.message

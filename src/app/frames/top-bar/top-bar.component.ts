@@ -12,9 +12,9 @@ import { map, shareReplay } from 'rxjs/operators';
 })
 export class TopBarComponent implements OnInit {
   @ViewChild(UserMenuComponent) userMenu: UserMenuComponent;
-  @Input("title") title: String;
+  @Input("title") title: string;
   @Input("subpage") subpage: boolean;
-  @Input("subpageName") subpage_name: String;
+  @Input("subpageName") subpage_name: string;
   @Input("start_date") start_date: Date = null;
   @Input("end_date") end_date: Date = null;
   isHandset$: Observable<boolean> = this.breakpointObserver.observe(Breakpoints.Handset)

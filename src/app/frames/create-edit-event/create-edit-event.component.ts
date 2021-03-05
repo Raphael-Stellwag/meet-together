@@ -1,10 +1,9 @@
-import { Component, OnInit, Input, Output, EventEmitter, ViewChild, AfterViewInit } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, ViewChild } from '@angular/core';
 import { IEvent } from 'src/app/interfaces/ievent';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { ActivatedRoute, ActivatedRouteSnapshot } from '@angular/router';
 import { EventService } from 'src/app/services/event.service';
 import { ITimePlaceSuggestion } from 'src/app/interfaces/itime-place-suggestion';
-import { v4 as uuidv4 } from 'uuid';
 
 @Component({
   selector: 'app-create-edit-event',
@@ -22,13 +21,13 @@ export class CreateEditEventComponent implements OnInit {
 
   constructor(private actRoute: ActivatedRoute, private formBuilder: FormBuilder, private eventService: EventService) { }
 
-  ngOnInit(): void {;
+  ngOnInit(): void {
     this.reactiveForm();
 
     if (this.isUpdateView) {
       let event_id;
       this.actRoute.snapshot.pathFromRoot.forEach((element: ActivatedRouteSnapshot) => {
-        if (element.params.id != undefined && element.params.id != null) {
+        if (element.params.id != undefined) {
           event_id = element.params.id;
         }
       })

@@ -41,7 +41,7 @@ export class TimePlaceSuggestionService {
 
   }
 
-  async getTimePlaceSuggestions(event_id: any) {
+  async getTimePlaceSuggestions(event_id: any): Promise<ITimePlaceSuggestion[]> {
     let data: ITimePlaceSuggestion[] = (await this.httpClient.get(environment.api_base_uri + "v1/event/" + event_id +
       "/time-place-suggestion/").toPromise()) as ITimePlaceSuggestion[];
 

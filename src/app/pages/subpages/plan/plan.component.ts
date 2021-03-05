@@ -54,7 +54,7 @@ export class PlanComponent implements OnInit {
         map((fruit: string | null) => fruit ? this._filter(fruit) : this.allParticipants.slice()));
     }
 
-    this.timePlaceSuggestions = await this.timePlaceSuggestionService.getTimePlaceSuggestions(this.event_id) as ITimePlaceSuggestion[];
+    this.timePlaceSuggestions = await this.timePlaceSuggestionService.getTimePlaceSuggestions(this.event_id);
 
     if (this.creator) {
       this.setAllParticipants();

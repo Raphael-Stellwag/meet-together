@@ -1,6 +1,3 @@
-import { LoadingScreenService } from './../frames/loading-screen/loading-screen.service';
-import { StorageService } from './../services/storage.service';
-import { ConnectionService } from './../services/connection.service';
 import { UserService } from 'src/app/services/user.service';
 import { MatDialog } from '@angular/material/dialog';
 import { Injectable } from '@angular/core';

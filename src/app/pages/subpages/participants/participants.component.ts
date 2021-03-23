@@ -1,7 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, ActivatedRouteSnapshot } from '@angular/router';
-import { EventService } from 'src/app/services/event.service';
-import { ParticipantsService } from 'src/app/services/participants.service';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-participants',

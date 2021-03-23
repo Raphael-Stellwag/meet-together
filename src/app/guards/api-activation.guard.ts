@@ -1,5 +1,5 @@
 import {Injectable} from "@angular/core";
-import {ActivatedRouteSnapshot, CanActivate, Router, RouterStateSnapshot} from "@angular/router";
+import {ActivatedRouteSnapshot, CanActivate, RouterStateSnapshot} from "@angular/router";
 import {ConnectionService} from "../services/connection.service";
 import {StorageService} from "../services/storage.service";
 import {LoadingScreenService} from "../frames/loading-screen/loading-screen.service";

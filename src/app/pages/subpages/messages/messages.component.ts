@@ -1,5 +1,5 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { ActivatedRoute, ActivatedRouteSnapshot } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 import { MessagesService } from 'src/app/services/messages.service';
 import { IMessage } from 'src/app/interfaces/imessage';
 import { EMessageGenerated } from 'src/app/enums/emessage-generated.enum';

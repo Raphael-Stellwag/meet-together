@@ -1,7 +1,5 @@
 import { Injectable } from '@angular/core';
 import {ActivatedRouteSnapshot, Resolve, Router} from '@angular/router';
-import {MessagesService} from "../../../services/messages.service";
-import {IMessage} from "../../../interfaces/imessage";
 import {EMPTY, Observable} from "rxjs";
 import {ParticipantsService} from "../../../services/participants.service";
 

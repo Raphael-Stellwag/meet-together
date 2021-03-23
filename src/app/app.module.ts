@@ -77,6 +77,8 @@ import { UpdateUserNameDialog } from './dialogs/update-user-name-dialog/update-u
 import { LoginDialog } from './dialogs/login-dialog/login-dialog.component';
 import { RegisterDialog } from './dialogs/register-dialog/register-dialog.component';
 import { LoadingScreenComponent } from './frames/loading-screen/loading-screen.component';
+import {ApiActivationGuard} from "./guards/api-activation.guard";
+import {HomeResolver} from "./pages/home/home.resolver";
 
 
 @NgModule({
@@ -156,10 +158,12 @@ import { LoadingScreenComponent } from './frames/loading-screen/loading-screen.c
   ],
   providers: [
     { provide: OWL_DATE_TIME_LOCALE, useValue: 'de' },
-    { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true }, 
-    { provide: HTTP_INTERCEPTORS, useClass: HttpHeaderInterceptor, multi: true }, 
+    { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true },
+    { provide: HTTP_INTERCEPTORS, useClass: HttpHeaderInterceptor, multi: true },
     AuthGuard,
-    LoadingScreenService
+    ApiActivationGuard,
+    LoadingScreenService,
+    HomeResolver
   ],
   bootstrap: [AppComponent],
   schemas: [CUSTOM_ELEMENTS_SCHEMA]

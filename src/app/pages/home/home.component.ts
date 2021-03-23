@@ -1,4 +1,4 @@
-import { Component, ViewChild } from '@angular/core';
+import {AfterViewInit, Component, OnInit, ViewChild} from '@angular/core';
 
 import { TopBarComponent } from 'src/app/frames/top-bar/top-bar.component';
 import { IEvent } from 'src/app/interfaces/ievent';
@@ -11,7 +11,7 @@ import {ActivatedRoute} from "@angular/router";
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.scss']
 })
-export class HomeComponent {
+export class HomeComponent implements OnInit, AfterViewInit{
 
   @ViewChild(TopBarComponent) topBarComponent: TopBarComponent;
   @ViewChild(AddEventButtonComponent) addJoinButton: AddEventButtonComponent;
@@ -25,6 +25,9 @@ export class HomeComponent {
   ngOnInit() {
     console.log("ngOnInit of home called");
     this.events = this.route.snapshot.data.eventData;
+  }
+
+  ngAfterViewInit() {
     if (this.events.length == 0) {
       this.addJoinButton.showToolTip();
     }

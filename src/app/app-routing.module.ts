@@ -19,10 +19,10 @@ import {PlanResolver} from "./pages/subpages/plan/plan.resolver";
 
 const routes: Routes = [
   { path: '', redirectTo: '/home', pathMatch: 'full' },
-  { path: 'home', component: HomeComponent, canActivate: [AuthGuard, ApiActivationGuard], resolve: {eventData: HomeResolver} },
-  { path: 'join-event/:id', component: JoinEventComponent, canActivate: [AuthGuard, ApiActivationGuard] },
+  { path: 'home', component: HomeComponent, canActivate: [ApiActivationGuard, AuthGuard], resolve: {eventData: HomeResolver} },
+  { path: 'join-event/:id', component: JoinEventComponent, canActivate: [ApiActivationGuard, AuthGuard] },
   {
-    path: 'event/:id', component: EventComponent, canActivate: [AuthGuard, ApiActivationGuard],
+    path: 'event/:id', component: EventComponent, canActivate: [ApiActivationGuard, AuthGuard],
     children: [
       { path: '', redirectTo: 'messages', pathMatch: 'full' },
       { path: 'messages', component: MessagesComponent, resolve: {messageData: MessagesResolver} },

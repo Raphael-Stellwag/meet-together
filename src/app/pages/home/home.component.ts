@@ -1,12 +1,10 @@
 import { Component, ViewChild } from '@angular/core';
-import { MatDialog } from '@angular/material/dialog';
 
 import { TopBarComponent } from 'src/app/frames/top-bar/top-bar.component';
 import { IEvent } from 'src/app/interfaces/ievent';
-import { UserService } from 'src/app/services/user.service';
-import { EventService } from 'src/app/services/event.service';
 import { AddEventButtonComponent } from 'src/app/frames/add-event-button/add-event-button.component';
 import { HelperFunctionsService } from 'src/app/services/helper-functions.service';
+import {ActivatedRoute} from "@angular/router";
 
 @Component({
   selector: 'app-home',
@@ -14,21 +12,19 @@ import { HelperFunctionsService } from 'src/app/services/helper-functions.servic
   styleUrls: ['./home.component.scss']
 })
 export class HomeComponent {
-  checked: boolean = false;
-  disabled: boolean = false;
-  color: string = "primary";
+
   @ViewChild(TopBarComponent) topBarComponent: TopBarComponent;
   @ViewChild(AddEventButtonComponent) addJoinButton: AddEventButtonComponent;
 
   events: IEvent[] = [];
 
-  constructor(public dialog: MatDialog, private userService: UserService, private eventSerivce: EventService, public helperFunctions: HelperFunctionsService) {
+  constructor(public helperFunctions: HelperFunctionsService, private route: ActivatedRoute) {
     console.log("constructor of home called");
   }
 
-  async ngOnInit() {
+  ngOnInit() {
     console.log("ngOnInit of home called");
-    this.events = await this.eventSerivce.getEvents();
+    this.events = this.route.snapshot.data.eventData;
     if (this.events.length == 0) {
       this.addJoinButton.showToolTip();
     }

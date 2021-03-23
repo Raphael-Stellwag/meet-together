@@ -1,5 +1,5 @@
 import { NgModule } from '@angular/core';
-import { Routes, RouterModule } from '@angular/router';
+import {Routes, RouterModule, ExtraOptions} from '@angular/router';
 import { EventComponent } from './pages/event/event.component';
 import { HomeComponent } from './pages/home/home.component';
 import { MessagesComponent } from './pages/subpages/messages/messages.component';
@@ -12,6 +12,9 @@ import { InviteComponent } from './pages/subpages/invite/invite.component';
 import { AuthGuard } from './guards/auth.guard';
 import {ApiActivationGuard} from "./guards/api-activation.guard";
 import {HomeResolver} from "./pages/home/home.resolver";
+import {MessagesResolver} from "./pages/subpages/messages/messages.resolver";
+import {ParticipantsResolver} from "./pages/subpages/participants/participants.resolver";
+import {PlanResolver} from "./pages/subpages/plan/plan.resolver";
 
 
 const routes: Routes = [
@@ -22,18 +25,23 @@ const routes: Routes = [
     path: 'event/:id', component: EventComponent, canActivate: [AuthGuard, ApiActivationGuard],
     children: [
       { path: '', redirectTo: 'messages', pathMatch: 'full' },
-      { path: 'messages', component: MessagesComponent },
-      { path: 'plan', component: PlanComponent },
+      { path: 'messages', component: MessagesComponent, resolve: {messageData: MessagesResolver} },
+      { path: 'plan', component: PlanComponent , resolve: {timePlaceSuggestionData: PlanResolver}},
       { path: 'details', component: DetailsComponent },
       { path: 'edit', component: EditComponent },
-      { path: 'participants', component: ParticipantsComponent },
+      { path: 'participants', component: ParticipantsComponent, resolve: {participantData: ParticipantsResolver} },
       { path: 'invite', component: InviteComponent }
     ]
   },
 ];
 
+export const routingConfiguration: ExtraOptions = {
+  paramsInheritanceStrategy: 'always'
+};
+
+
 @NgModule({
-  imports: [RouterModule.forRoot(routes)],
+  imports: [RouterModule.forRoot(routes, routingConfiguration)],
   exports: [RouterModule]
 })
 export class AppRoutingModule { }

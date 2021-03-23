@@ -17,21 +17,15 @@ export class MessagesComponent implements OnInit, OnDestroy {
   event_id;
   user_id;
 
-  constructor(private actRoute: ActivatedRoute, private messageService: MessagesService, private helperFunctions: HelperFunctionsService, private userService: UserService) {
-    this.user_id = userService.getUserId();
+  constructor(private actRoute: ActivatedRoute, private messageService: MessagesService,
+              private helperFunctions: HelperFunctionsService, private userService: UserService) {
+
   }
 
   ngOnInit(): void {
-    this.event_id = null;
-    this.actRoute.snapshot.pathFromRoot.forEach((element: ActivatedRouteSnapshot) => {
-      if (element.params.id != undefined) {
-        this.event_id = element.params.id;
-      }
-    })
-    this.messageService.getMessages(this.event_id)
-      .then(messages => {
-        this.messages = messages;
-      })
+    this.user_id = this.userService.getUserId();
+    this.messages = this.actRoute.snapshot.data.messageData;
+    this.event_id = this.messages[0].event_id;
   }
 
   ngOnDestroy(): void {

@@ -11,16 +11,10 @@ import { ParticipantsService } from 'src/app/services/participants.service';
 export class ParticipantsComponent implements OnInit {
   participants: any[];
 
-  constructor(private actRoute: ActivatedRoute, private eventService: EventService, private participantsService: ParticipantsService) { }
+  constructor(private actRoute: ActivatedRoute) { }
 
-  async ngOnInit() {
-    let event_id;
-    this.actRoute.snapshot.pathFromRoot.forEach((element: ActivatedRouteSnapshot) => {
-      if (element.params.id != undefined) {
-        event_id = element.params.id;
-      }
-    })
-    this.participants = await this.participantsService.getParticipants(event_id) as any[];
+  ngOnInit() {
+    this.participants = this.actRoute.snapshot.data.participantData;
   }
 
 }

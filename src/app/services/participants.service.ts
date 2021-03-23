@@ -9,9 +9,9 @@ export class ParticipantsService {
 
   constructor(private httpClient: HttpClient ) { }
 
-  async getParticipants(event_id: any) {
+  async getParticipants(event_id: any) : Promise<any[]>{
     let data = await this.httpClient.get(environment.api_base_uri + "v1/event/" + event_id + "/participants/", {}).toPromise();
     console.debug("Get Request is successful ", data);
-    return data;
+    return data as any[];
   }
 }

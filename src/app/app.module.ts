@@ -79,6 +79,9 @@ import { RegisterDialog } from './dialogs/register-dialog/register-dialog.compon
 import { LoadingScreenComponent } from './frames/loading-screen/loading-screen.component';
 import {ApiActivationGuard} from "./guards/api-activation.guard";
 import {HomeResolver} from "./pages/home/home.resolver";
+import {MessagesResolver} from "./pages/subpages/messages/messages.resolver";
+import {ParticipantsResolver} from "./pages/subpages/participants/participants.resolver";
+import {PlanResolver} from "./pages/subpages/plan/plan.resolver";
 
 
 @NgModule({
@@ -163,7 +166,10 @@ import {HomeResolver} from "./pages/home/home.resolver";
     AuthGuard,
     ApiActivationGuard,
     LoadingScreenService,
-    HomeResolver
+    HomeResolver,
+    MessagesResolver,
+    ParticipantsResolver,
+    PlanResolver
   ],
   bootstrap: [AppComponent],
   schemas: [CUSTOM_ELEMENTS_SCHEMA]

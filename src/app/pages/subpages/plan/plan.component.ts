@@ -41,7 +41,7 @@ export class PlanComponent implements OnInit {
       }
     })
     let event = await this.eventService.getEvent(this.event_id);
-    this.initView(event);
+    await this.initView(event);
 
   }
 
@@ -54,7 +54,7 @@ export class PlanComponent implements OnInit {
         map((fruit: string | null) => fruit ? this._filter(fruit) : this.allParticipants.slice()));
     }
 
-    this.timePlaceSuggestions = await this.timePlaceSuggestionService.getTimePlaceSuggestions(this.event_id);
+    this.timePlaceSuggestions = this.actRoute.snapshot.data.timePlaceSuggestionData;
 
     if (this.creator) {
       this.setAllParticipants();
